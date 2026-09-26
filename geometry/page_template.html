@@ -1,0 +1,532 @@
+<title>Astrolabe Primitives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap">
+<style>
+/* ---- tokens: light is the bare :root, per the identity's "technical drawing
+   on paper". dark is a separate environment, not an inversion. ---- */
+:root{
+  --ink:#092052; --body:#64748B; --faint:#CBD5E1; --active:#0F58E5;
+  --mark:#E5484D; --ground:#F6F8FC; --panel:#FFFFFF; --rule:#DBE3EF;
+  --dim:#8A99B0;
+  --serif:'Fraunces','Iowan Old Style',Georgia,serif;
+  --sans:'IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+:root:not([data-theme="light"]){ color-scheme:light }
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#F6F8FC; --body:#94A3B8; --faint:#1E3A6B; --active:#4F86F7;
+    --mark:#F0696D; --ground:#071A44; --panel:#092052; --rule:#16346E;
+    --dim:#7E92B4; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#F6F8FC; --body:#94A3B8; --faint:#1E3A6B; --active:#4F86F7;
+  --mark:#F0696D; --ground:#071A44; --panel:#092052; --rule:#16346E;
+  --dim:#7E92B4; color-scheme:dark;
+}
+/* test 06: would the graphic survive in one colour? */
+:root.single-ink{ --body:var(--ink); --faint:var(--ink); --active:var(--ink); --mark:var(--ink) }
+/* test 07: is the information clear once the decorative layer is gone? */
+:root.stripped .dsc .faint{ display:none }
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-weight:300; line-height:1.62;
+  font-size:15.5px; margin:0; padding-block:0;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--active);color:var(--ground)}
+
+/* ---- the measuring edge: the spine everything aligns to ---- */
+.spine{
+  position:fixed; inset-block:0; inset-inline-start:0; width:64px;
+  pointer-events:none; z-index:5; display:none;
+}
+.spine svg{height:100%;width:100%;display:block}
+@media (min-width:920px){ .spine{display:block} }
+
+.wrap{ max-width:1180px; margin-inline:auto; padding-inline:20px; }
+@media (min-width:920px){ .wrap{ padding-inline:104px 40px } }
+
+/* ---- type ---- */
+h1,h2,h3{font-family:var(--serif);font-weight:500;text-wrap:balance;margin:0;
+  font-optical-sizing:auto;letter-spacing:-0.012em}
+h1{font-size:clamp(2.6rem,7.4vw,5.4rem);line-height:0.95;letter-spacing:-0.028em}
+h2{font-size:clamp(1.75rem,3.6vw,2.75rem);line-height:1.06}
+h3{font-size:1.06rem;font-family:var(--sans);font-weight:500;letter-spacing:0}
+p{margin:0;max-width:62ch}
+a{color:var(--active)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--body);font-weight:500}
+.lede{font-size:clamp(1.02rem,1.6vw,1.24rem);color:var(--body);line-height:1.56;
+  font-weight:300;max-width:56ch}
+.note{font-size:13.4px;color:var(--body);line-height:1.5}
+.dim{color:var(--dim)}
+
+/* ---- section rhythm ---- */
+section{padding-block:clamp(52px,7vw,96px);border-top:1px solid var(--rule)}
+section:first-of-type{border-top:0}
+.head{display:flex;gap:18px;align-items:baseline;flex-wrap:wrap;
+  margin-bottom:26px}
+.head .tallymark{flex:0 0 auto}
+.stack{display:flex;flex-direction:column;gap:18px}
+
+/* ---- hero ---- */
+.hero{padding-block:clamp(44px,6vw,76px) clamp(28px,3.4vw,44px);
+  display:grid;gap:clamp(24px,4vw,56px);align-items:center;
+  grid-template-columns:1fr}
+@media (min-width:880px){ .hero{grid-template-columns:1.02fr 0.98fr} }
+.hero-fig{position:relative;margin-inline:-20px;min-width:0}
+@media (min-width:880px){ .hero-fig{margin-inline:0 -40px} }
+.hero-fig svg{width:100%;height:auto;display:block;overflow:visible}
+.eyebrow{display:flex;gap:12px;align-items:center;margin-bottom:20px}
+.eyebrow .bar{height:1px;width:46px;background:var(--ink);opacity:.5}
+.hero h1 em{font-style:normal;color:var(--active)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));
+  gap:0;border-block:1px solid var(--rule);margin-top:34px}
+.facts div{padding:13px 14px 15px;border-inline-start:1px solid var(--rule)}
+.facts dt{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--body);margin:0 0 5px}
+.facts dd{margin:0;font-family:var(--mono);font-size:1.16rem;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+
+/* ---- controls ---- */
+.rig{display:flex;flex-wrap:wrap;gap:10px 26px;align-items:center;
+  padding:16px 0;border-top:1px solid var(--rule);margin-top:26px}
+.ctl{display:flex;align-items:center;gap:10px;min-width:0}
+.ctl label{font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--body);white-space:nowrap}
+.ctl output{font-family:var(--mono);font-size:12.5px;color:var(--active);
+  min-width:5.4ch;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;
+  width:clamp(90px,20vw,150px);height:20px;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:1px;background:var(--body)}
+input[type=range]::-moz-range-track{height:1px;background:var(--body)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:3px;
+  height:15px;background:var(--active);border:0;border-radius:0;margin-top:-7px}
+input[type=range]::-moz-range-thumb{width:3px;height:15px;background:var(--active);
+  border:0;border-radius:0}
+input[type=range]:focus-visible{outline:1px solid var(--active);outline-offset:4px}
+button.sw{font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;
+  text-transform:uppercase;background:none;color:var(--body);cursor:pointer;
+  border:1px solid var(--rule);padding:7px 12px 6px;display:inline-flex;
+  gap:8px;align-items:center}
+button.sw:hover{color:var(--ink);border-color:var(--body)}
+button.sw[aria-pressed=true]{color:var(--active);border-color:var(--active)}
+button.sw .pip{width:5px;height:5px;background:currentColor;opacity:.3}
+button.sw[aria-pressed=true] .pip{opacity:1}
+button.sw:focus-visible{outline:1px solid var(--active);outline-offset:2px}
+
+/* ---- derivation table ---- */
+.deriv{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.deriv th{text-align:left;font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--body);
+  padding:0 16px 9px 0;border-bottom:1px solid var(--ink)}
+.deriv td{padding:11px 16px 11px 0;border-bottom:1px solid var(--rule);
+  vertical-align:top;color:var(--body);font-weight:300}
+.deriv td:first-child{color:var(--ink);white-space:nowrap;width:1%}
+.deriv code{font-family:var(--mono);font-size:12.6px;color:var(--active)}
+.tscroll{overflow-x:auto}
+
+/* ---- weights ---- */
+.weights{display:grid;gap:1px;background:var(--rule);border-block:1px solid var(--rule)}
+.wrow{background:var(--ground);display:grid;grid-template-columns:82px 1fr 96px;
+  gap:16px;align-items:center;padding:14px 0}
+.wrow .swatch{height:100%;min-height:14px;display:flex;align-items:center}
+.wrow .swatch i{display:block;width:100%;background:var(--ink)}
+.wrow .swatch.act i{background:var(--active)}
+.wrow b{font-weight:500;font-size:13.6px}
+.wrow span{font-family:var(--mono);font-size:11.5px;color:var(--body);
+  text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- plate grid ---- */
+.family{margin-top:44px}
+.family:first-of-type{margin-top:14px}
+.fhead{display:flex;gap:14px;align-items:baseline;padding-bottom:12px;
+  border-bottom:1px solid var(--ink);flex-wrap:wrap}
+.fhead .k{font-family:var(--mono);font-size:13px;font-weight:500;
+  color:var(--active);letter-spacing:.12em;width:18px;flex:0 0 auto}
+.fhead h3{font-size:1.24rem;font-family:var(--serif);font-weight:500}
+.fhead p{font-size:13px;color:var(--body);margin-inline-start:auto;max-width:46ch}
+/* ruled like a drawing table: column and row rules only, no outer frame, so an
+   incomplete last row leaves open space rather than empty cells */
+.grid{display:grid;gap:0;
+  grid-template-columns:repeat(auto-fill,minmax(178px,1fr))}
+figure{margin:0;background:var(--panel);padding:12px 13px 14px;
+  display:flex;flex-direction:column;gap:9px;
+  border-inline-start:1px solid var(--rule);
+  border-bottom:1px solid var(--rule)}
+figure .dsc{width:100%;height:auto;display:block;aspect-ratio:1;max-width:100%}
+figcaption{display:flex;flex-direction:column;gap:3px}
+figcaption b{font-weight:500;font-size:13.2px;color:var(--ink)}
+figcaption span{font-size:11.6px;line-height:1.42;color:var(--body)}
+figcaption .id{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;
+  color:var(--dim);text-transform:uppercase}
+
+/* ---- svg semantic classes: one drawing, five inks ---- */
+.dsc{fill:none}
+.dsc .ink{stroke:var(--ink);color:var(--ink)}
+.dsc .body{stroke:var(--body);color:var(--body)}
+.dsc .faint{stroke:var(--faint);color:var(--faint)}
+.dsc .active{stroke:var(--active);color:var(--active)}
+.dsc .mark{stroke:var(--mark);color:var(--mark)}
+.dsc .fill{stroke:none}
+.dsc [fill="var(--ground)"]{fill:var(--panel)}
+
+/* ---- rules panel ---- */
+.rules{display:grid;gap:1px;background:var(--rule);
+  grid-template-columns:repeat(auto-fit,minmax(248px,1fr));
+  border:1px solid var(--rule)}
+.rule-card{background:var(--panel);padding:20px 20px 22px;
+  display:flex;flex-direction:column;gap:9px}
+.rule-card .label{color:var(--active)}
+.rule-card b{font-family:var(--serif);font-weight:500;font-size:1.16rem;
+  line-height:1.2;letter-spacing:-.01em}
+.rule-card p{font-size:13.4px;color:var(--body);line-height:1.5}
+.rule-card code{font-family:var(--mono);font-size:12px;color:var(--ink)}
+
+/* ---- checklist ---- */
+.checks{list-style:none;padding:0;margin:0;display:grid;gap:0}
+.checks li{display:grid;grid-template-columns:34px 1fr;gap:14px;
+  padding:14px 0;border-bottom:1px solid var(--rule);align-items:start}
+.checks li:first-child{border-top:1px solid var(--ink)}
+.checks .n{font-family:var(--mono);font-size:11px;color:var(--active);
+  padding-top:3px;letter-spacing:.08em}
+.checks b{font-weight:400;font-size:14.6px;color:var(--ink)}
+.checks span{display:block;font-size:12.8px;color:var(--body);margin-top:2px}
+
+footer{padding-block:44px 64px;border-top:1px solid var(--ink);
+  display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+footer svg{width:50px;height:50px;flex:0 0 auto}
+footer .t{font-size:12.6px;color:var(--body);line-height:1.5}
+footer .ar{font-family:var(--sans);font-size:14px;color:var(--ink);
+  direction:rtl;margin-inline-start:auto}
+
+@media (prefers-reduced-motion:no-preference){
+  .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+    animation:draw 1500ms cubic-bezier(.2,.75,.25,1) forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .fade{opacity:0;animation:fade 700ms ease 900ms forwards}
+  @keyframes fade{to{opacity:1}}
+}
+</style>
+
+<div class="spine" aria-hidden="true">
+  <svg viewBox="0 0 64 1000" preserveAspectRatio="none" class="dsc">
+    <path d="M40 0V1000" class="faint" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    <g id="spine-ticks"></g>
+  </svg>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">
+        <span class="bar"></span>
+        <span class="label">.describe( · role 02 · geometric systems</span>
+      </div>
+      <h1>One angle<br>generates<br>the <em>whole</em> mark.</h1>
+      <p class="lede" style="margin-top:26px">
+        The 5a astrolabe is not an assembly of parts. Fix the sight axis θ and
+        everything else is forced: the star sits on the ring at θ, the dot at
+        θ+180°, the bowl is tangent exactly at that dot, and the aperture opens
+        where the instrument is looking. This is the vocabulary that falls out
+        of it — 46 primitives, all derived, none invented.
+      </p>
+      <dl class="facts">
+        <div><dt>sight axis θ</dt><dd>−40.6°</dd></div>
+        <div><dt>ring R</dt><dd>86</dd></div>
+        <div><dt>tangent κ</dt><dd>0.4884</dd></div>
+        <div><dt>aperture</dt><dd>28°</dd></div>
+      </dl>
+    </div>
+    <div class="hero-fig">
+      <svg id="live" class="dsc" viewBox="-34 -34 268 268" role="img"
+           aria-label="The 5a mark drawn live from its construction constants"></svg>
+    </div>
+  </header>
+
+  <div class="rig" role="group" aria-label="Construction controls">
+    <div class="ctl">
+      <label for="th">θ sight axis</label>
+      <input type="range" id="th" min="-180" max="180" step="0.2" value="-40.6">
+      <output id="tho">−40.6°</output>
+    </div>
+    <div class="ctl">
+      <label for="ka">κ tangent</label>
+      <input type="range" id="ka" min="0.18" max="0.78" step="0.002" value="0.4884">
+      <output id="kao">0.488</output>
+    </div>
+    <div class="ctl">
+      <label for="gp">aperture</label>
+      <input type="range" id="gp" min="6" max="96" step="0.5" value="28">
+      <output id="gpo">28°</output>
+    </div>
+    <button class="sw" id="reset">Reset to 5a</button>
+    <button class="sw" id="proof" aria-pressed="false"><i class="pip"></i>Construction</button>
+  </div>
+
+  <section>
+    <div class="head">
+      <svg class="dsc tallymark" width="42" height="30" viewBox="0 0 42 30" aria-hidden="true">
+        <g class="ink" stroke-width="2.4" stroke-linecap="round">
+          <path d="M4 4V26"/><path d="M11 4V26"/><path d="M18 4V26"/><path d="M25 4V26"/>
+          <path d="M1 28L28 2"/>
+        </g>
+      </svg>
+      <h2>The derivation</h2>
+    </div>
+    <p class="lede" style="margin-bottom:28px">
+      Four numbers. Every other measurement in the mark is a consequence of
+      them, which is why the reconstruction in this page matches the original
+      file exactly. If a future edit breaks that match, the constants are
+      wrong — not the logo.
+    </p>
+    <div class="tscroll"><table class="deriv">
+      <thead><tr><th>Element</th><th>Forced by</th></tr></thead>
+      <tbody>
+        <tr><td>Star</td><td>sits <em>on</em> the ring at <code>θ</code> — a sighting target, not an ornament</td></tr>
+        <tr><td>Positional dot</td><td>the ring at <code>θ + 180°</code>, antipodal to the star</td></tr>
+        <tr><td>Bowl centre</td><td>on the sight axis, at <code>R − r = 44</code> from the ring centre</td></tr>
+        <tr><td>Tangency</td><td>the bowl touches the ring <em>exactly at the dot</em> — one point does two jobs</td></tr>
+        <tr><td>Aperture</td><td><code>28°</code> centred on <code>θ</code>: the instrument is open where it looks</td></tr>
+        <tr><td>Star phase</td><td><code>θ mod 45° = 4.4°</code>, so one of the eight arms lies along <code>θ</code></td></tr>
+        <tr><td>Sighting ray</td><td>that arm, extended to 30 units</td></tr>
+        <tr><td>Stem</td><td>the vertical tangent to the bowl at its rightmost point</td></tr>
+        <tr><td>Horizontal rule</td><td>the bowl's own diameter, terminating at that tangent</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 style="margin-top:46px">Four weights, one unit</h3>
+    <p class="note" style="margin:8px 0 18px">
+      <span class="mono">u = 2</span>. Nothing in between — a fifth weight is how
+      a system starts to look approximate.
+    </p>
+    <div class="weights">
+      <div class="wrow"><div class="swatch"><i style="height:4px"></i></div>
+        <b>Ring — structure</b><span>4.0 · 2.0u</span></div>
+      <div class="wrow"><div class="swatch act"><i style="height:6.8px"></i></div>
+        <b>Stem — the active stroke</b><span>6.8 · 3.4u</span></div>
+      <div class="wrow"><div class="swatch"><i style="height:3px"></i></div>
+        <b>Mark — ticks, pointers, data</b><span>3.0 · 1.5u</span></div>
+      <div class="wrow"><div class="swatch"><i style="height:1.2px"></i></div>
+        <b>Hair — construction, metadata</b><span>1.2 · 0.6u</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head" style="align-items:flex-end">
+      <div>
+        <span class="label">02 · the library</span>
+        <h2 style="margin-top:6px">Forty-six primitives</h2>
+      </div>
+      <div style="margin-inline-start:auto;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="sw" id="ink1" aria-pressed="false"><i class="pip"></i>One ink</button>
+        <button class="sw" id="strip" aria-pressed="false"><i class="pip"></i>Strip decoration</button>
+        <button class="sw" id="theme">Invert</button>
+      </div>
+    </div>
+    <p class="lede" style="margin-bottom:10px">
+      Extracted from the astrolabe, not illustrations of one. The two switches
+      above are tests 06 and 07 from the design brief, made operable: collapse
+      every ink to one and the drawing should survive; delete the whole
+      <span class="mono">faint</span> layer and the information should still read.
+    </p>
+    <!--PLATES-->
+  </section>
+
+  <section>
+    <div class="head"><span class="label">03 · guards</span></div>
+    <h2 style="margin-bottom:26px">Rules the code enforces</h2>
+    <div class="rules">
+      <div class="rule-card">
+        <span class="label">raises</span>
+        <b>Graduation is never uniform all the way round</b>
+        <p><code>radial_scale()</code> refuses a sweep of 330° or more. A fully
+        graduated circle reads as a clock; a graduated sector reads as an
+        instrument. Asymmetry is the entire difference.</p>
+      </div>
+      <div class="rule-card">
+        <span class="label">raises</span>
+        <b>A closed ring is not a ring</b>
+        <p><code>broken_ring()</code> refuses <code>gap ≤ 0</code>. If you want a
+        plain circle, call <code>circle()</code> and know you have stepped
+        outside the vocabulary.</p>
+      </div>
+      <div class="rule-card">
+        <span class="label">never automatic</span>
+        <b>Coral is always a judgement</b>
+        <p>No primitive reaches for the mark ink on its own.
+        <code>data_series()</code> takes an explicit list of outlier indices, so
+        coral only ever appears because someone decided a point mattered.</p>
+      </div>
+      <div class="rule-card">
+        <span class="label">no raw hex</span>
+        <b>Five semantic inks, everywhere</b>
+        <p><code>ink · body · faint · active · mark</code>. That is what makes
+        light, dark and single-ink the same drawing rather than three drawings —
+        and what makes the switches above possible at all.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="label">04 · before approving anything</span></div>
+    <h2 style="margin-bottom:28px">The design test</h2>
+    <ol class="checks">
+      <li><span class="n">01</span><div><b>Could this belong to a generic AI startup?</b>
+        <span>If yes, redesign it.</span></div></li>
+      <li><span class="n">02</span><div><b>Is there a real relationship to measurement, information, orientation, computation or knowledge?</b>
+        <span>If no, remove it.</span></div></li>
+      <li><span class="n">03</span><div><b>Does it use the vocabulary without drawing an astrolabe?</b>
+        <span>If yes, good.</span></div></li>
+      <li><span class="n">04</span><div><b>Is coral saying something?</b>
+        <span>If no, remove it.</span></div></li>
+      <li><span class="n">05</span><div><b>Would it still read as .describe( with the logo removed?</b>
+        <span>If no, the system is too logo-dependent.</span></div></li>
+      <li><span class="n">06</span><div><b>Does it survive in one colour?</b>
+        <span>Set all five inks to the same value and look again — the switch above does it.</span></div></li>
+      <li><span class="n">07</span><div><b>Is the information still clear with the decorative layer gone?</b>
+        <span>Delete every faint element and check.</span></div></li>
+    </ol>
+  </section>
+
+  <footer>
+    <svg class="dsc" viewBox="-20 -20 240 240" aria-hidden="true"><!--MARK--></svg>
+    <div class="t">
+      <b style="font-weight:500;color:var(--ink)">astrolabe.py</b> · 46 plates ·
+      generated from the locked 5a mark<br>
+      <span class="dim">Run <span class="mono">python3 astrolabe.py</span> to regenerate.
+      Import it to build everything else.</span>
+    </div>
+    <div class="ar">من البيانات إلى القرار</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var C=100, R=86, T0=-40.6, STEM_OVER=64.77;
+  var $=function(s){return document.querySelector(s)};
+
+  function polar(cx,cy,r,d){var a=d*Math.PI/180;
+    return [cx+r*Math.cos(a), cy+r*Math.sin(a)];}
+  function n(v){return Math.round(v*100)/100;}
+  function arcD(cx,cy,r,a0,a1){
+    var sw=((a1-a0)%360+360)%360, p=polar(cx,cy,r,a0), q=polar(cx,cy,r,a1);
+    return 'M'+n(p[0])+' '+n(p[1])+'A'+n(r)+' '+n(r)+' 0 '+(sw>180?1:0)+' 1 '+n(q[0])+' '+n(q[1]);
+  }
+  function el(t,a){var e=document.createElementNS('http://www.w3.org/2000/svg',t);
+    for(var k in a) e.setAttribute(k,a[k]); return e;}
+  function ln(g,p,q,cls,w,extra){
+    var e=el('path',{d:'M'+n(p[0])+' '+n(p[1])+'L'+n(q[0])+' '+n(q[1]),
+      'class':cls,'stroke-width':w,fill:'none','stroke-linecap':'round'});
+    if(extra) for(var k in extra) e.setAttribute(k,extra[k]);
+    g.appendChild(e); return e;}
+
+  // the mark, rebuilt from theta / kappa / gap. nothing is hard-coded.
+  function build(svg, th, ka, gap, proof){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    var g=el('g',{}), r=R*ka, D=th-T0;
+    var bowl=polar(C,C,R-r,th+180), star=polar(C,C,R,th), dot=polar(C,C,R,th+180);
+    // local frame: "horizontal" runs along D, "vertical" along D+90
+    var hx=polar(0,0,1,D), vx=polar(0,0,1,D+90);
+    var edge=[bowl[0]+r*hx[0], bowl[1]+r*hx[1]];
+
+    if(proof){
+      g.appendChild(el('circle',{cx:C,cy:C,r:R,'class':'faint','stroke-width':1.2,
+        fill:'none','stroke-dasharray':'5 5'}));
+      g.appendChild(el('circle',{cx:n(bowl[0]),cy:n(bowl[1]),r:n(r),'class':'faint',
+        'stroke-width':1.2,fill:'none','stroke-dasharray':'5 5'}));
+      ln(g,star,dot,'faint',1.2,{'stroke-dasharray':'4 4'});
+      ln(g,polar(C,C,R+18,D),polar(C,C,R+18,D+180),'faint',1.2,{'stroke-dasharray':'10 4 2 4'});
+      ln(g,polar(C,C,R+18,D+90),polar(C,C,R+18,D-90),'faint',1.2,{'stroke-dasharray':'10 4 2 4'});
+      for(var t=-62;t<=62.001;t+=4){
+        var h=(Math.round((t+62)/4)%5===0)?10:4.5;
+        ln(g,polar(C,C,R,th+t),polar(C,C,R-h,th+t),'faint',1.2);
+      }
+      [[C,C],bowl,dot].forEach(function(p){
+        g.appendChild(el('circle',{cx:n(p[0]),cy:n(p[1]),r:3.4,'class':'ink',
+          'stroke-width':1.2,fill:'var(--panel)'}));
+      });
+    }
+
+    // ring
+    var ring=el('path',{d:arcD(C,C,R,th+gap/2,th-gap/2),'class':'ink',
+      'stroke-width':4,fill:'none','stroke-linecap':'round'});
+    g.appendChild(ring);
+    // bowl + its diameter + the tangent stem
+    g.appendChild(el('circle',{cx:n(bowl[0]),cy:n(bowl[1]),r:n(r),'class':'ink',
+      'stroke-width':4,fill:'none'}));
+    ln(g,[bowl[0]-r*hx[0],bowl[1]-r*hx[1]],edge,'ink',4);
+    var over=STEM_OVER*(r/42);
+    ln(g,[edge[0]-vx[0]*(r+over),edge[1]-vx[1]*(r+over)],
+        [edge[0]+vx[0]*r,edge[1]+vx[1]*r],'active',6.8);
+    // star: eight arms at 45 deg, phased on theta; the theta arm is the long one
+    for(var k=0;k<8;k++){
+      var L=(k===0)?30:(k%2===0?10:6);
+      ln(g,star,polar(star[0],star[1],L,th+45*k),'ink',3);
+    }
+    g.appendChild(el('circle',{cx:n(star[0]),cy:n(star[1]),r:2.8,'class':'ink fill',
+      fill:'currentColor',stroke:'none'}));
+    g.appendChild(el('circle',{cx:n(dot[0]),cy:n(dot[1]),r:5.6,'class':'ink fill',
+      fill:'currentColor',stroke:'none'}));
+    svg.appendChild(g);
+    return ring;
+  }
+
+  var live=$('#live'), th=$('#th'), ka=$('#ka'), gp=$('#gp'), showProof=false;
+  function render(anim){
+    var t=parseFloat(th.value), k=parseFloat(ka.value), g=parseFloat(gp.value);
+    $('#tho').textContent=(t<0?'−':'')+Math.abs(t).toFixed(1)+'°';
+    $('#kao').textContent=k.toFixed(3);
+    $('#gpo').textContent=g.toFixed(0)+'°';
+    var ring=build(live,t,k,g,showProof);
+    if(anim && ring.getTotalLength){
+      var L=ring.getTotalLength();
+      ring.style.setProperty('--len',L);
+      ring.classList.add('draw');
+    }
+  }
+  [th,ka,gp].forEach(function(i){i.addEventListener('input',function(){render(false)})});
+  $('#reset').addEventListener('click',function(){
+    th.value=-40.6; ka.value=0.4884; gp.value=28; render(true);
+  });
+  $('#proof').addEventListener('click',function(){
+    showProof=!showProof; this.setAttribute('aria-pressed',showProof); render(false);
+  });
+
+  // footer mark, locked
+  build($('footer svg'),T0,0.4884,28,false);
+
+  // the spine: a measuring edge, graduated but never all the way round
+  var ticks=$('#spine-ticks'), frag=document.createDocumentFragment();
+  for(var i=0;i<=50;i++){
+    var y=i*20, major=(i%5===0);
+    var p=el('path',{d:'M40 '+y+'H'+(40+(major?9:4)),'class':'faint',
+      'stroke-width':1,'vector-effect':'non-scaling-stroke',fill:'none'});
+    frag.appendChild(p);
+  }
+  ticks.appendChild(frag);
+
+  function toggle(id,cls){
+    var b=$('#'+id);
+    b.addEventListener('click',function(){
+      var on=document.documentElement.classList.toggle(cls);
+      b.setAttribute('aria-pressed',on);
+    });
+  }
+  toggle('ink1','single-ink'); toggle('strip','stripped');
+  $('#theme').addEventListener('click',function(){
+    var r=document.documentElement;
+    var dark=getComputedStyle(r).getPropertyValue('color-scheme').trim()==='dark';
+    r.setAttribute('data-theme',dark?'light':'dark');
+  });
+
+  render(true);
+})();
+</script>

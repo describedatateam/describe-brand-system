@@ -1,0 +1,1151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Small businesses generate real data long before they can justify a data hire. .describe( analyses your sales, customer and campaign numbers so you know what's working before you bet on it.">
+<!--
+  ============================================================================
+  WORKING DRAFT — NOT FOR PUBLICATION
+  ============================================================================
+  Known problems, all recorded in the repository README:
+
+  1. The proof section's figures do not reconcile.
+       542,014 - 5,270 - 9,252 = 527,492
+     but the page states n = 534,232. The canonical UCI Online Retail dataset
+     is also usually cited at 541,909 rows, not 542,014. Re-run the analysis
+     and regenerate the chart before this goes anywhere.
+
+  2. Service 02 has no price. The "when to pick this" copy was pasted into the
+     price field; the page marks the gap in coral.
+
+  3. The wordmark does not exist. ".describe(" in the nav and footer is set in
+     IBM Plex Mono as a stand-in.
+
+  4. Arabic exists for the hero and the who-we're-not-for section only. The
+     site is English-only until the rest is written.
+
+  5. Typography here predates the Role 04 decisions: it uses IBM Plex Sans
+     Arabic and leans on mono far more than the mono budget now allows.
+     Rebuild against type/typography.css.
+
+  6. The intake form is not wired to anything.
+  ============================================================================
+-->
+<title>describe — From Data to Decision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500&display=swap">
+<style>
+/* ============================================================
+   .describe( — homepage
+   Two environments, alternating. Navy is the instrument at rest;
+   off-white is the technical drawing on paper. Coral appears
+   exactly once on this page: the outlier in the chart.
+   ============================================================ */
+:root{
+  --navy:#092052; --blue:#0F58E5; --coral:#E5484D;
+  --grey:#64748B; --lgrey:#CBD5E1; --off:#F6F8FC;
+  --serif:'Fraunces','Iowan Old Style',Georgia,serif;
+  --sans:'IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  /* light environment — technical drawing on paper */
+  --ink:#092052; --body:#5A6B85; --faint:#CBD5E1; --active:#0F58E5;
+  --mark:#E5484D; --ground:#F6F8FC; --rule:#D8E1EF; --dim:#8A99B0;
+  --panel:#FFFFFF;
+}
+:root:not([data-theme="light"]){color-scheme:light}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#F6F8FC; --body:#93A4C0; --faint:#1C3566; --active:#5B8DF0;
+    --mark:#F0696D; --ground:#050F2E; --rule:#152C5E; --dim:#7285A6;
+    --panel:#08183F; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#F6F8FC; --body:#93A4C0; --faint:#1C3566; --active:#5B8DF0;
+  --mark:#F0696D; --ground:#050F2E; --rule:#152C5E; --dim:#7285A6;
+  --panel:#08183F; color-scheme:dark;
+}
+/* dark bands: fixed regardless of viewer theme — they are the design,
+   not a theme. Their tokens are declared here in full. */
+.band{
+  --ink:#F6F8FC; --body:#9FB0CC; --faint:#1C3566; --active:#5B8DF0;
+  --mark:#F0696D; --ground:#071A44; --rule:#16346E; --dim:#7285A6;
+  --panel:#092052;
+  background:var(--ground); color:var(--ink);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .band{--ground:#08193E}
+}
+:root[data-theme="dark"] .band{--ground:#08193E}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;padding-block:0;background:var(--ground);color:var(--ink);
+  font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--active);color:#fff}
+
+/* ---------- type ---------- */
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;
+  font-optical-sizing:auto;text-wrap:balance;font-variation-settings:'SOFT' 0,'WONK' 0}
+h1{font-size:clamp(2.55rem,5.6vw,4.9rem);line-height:0.95;letter-spacing:-0.03em;
+  font-weight:300}
+h2{font-size:clamp(2rem,4.4vw,3.5rem);line-height:1.02;letter-spacing:-0.022em}
+h3{font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.14;letter-spacing:-0.012em}
+p{margin:0}
+a{color:inherit}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--body);font-weight:500}
+.lede{font-size:clamp(1.06rem,1.7vw,1.32rem);line-height:1.5;color:var(--body);
+  font-weight:200;max-width:34ch}
+.copy{font-size:16.5px;line-height:1.66;color:var(--body);max-width:58ch}
+.copy strong{font-weight:500;color:var(--ink)}
+.ar{direction:rtl;text-align:right}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:22px}
+@media (min-width:1080px){.wrap{padding-inline:118px 54px}}
+section{position:relative;overflow:hidden}
+.pad{padding-block:clamp(72px,10vw,150px)}
+
+/* ---------- the measuring edge ---------- */
+.spine{position:fixed;inset-block:0;inset-inline-start:0;width:74px;z-index:40;
+  pointer-events:none;display:none;mix-blend-mode:normal}
+@media (min-width:1080px){.spine{display:block}}
+.spine svg{position:absolute;inset:0;width:100%;height:100%}
+.spine .rdg{stroke:currentColor;fill:none}
+.spine .lab{position:absolute;inset-inline-start:54px;font-family:var(--mono);
+  font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  writing-mode:vertical-rl;top:50%;transform:translateY(-50%);
+  transition:color .4s ease}
+#spineWrap{color:var(--faint)}
+#spineWrap[data-on-dark="1"]{color:#1C3566}
+.spine .cursor{stroke:var(--blue);stroke-width:2.6;transition:transform .18s linear}
+
+/* ---------- nav ---------- */
+nav{position:fixed;inset-block-start:0;inset-inline:0;z-index:50;
+  display:flex;align-items:center;gap:18px;padding:14px 22px;
+  backdrop-filter:blur(10px);transition:background .4s ease,border-color .4s ease;
+  border-bottom:1px solid transparent}
+nav.solid{background:color-mix(in srgb,var(--ground) 88%,transparent);
+  border-bottom-color:var(--rule)}
+/* the nav floats over alternating environments — it takes the tokens of
+   whichever band is under it, so the wordmark never sits navy on navy */
+nav[data-on-dark="1"]{--ink:#F6F8FC;--body:#9FB0CC;--active:#5B8DF0;
+  --rule:#16346E;--ground:#071A44}
+@media (min-width:1080px){nav{padding-inline:118px 54px}}
+.brandlock{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brandlock svg{width:26px;height:26px;flex:0 0 auto}
+.brandlock .wm{font-family:var(--mono);font-size:15px;letter-spacing:-.02em;
+  font-weight:500;color:var(--ink);white-space:nowrap}
+.brandlock .wm .p{color:var(--active)}
+nav .links{display:none;gap:22px;margin-inline-start:auto;align-items:center}
+@media (min-width:860px){nav .links{display:flex}}
+nav .links a{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--body);text-decoration:none}
+nav .links a:hover{color:var(--active)}
+nav .navcta{margin-inline-start:auto}
+@media (min-width:860px){nav .navcta{margin-inline-start:0}}
+
+/* ---------- buttons ---------- */
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;display:inline-flex;align-items:center;gap:12px;
+  padding:13px 18px 12px;border:1px solid var(--ink);color:var(--ink);
+  background:none;text-decoration:none;cursor:pointer;position:relative}
+.btn .ar{color:var(--active);transition:transform .2s cubic-bezier(.2,.8,.3,1)}
+.btn:hover{background:var(--ink);color:var(--ground)}
+.btn:hover .ar{transform:translateX(4px);color:var(--ground)}
+.btn:focus-visible{outline:2px solid var(--active);outline-offset:3px}
+.btn.solid{background:var(--active);border-color:var(--active);color:#fff}
+.btn.solid .ar{color:#fff}
+.btn.solid:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.sm{padding:9px 13px 8px;font-size:10px}
+/* calibration ticks flanking a primary action */
+.btnwrap{display:inline-flex;align-items:stretch;gap:9px}
+.btnwrap .tk{width:9px;flex:0 0 auto}
+.btnwrap .tk svg{height:100%;width:100%;stroke:var(--faint);fill:none}
+
+/* ---------- hero ---------- */
+.heroinner{display:grid;grid-template-columns:1fr;gap:clamp(30px,4vw,54px);
+  align-items:center;padding-block:clamp(104px,13vw,150px) clamp(64px,8vw,108px)}
+@media (min-width:980px){.heroinner{grid-template-columns:1.16fr .84fr}}
+.heroinner h1 em{font-style:normal;color:var(--active)}
+.heroart{position:relative;min-width:0;margin-inline:-22px}
+@media (min-width:980px){.heroart{margin-inline:0 -86px}}
+.heroart svg{width:100%;height:auto;display:block;overflow:visible}
+.kicker{display:flex;align-items:center;gap:13px;margin-bottom:26px}
+.kicker .bar{height:1px;width:44px;background:currentColor;opacity:.45}
+.herofoot{display:flex;gap:14px 30px;flex-wrap:wrap;align-items:center;
+  margin-top:38px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));
+  border-top:1px solid var(--rule);margin-top:clamp(44px,6vw,72px)}
+.stats div{padding:16px 16px 18px;border-inline-start:1px solid var(--rule)}
+.stats div:first-child{padding-inline-start:0;border-inline-start:0}
+.stats dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);margin:0 0 6px}
+.stats dd{margin:0;font-family:var(--serif);font-size:1.5rem;font-weight:300;
+  color:var(--ink);letter-spacing:-.02em}
+
+/* ---------- section head ---------- */
+.shead{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;
+  margin-bottom:clamp(26px,3.4vw,46px)}
+.shead .tly{flex:0 0 auto;padding-top:9px}
+.shead .tly svg{display:block;stroke:var(--active);fill:none}
+.shead .ht{flex:1 1 340px;min-width:0}
+.shead .label{margin-bottom:9px;display:block}
+.shead .side{flex:1 1 280px;max-width:44ch;padding-top:6px}
+
+/* ---------- who ---------- */
+.symptoms{display:grid;gap:0;margin-top:34px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  border-top:1px solid var(--rule)}
+.symptoms li{list-style:none;padding:20px 20px 24px;
+  border-inline-start:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  font-size:15.4px;line-height:1.52;color:var(--body);display:flex;
+  flex-direction:column;gap:12px}
+.symptoms li:first-child{border-inline-start:0;padding-inline-start:0}
+.symptoms li .n{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  color:var(--active)}
+.notfor{margin-top:clamp(40px,5vw,66px);border-inline-start:2px solid var(--faint);
+  padding-inline-start:22px;max-width:62ch}
+
+/* ---------- services ---------- */
+.svc{border-top:1px solid var(--rule);padding-block:clamp(30px,4vw,48px);
+  display:grid;gap:22px clamp(28px,4vw,56px);grid-template-columns:1fr}
+@media (min-width:900px){.svc{grid-template-columns:0.9fr 1.1fr}}
+.svc .l{display:flex;flex-direction:column;gap:14px}
+.svc .num{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  color:var(--active)}
+.svc .price{font-family:var(--mono);font-size:12.5px;color:var(--ink);
+  border:1px solid var(--rule);padding:7px 11px 6px;align-self:flex-start;
+  font-variant-numeric:tabular-nums}
+.svc .price.todo{color:var(--mark);border-color:var(--mark)}
+.svc .r{display:flex;flex-direction:column;gap:18px;min-width:0}
+.svc .deliver{display:flex;flex-direction:column;gap:9px;margin:0;padding:0}
+.svc .deliver li{list-style:none;display:grid;grid-template-columns:16px 1fr;
+  gap:11px;font-size:14.8px;line-height:1.5;color:var(--body)}
+.svc .deliver li svg{margin-top:7px;stroke:var(--active);fill:none}
+.svc .when{font-size:14.6px;line-height:1.52;color:var(--body);
+  border-inline-start:1px solid var(--faint);padding-inline-start:16px}
+.svc .when b{display:block;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+  margin-bottom:5px;font-weight:500}
+
+/* ---------- process ---------- */
+.stages{display:grid;gap:0;grid-template-columns:1fr;margin-top:12px}
+@media (min-width:760px){.stages{grid-template-columns:repeat(5,1fr)}}
+.stage{padding:26px 18px 30px;border-top:1px solid var(--rule);
+  border-inline-start:1px solid var(--rule);display:flex;flex-direction:column;
+  gap:15px;position:relative}
+@media (max-width:759px){.stage{border-inline-start:0;padding-inline:0}}
+.stage:first-child{border-inline-start:0;padding-inline-start:0}
+.stage .fig{height:58px}
+.stage .fig svg{height:100%;width:auto;overflow:visible;fill:none}
+.stage .st{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--active)}
+.stage h3{font-size:1.14rem}
+.stage p{font-size:14.2px;line-height:1.5;color:var(--body)}
+.needs{margin-top:clamp(38px,5vw,60px);display:grid;gap:14px;
+  grid-template-columns:1fr;max-width:70ch}
+.needs .label{color:var(--active)}
+
+/* ---------- proof ---------- */
+.proof{display:grid;gap:clamp(30px,4vw,60px);grid-template-columns:1fr;
+  align-items:start}
+@media (min-width:1000px){.proof{grid-template-columns:1fr 1.04fr}}
+.chartbox{border:1px solid var(--rule);background:var(--panel);
+  padding:20px 20px 16px;min-width:0}
+.chartbox svg{width:100%;height:auto;display:block;overflow:visible}
+.chartmeta{display:flex;gap:10px 20px;flex-wrap:wrap;margin-top:14px;
+  padding-top:12px;border-top:1px solid var(--rule)}
+.chartmeta span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim)}
+.chartmeta .out{color:var(--mark)}
+.findings{display:flex;flex-direction:column;gap:0;margin-top:26px}
+.findings div{padding:15px 0;border-top:1px solid var(--rule);display:grid;
+  grid-template-columns:20px 1fr;gap:14px;align-items:start}
+.findings div span{font-family:var(--mono);font-size:10px;color:var(--active);
+  padding-top:4px}
+.findings div p{font-size:14.8px;line-height:1.5;color:var(--body)}
+.discovery{border-inline-start:2px solid var(--active);padding-inline-start:22px;
+  margin-top:clamp(40px,5vw,64px);max-width:62ch}
+.where{margin-top:clamp(40px,5vw,64px);border:1px solid var(--rule);
+  padding:clamp(24px,3vw,34px);max-width:70ch;background:var(--panel)}
+
+/* ---------- about ---------- */
+.about{display:grid;gap:clamp(30px,4vw,58px);grid-template-columns:1fr}
+@media (min-width:980px){.about{grid-template-columns:.82fr 1.18fr}}
+.namebox{border:1px solid var(--rule);padding:clamp(24px,3vw,32px);
+  display:flex;flex-direction:column;gap:18px;align-self:start;
+  background:var(--panel)}
+.namebox .big{font-family:var(--mono);font-size:clamp(1.3rem,2.6vw,1.75rem);
+  color:var(--ink);letter-spacing:-.03em}
+.namebox .big .p{color:var(--active)}
+.namebox .big .cur{color:var(--active);animation:blink 1.15s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.namebox .big .cur{animation:none}}
+.prose{display:flex;flex-direction:column;gap:17px}
+.prose p{font-size:16.5px;line-height:1.68;color:var(--body);max-width:60ch}
+.belief{margin-top:clamp(44px,6vw,80px)}
+.belief blockquote{margin:0;font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.5rem,3.4vw,2.5rem);line-height:1.18;letter-spacing:-.02em;
+  color:var(--ink);max-width:22ch}
+
+/* ---------- faq ---------- */
+.faq{border-top:1px solid var(--rule)}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{cursor:pointer;list-style:none;padding:22px 0;display:grid;
+  grid-template-columns:1fr 22px;gap:18px;align-items:center;
+  font-size:17px;font-weight:400;color:var(--ink)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:focus-visible{outline:2px solid var(--active);outline-offset:3px}
+.faq summary:hover{color:var(--active)}
+.faq summary svg{stroke:var(--active);fill:none;transition:transform .26s cubic-bezier(.2,.8,.3,1)}
+.faq details[open] summary svg{transform:rotate(90deg)}
+.faq .a{padding:0 0 24px;font-size:15.4px;line-height:1.62;color:var(--body);
+  max-width:62ch}
+
+/* ---------- contact ---------- */
+.contact{display:grid;gap:clamp(30px,4vw,60px);grid-template-columns:1fr}
+@media (min-width:940px){.contact{grid-template-columns:.86fr 1.14fr}}
+form{display:flex;flex-direction:column;gap:20px}
+.row{display:grid;gap:20px;grid-template-columns:1fr}
+@media (min-width:620px){.row{grid-template-columns:1fr 1fr}}
+.fld{display:flex;flex-direction:column;gap:7px}
+.fld label{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}
+.fld input,.fld textarea{font-family:var(--sans);font-size:15.5px;font-weight:300;
+  color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--rule);
+  padding:9px 0;width:100%;border-radius:0}
+.fld textarea{min-height:92px;resize:vertical}
+.fld input:focus,.fld textarea:focus{outline:none;border-bottom-color:var(--active);
+  box-shadow:0 1px 0 var(--active)}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--dim);opacity:1}
+.formnote{font-size:12.6px;color:var(--dim);line-height:1.5;max-width:52ch}
+.reach{display:flex;flex-direction:column;gap:0;align-self:start}
+.reach a,.reach .item{display:grid;grid-template-columns:1fr auto;gap:14px;
+  padding:15px 0;border-top:1px solid var(--rule);text-decoration:none;
+  align-items:baseline}
+.reach .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}
+.reach .v{font-size:15px;color:var(--ink);justify-self:end;text-align:right;
+  word-break:break-word}
+.reach a:hover .v{color:var(--active)}
+#formMsg{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--active)}
+
+/* ---------- footer ---------- */
+footer{padding-block:clamp(50px,6vw,80px) 40px}
+.fgrid{display:grid;gap:30px;grid-template-columns:1fr;align-items:end}
+@media (min-width:820px){.fgrid{grid-template-columns:1fr auto}}
+.flock{display:flex;align-items:center;gap:16px}
+.flock svg{width:52px;height:52px;flex:0 0 auto}
+.flock .t .wm{font-family:var(--mono);font-size:19px;letter-spacing:-.02em;
+  font-weight:500;color:var(--ink)}
+.flock .t .wm .p{color:var(--active)}
+.flock .t .d{font-size:14px;color:var(--body);margin-top:3px}
+.flock .t .d.ar{direction:rtl;text-align:left}
+.fmeta{display:flex;gap:10px 26px;flex-wrap:wrap;align-items:center;
+  margin-top:34px;padding-top:20px;border-top:1px solid var(--rule)}
+.fmeta a,.fmeta span{font-family:var(--mono);font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--dim);text-decoration:none}
+.fmeta a:hover{color:var(--active)}
+.fmeta .last{margin-inline-start:auto}
+
+/* ---------- entrance: visible at rest, then settles ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .drawin{stroke-dasharray:var(--L);stroke-dashoffset:var(--L);
+    animation:dash 1700ms cubic-bezier(.22,.7,.25,1) forwards}
+  @keyframes dash{to{stroke-dashoffset:0}}
+}
+.dsc{fill:none}
+.dsc .ink{stroke:var(--ink);color:var(--ink)}
+.dsc .body{stroke:var(--body);color:var(--body)}
+.dsc .faint{stroke:var(--faint);color:var(--faint)}
+.dsc .active{stroke:var(--active);color:var(--active)}
+.dsc .mark{stroke:var(--mark);color:var(--mark)}
+.dsc .fill{stroke:none}
+</style>
+
+</head>
+<body>
+<div class="spine" id="spineWrap" aria-hidden="true">
+  <svg viewBox="0 0 74 800" preserveAspectRatio="none">
+    <path d="M46 0V800" class="rdg" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    <g id="spineTicks"></g>
+  </svg>
+  <svg viewBox="0 0 74 800" preserveAspectRatio="none" style="pointer-events:none">
+    <path id="spineCursor" class="cursor" d="M36 0H56" vector-effect="non-scaling-stroke"/>
+  </svg>
+  <span class="lab" id="spineLab">01 · Instinct</span>
+</div>
+
+<nav id="nav">
+  <a class="brandlock" href="#top" aria-label="describe — home">
+    <svg viewBox="-20 -20 240 240" class="dsc" aria-hidden="true"><g id="navmark"></g></svg>
+    <span class="wm">.describe<span class="p">(</span></span>
+  </a>
+  <div class="links">
+    <a href="#who">Who we help</a>
+    <a href="#services">Services</a>
+    <a href="#method">Method</a>
+    <a href="#proof">Proof</a>
+    <a href="#about">About</a>
+  </div>
+  <a class="btn sm navcta" href="#contact">Start<span class="ar">→</span></a>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="band" id="top">
+  <div class="wrap">
+    <div class="heroinner">
+      <div>
+        <div class="kicker">
+          <span class="bar"></span>
+          <span class="label" style="color:#9FB0CC">Data analytics · business intelligence · statistics</span>
+        </div>
+        <h1>You built your business on instinct.<br>Grow it on <em>evidence</em>.</h1>
+        <p class="lede" style="margin-top:30px;max-width:44ch">
+          Small businesses generate real data long before they can justify a
+          data hire. We fill that gap: your sales, customer and campaign
+          numbers, analysed and explained, so you know what's working before
+          you bet on it.
+        </p>
+        <div class="herofoot">
+          <span class="btnwrap">
+            <span class="tk"><svg viewBox="0 0 9 48" preserveAspectRatio="none">
+              <path d="M0 1H9M0 24H5M0 47H9" stroke-width="1" vector-effect="non-scaling-stroke"/></svg></span>
+            <a class="btn solid" href="#contact">Tell us about your data<span class="ar">→</span></a>
+            <span class="tk"><svg viewBox="0 0 9 48" preserveAspectRatio="none">
+              <path d="M9 1H0M9 24H4M9 47H0" stroke-width="1" vector-effect="non-scaling-stroke"/></svg></span>
+          </span>
+          <a href="#proof" style="font-family:var(--mono);font-size:11px;
+             letter-spacing:.13em;text-transform:uppercase;color:#9FB0CC;
+             text-decoration:none;border-bottom:1px solid #1C3566;padding-bottom:3px">
+            See a worked example</a>
+        </div>
+      </div>
+      <div class="heroart">
+        <svg id="heroArt" class="dsc" viewBox="-40 -30 300 280"
+             role="img" aria-label="Astrolabe construction: a broken ring, an inner tangent circle and a sighting star"></svg>
+      </div>
+    </div>
+    <dl class="stats" style="--rule:#16346E">
+      <div><dt>Based</dt><dd>Gaza · remote</dd></div>
+      <div><dt>Working in</dt><dd>Python · SQL</dd></div>
+      <div><dt>Delivered in</dt><dd>عربي · EN</dd></div>
+      <div><dt>First reply</dt><dd>Within 24h</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ================= WHO ================= -->
+<section id="who" class="pad">
+  <div class="wrap">
+    <div class="shead">
+      <span class="tly"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true">
+        <g stroke-width="2.2" stroke-linecap="round">
+          <path d="M3 3V19"/></g></svg></span>
+      <div class="ht">
+        <span class="label">Who we help</span>
+        <h2>You already have the data.<br>Nobody has the time.</h2>
+      </div>
+      <div class="side">
+        <p class="copy" style="font-size:15.4px">
+          You lead a small team, and you're hands-on in all of it. Your business
+          already generates more data than anyone has time to read — sales,
+          customers, campaigns, returns. You know there are answers in there.
+          But every week, the decisions that matter most still get made on
+          experience and a quick look at the dashboard, because there's no one
+          whose job it is to dig deeper, and you're not ready to hire for it.
+        </p>
+      </div>
+    </div>
+
+    <span class="label">What it sounds like from inside</span>
+    <ul class="symptoms">
+      <li><span class="n">01</span>Someone tells you on a call how they found
+        you, and it never makes it into the system.</li>
+      <li><span class="n">02</span>Two reports show two different totals for
+        the same month.</li>
+      <li><span class="n">03</span>You're spending on three channels and can
+        only guess which one is carrying the other two.</li>
+    </ul>
+
+    <div class="notfor">
+      <span class="label">Who we're not for</span>
+      <p class="copy" style="margin-top:11px">
+        If you already have an analyst in-house, you don't need us — you need
+        to give them time. If you haven't launched yet, there's nothing to
+        analyse; come back once you have a few months of real activity. If you
+        need pipelines and infrastructure built, that's engineering work and a
+        different team. And if you've already made the decision and want
+        numbers to back it up, we're the wrong people:
+        <strong>sometimes what the data says is that the plan isn't working.</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section id="services" class="pad" style="border-top:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="shead">
+      <span class="tly"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true">
+        <g stroke-width="2.2" stroke-linecap="round">
+          <path d="M3 3V19"/><path d="M10 3V19"/></g></svg></span>
+      <div class="ht">
+        <span class="label">Three ways in</span>
+        <h2>Pick the one that<br>matches your problem.</h2>
+      </div>
+      <div class="side">
+        <p class="copy" style="font-size:15.4px">
+          Not packages. Three different problems, each needing a different
+          first move. If you're not sure which one you're in, that's a normal
+          place to start a conversation from.
+        </p>
+      </div>
+    </div>
+    <div id="services-list"></div>
+  </div>
+</section>
+
+<!-- ================= METHOD ================= -->
+<section id="method" class="band pad">
+  <div class="wrap">
+    <div class="shead">
+      <span class="tly"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true">
+        <g stroke-width="2.2" stroke-linecap="round" stroke="var(--active)">
+          <path d="M3 3V19"/><path d="M10 3V19"/><path d="M17 3V19"/></g></svg></span>
+      <div class="ht">
+        <span class="label" style="color:#9FB0CC">How we work</span>
+        <h2>Five stages. Each one<br>stops the next being<br>guesswork.</h2>
+      </div>
+      <div class="side">
+        <p class="copy" style="font-size:15.4px">
+          Most data work goes wrong because someone decided what to build
+          before finding out what was actually happening.
+        </p>
+      </div>
+    </div>
+    <div class="stages" id="stages"></div>
+    <div class="needs">
+      <span class="label">What we need from you to start</span>
+      <p class="copy">
+        Three things get a project moving: access to the data, one person who
+        knows how the business really works and can answer questions, and about
+        two hours of their time up front. If getting access needs sign-off from
+        someone else, it's worth starting that conversation now rather than
+        later.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROOF ================= -->
+<section id="proof" class="pad" style="border-top:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="shead">
+      <span class="tly"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true">
+        <g stroke-width="2.2" stroke-linecap="round" stroke="var(--active)">
+          <path d="M3 3V19"/><path d="M10 3V19"/><path d="M17 3V19"/><path d="M24 3V19"/></g></svg></span>
+      <div class="ht">
+        <span class="label">A worked example</span>
+        <h2>What a year of<br>e-commerce sales<br>actually shows.</h2>
+      </div>
+      <div class="side">
+        <p class="copy" style="font-size:15.4px">
+          Public data, so you can check us. The graphic below is the finding,
+          not an illustration of it — and it states its n, like everything
+          else we publish.
+        </p>
+      </div>
+    </div>
+
+    <div class="proof">
+      <div>
+        <p class="copy">
+          We analysed the <strong>UCI Online Retail dataset</strong> — a year of
+          transactions from a UK online retailer, publicly available and
+          citable. Cleaning removed duplicates, isolated returns that were
+          inflating volume, and flagged records with missing customer IDs
+          rather than deleting them.
+        </p>
+        <div class="findings" id="findings"></div>
+      </div>
+      <div class="chartbox">
+        <svg id="chart" class="dsc" viewBox="0 0 420 290" role="img"
+          aria-label="Monthly revenue across the year, with the September to November concentration marked and one outlier transaction flagged"></svg>
+        <div class="chartmeta">
+          <span>n = 534,232 cleaned transactions</span>
+          <span>Source · UCI ML Repository</span>
+          <span class="out">● Outlier — excluded from the mean</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="discovery">
+      <span class="label" style="color:var(--active)">From a real conversation</span>
+      <p class="copy" style="margin-top:11px">
+        We went into an exploratory session expecting it to be dashboard and
+        KPI work. The questions led somewhere else. Their CRM was fine and they
+        were happy with it — the problems sat a level below, in how information
+        was structured and captured. <strong>Reporting gaps and missing history
+        were the symptom, not the thing to fix.</strong>
+      </p>
+      <p class="formnote" style="margin-top:12px">Shared with permission. No identifying detail.</p>
+    </div>
+
+    <div class="where">
+      <span class="label">Where we are</span>
+      <p class="copy" style="margin-top:12px">
+        We are a new practice. One exploratory session, one proposal, no
+        completed commercial projects yet. What's above is a worked example on
+        public data and an anonymised finding from a real conversation — not a
+        client list, because we don't have one.
+      </p>
+      <p class="copy" style="margin-top:13px">
+        <strong>We price accordingly, and we'd rather tell you this now than
+        have you find out later.</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="band pad">
+  <div class="wrap">
+    <div class="shead">
+      <span class="tly"><svg width="34" height="22" viewBox="0 0 34 22" aria-hidden="true">
+        <g stroke-width="2.2" stroke-linecap="round" stroke="var(--active)">
+          <path d="M3 3V19"/><path d="M10 3V19"/><path d="M17 3V19"/><path d="M24 3V19"/>
+          <path d="M1 20L26 2"/></g></svg></span>
+      <div class="ht">
+        <span class="label" style="color:#9FB0CC">About</span>
+        <h2>The name is the method.</h2>
+      </div>
+    </div>
+
+    <div class="about">
+      <div class="namebox">
+        <div class="big">.describe<span class="p">(</span><span class="cur">|</span></div>
+        <p class="copy" style="font-size:15px">
+          In Python, <span class="mono" style="color:var(--ink)">.describe()</span>
+          is the first thing you run on a dataset you've never seen. You don't
+          ask it anything clever. You ask it to tell you what's there — how
+          many rows, what the average is, where the extremes sit, what's
+          missing.
+        </p>
+        <p class="copy" style="font-size:15px">
+          It's the moment before any analysis. Before assumptions, before a
+          hypothesis, before someone decides what the answer should be. You
+          look first.
+        </p>
+        <p class="copy" style="font-size:15px">
+          That's the whole method, so it's the name. The bracket stays open
+          because the work hasn't started yet — what goes inside it is your
+          business.
+        </p>
+      </div>
+
+      <div class="prose">
+        <p>I'm <strong>Wafa'a Al-Hayek</strong>, and I run .describe( from Gaza.</p>
+        <p>I studied business administration, not computing, partly because the
+          local computer science programme looked more rigid than useful. The
+          interest didn't go away. In 2022 I joined a software development
+          bootcamp with almost no programming background and spent the first
+          weeks not entirely sure what separated Java from JavaScript. I
+          finished it.</p>
+        <p>A year later I was advised that software engineering was the safer
+          career. I moved to data analytics instead, because I liked Python,
+          and because I wanted the part of the work where you find the thing
+          nobody had noticed yet. Three years in that field now, across
+          analytics, monitoring and evaluation, and reporting.</p>
+        <p>The business degree turned out to matter more than I expected.
+          <strong>Most of what goes wrong in data work isn't technical — it's
+          someone building the right thing for the wrong question.</strong></p>
+        <p style="padding-top:14px;border-top:1px solid var(--rule)">
+          The team is me, at present. Two specialists — a software engineer and
+          a data analyst — will join as the workload supports it. Either way,
+          you'll always know who is working on your project.</p>
+      </div>
+    </div>
+
+    <div class="belief">
+      <div class="shead" style="margin-bottom:24px">
+        <div class="ht"><span class="label" style="color:#9FB0CC">What we believe</span></div>
+      </div>
+      <div class="about">
+        <blockquote>A number doesn't have to be wrong to mislead you.</blockquote>
+        <div class="prose">
+          <p>A different denominator, a shorter window, a slightly rephrased
+            question — and honest data says something else. Deliberately in
+            politics; in good faith nearly everywhere else.</p>
+          <p>In a business, the risk isn't the arithmetic. It's asking the
+            wrong question, or reading more into an answer than it can carry.
+            So we show our method, we name what we excluded, and we say plainly
+            when a finding is weaker than you were hoping.
+            <strong>You should be able to check us.</strong></p>
+          <p>And if you've analysed something yourself and you're about to act
+            on it — have someone verify it first.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq" class="pad" style="border-top:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="shead">
+      <div class="ht">
+        <span class="label">Questions we get</span>
+        <h2>Before you write.</h2>
+      </div>
+    </div>
+    <div class="faq" id="faq"></div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="band pad">
+  <div class="wrap">
+    <div class="shead">
+      <div class="ht">
+        <span class="label" style="color:#9FB0CC">Start here</span>
+        <h2>Tell us about your data.</h2>
+      </div>
+      <div class="side">
+        <p class="copy" style="font-size:15.4px">
+          You don't need a brief or a budget. Come with the decision you're
+          stuck on — working out which question is worth answering is part of
+          the job, not a prerequisite for it.
+        </p>
+      </div>
+    </div>
+
+    <div class="contact">
+      <div class="reach">
+        <a href="mailto:info@describe.team">
+          <span class="k">Email</span><span class="v">info@describe.team</span></a>
+        <a href="https://www.linkedin.com/company/describeteam" target="_blank" rel="noopener">
+          <span class="k">LinkedIn</span><span class="v">/describeteam</span></a>
+        <a href="https://github.com/describedatateam" target="_blank" rel="noopener">
+          <span class="k">GitHub</span><span class="v">/describedatateam</span></a>
+        <div class="item"><span class="k">First reply</span><span class="v">Within 24 hours</span></div>
+        <div class="item"><span class="k">Languages</span><span class="v">English · العربية</span></div>
+      </div>
+
+      <form id="intake" novalidate>
+        <div class="row">
+          <div class="fld"><label for="f-name">Full name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Your name"></div>
+          <div class="fld"><label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@company.com"></div>
+        </div>
+        <div class="row">
+          <div class="fld"><label for="f-role">Your position</label>
+            <input id="f-role" name="role" type="text" placeholder="e.g. Founder"></div>
+          <div class="fld"><label for="f-org">Organisation</label>
+            <input id="f-org" name="org" type="text" autocomplete="organization" placeholder="Company name"></div>
+        </div>
+        <div class="fld"><label for="f-msg">What can we help you with?</label>
+          <textarea id="f-msg" name="message"
+            placeholder="The decision you're stuck on, or the number you don't trust. Rough is fine."></textarea></div>
+        <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:6px">
+          <button class="btn solid" type="submit">Send<span class="ar">→</span></button>
+          <span id="formMsg" role="status"></span>
+        </div>
+        <p class="formnote">
+          We use what you send only to reply to you. Nothing is shared, and we
+          delete it on request.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="band">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="flock">
+        <svg class="dsc" viewBox="-20 -20 240 240" aria-hidden="true"><g id="footmark"></g></svg>
+        <div class="t">
+          <div class="wm">.describe<span class="p">(</span></div>
+          <div class="d">From data to decision</div>
+          <div class="d ar">من البيانات إلى القرار</div>
+        </div>
+      </div>
+      <a class="btn" href="#contact">Tell us about your data<span class="ar">→</span></a>
+    </div>
+    <div class="fmeta">
+      <span>© 2026 .describe(</span>
+      <a href="mailto:info@describe.team">info@describe.team</a>
+      <a href="#">Privacy</a>
+      <a href="#" id="langToggle">العربية</a>
+      <span class="last">describe.team</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+/* ---------- 5a constants: everything on this page is drawn from them ---- */
+var C=100, R=86, THETA=-40.6, GAP=28, KAPPA=42/86, STEM=64.77;
+var NS='http://www.w3.org/2000/svg';
+function P(cx,cy,r,d){var a=d*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+function n(v){return Math.round(v*100)/100}
+function arcD(cx,cy,r,a0,a1){
+  var sw=((a1-a0)%360+360)%360,p=P(cx,cy,r,a0),q=P(cx,cy,r,a1);
+  return 'M'+n(p[0])+' '+n(p[1])+'A'+n(r)+' '+n(r)+' 0 '+(sw>180?1:0)+' 1 '+n(q[0])+' '+n(q[1]);
+}
+function E(t,a,parent){var e=document.createElementNS(NS,t);
+  for(var k in a)e.setAttribute(k,a[k]); if(parent)parent.appendChild(e); return e}
+function L(g,p,q,cls,w,extra){
+  var a={d:'M'+n(p[0])+' '+n(p[1])+'L'+n(q[0])+' '+n(q[1]),'class':cls,
+    'stroke-width':w,'stroke-linecap':'round'};
+  for(var k in (extra||{}))a[k]=extra[k];
+  return E('path',a,g);
+}
+function mark(g,scale){
+  var r=42,b=P(C,C,R-r,THETA+180),s=P(C,C,R,THETA),d=P(C,C,R,THETA+180);
+  E('path',{d:arcD(C,C,R,THETA+GAP/2,THETA-GAP/2),'class':'ink','stroke-width':4,
+    'stroke-linecap':'round'},g);
+  E('circle',{cx:n(b[0]),cy:n(b[1]),r:r,'class':'ink','stroke-width':4},g);
+  L(g,[b[0]-r,b[1]],[b[0]+r,b[1]],'ink',4);
+  L(g,[b[0]+r,b[1]-r-STEM],[b[0]+r,b[1]+r],'active',6.8);
+  for(var k=0;k<8;k++){var Ln=k===0?30:(k%2===0?10:6);
+    L(g,s,P(s[0],s[1],Ln,THETA+45*k),'ink',3);}
+  E('circle',{cx:n(s[0]),cy:n(s[1]),r:2.8,'class':'ink fill',fill:'currentColor'},g);
+  E('circle',{cx:n(d[0]),cy:n(d[1]),r:5.6,'class':'ink fill',fill:'currentColor'},g);
+}
+mark(document.getElementById('navmark'));
+mark(document.getElementById('footmark'));
+
+/* ---------- hero art: the instrument, exposed ---------- */
+(function(){
+  var svg=document.getElementById('heroArt');
+  var g=E('g',{},svg), r=42;
+  var b=P(C,C,R-r,THETA+180), s=P(C,C,R,THETA), d=P(C,C,R,THETA+180);
+  // construction layer
+  E('circle',{cx:C,cy:C,r:R,'class':'faint','stroke-width':1.1,
+    'stroke-dasharray':'5 5'},g);
+  L(g,P(C,C,R+30,THETA),P(C,C,R+30,THETA+180),'faint',1.1,{'stroke-dasharray':'4 4'});
+  // sector graduation — never all the way round
+  for(var t=-66;t<=66.001;t+=3){
+    var h=(Math.round((t+66)/3)%5===0)?11:5;
+    L(g,P(C,C,R,THETA+t),P(C,C,R-h,THETA+t),'faint',1.1);
+  }
+  // radial fan across the observed sector
+  for(var i=0;i<7;i++){
+    var a=THETA+130+i*7;
+    L(g,P(C,C,R*0.52,a),P(C,C,R*0.93,a),'faint',1.1);
+  }
+  // the mark
+  var ring=E('path',{d:arcD(C,C,R,THETA+GAP/2,THETA-GAP/2),'class':'ink',
+    'stroke-width':4,'stroke-linecap':'round'},g);
+  var bowl=E('circle',{cx:n(b[0]),cy:n(b[1]),r:r,'class':'ink','stroke-width':4},g);
+  L(g,[b[0]-r,b[1]],[b[0]+r,b[1]],'ink',4);
+  L(g,[b[0]+r,b[1]-r-STEM],[b[0]+r,b[1]+r],'active',6.8);
+  for(var k=0;k<8;k++){var Ln=k===0?30:(k%2===0?10:6);
+    L(g,s,P(s[0],s[1],Ln,THETA+45*k),'ink',3);}
+  E('circle',{cx:n(s[0]),cy:n(s[1]),r:2.8,'class':'ink fill',fill:'currentColor'},g);
+  E('circle',{cx:n(d[0]),cy:n(d[1]),r:5.6,'class':'ink fill',fill:'currentColor'},g);
+  // data field settling inside the bowl — the thing being looked at
+  var seed=7;
+  function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647}
+  for(var j=0;j<34;j++){
+    var ang=rnd()*360, rad=Math.sqrt(rnd())*(r-9), p=P(b[0],b[1],rad,ang);
+    E('circle',{cx:n(p[0]),cy:n(p[1]),r:1.7,'class':'active fill',
+      fill:'currentColor','fill-opacity':(0.25+rnd()*0.6).toFixed(2)},g);
+  }
+  // leaders
+  var lg=E('g',{'class':'faint'},g);
+  E('path',{d:'M'+n(s[0])+' '+n(s[1])+'L'+n(s[0]-26)+' '+n(s[1]-40)+'H'+n(s[0]-52),
+    'class':'faint','stroke-width':1.1},lg);
+  var tx=E('text',{x:n(s[0]-56),y:n(s[1]-36),'text-anchor':'end','font-size':8.4,
+    'font-family':"'IBM Plex Mono',monospace",'letter-spacing':'0.1em',
+    fill:'currentColor','class':'faint fill'},lg);
+  tx.textContent='θ = −40.6°';
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    [ring,bowl].forEach(function(el){
+      try{var len=el.getTotalLength();
+        el.style.setProperty('--L',len); el.classList.add('drawin');}catch(e){}
+    });
+  }
+})();
+
+/* ---------- services ---------- */
+var SERVICES=[
+ {n:'01',name:'Cleaning up messy data',
+  line:'We take the data you already hold, wherever it lives, and make it usable before anyone tries to analyse it.',
+  price:'From $30 · 4 days · 2 revisions', priceTodo:false,
+  deliver:['A cleaned dataset in the format you need — Excel, CSV or Google Sheets.',
+   'A document listing what we found and what we did about it: duplicates removed, missing values handled, formats standardised, outliers flagged rather than quietly deleted.',
+   'If several files had to agree with each other, a record of how we made them agree.',
+   'You keep everything, and the work is repeatable.'],
+  when:'Pick this when you already know what you want to do with the data, and the only thing in the way is the state it’s in. You have someone who’ll take it from there — an analyst, a developer, or you.'},
+ {n:'02',name:'Dashboards and performance tracking',
+  line:'A place to look every week that tells you how the business is doing, without anyone rebuilding it by hand.',
+  price:'Price and timeline to set', priceTodo:true,
+  deliver:['A working dashboard in Power BI or Tableau, connected to your data so it updates without manual work.',
+   'A short written definition of every number on it — what counts as a sale, where the figure comes from, what it excludes — so two people reading it reach the same conclusion.',
+   'A handover session for whoever will use it day to day.'],
+  when:'Pick this when the question repeats. You’re rebuilding the same report monthly, or your team is working from different numbers and nobody is sure which are right.'},
+ {n:'03',name:'Testing whether it’s real',
+  line:'Finding out whether a pattern in your numbers is a genuine effect or a coincidence you’re about to spend money on.',
+  price:'1–2 weeks · priced per project', priceTodo:false,
+  deliver:['A written analysis stating what we tested, what we found, and how confident you should be in it — including when the honest answer is “your data can’t settle this yet.”',
+   'Charts showing the pattern.',
+   'A plain-language section separating what the result supports from what it doesn’t, so you don’t over-read it.'],
+  when:'Pick this when a decision is expensive and you don’t want to get it wrong. Two channels look different — is that real? A change looks like it worked — did it, or was that the season?'}
+];
+(function(){
+  var host=document.getElementById('services-list');
+  SERVICES.forEach(function(s){
+    var sec=document.createElement('div'); sec.className='svc';
+    var lis=s.deliver.map(function(d){
+      return '<li><svg width="16" height="8" viewBox="0 0 16 8" aria-hidden="true">'+
+        '<path d="M0 4H11" stroke-width="1.4"/><path d="M11 1L15 4L11 7" stroke-width="1.4" '+
+        'stroke-linejoin="round" stroke-linecap="round"/></svg><span>'+d+'</span></li>';
+    }).join('');
+    sec.innerHTML =
+      '<div class="l">'+
+        '<span class="num">'+s.n+'</span>'+
+        '<h3>'+s.name+'</h3>'+
+        '<p class="copy" style="font-size:15.2px">'+s.line+'</p>'+
+        '<span class="price'+(s.priceTodo?' todo':'')+'">'+s.price+'</span>'+
+      '</div>'+
+      '<div class="r">'+
+        '<ul class="deliver">'+lis+'</ul>'+
+        '<div class="when"><b>When this is the right one</b>'+s.when+'</div>'+
+      '</div>';
+    host.appendChild(sec);
+  });
+})();
+
+/* ---------- method: the data → decision transformation ---------- */
+var STAGES=[
+ {k:'Stage 01',t:'Observe',p:'We look at how your business actually runs and where the data comes from — the real workflow, not the one on the diagram. Usually a working session with whoever handles it daily.'},
+ {k:'Stage 02',t:'Measure',p:'We establish what’s really in the data: what’s captured, what’s missing, what’s inconsistent, and what can be answered with confidence. This sets the ceiling on everything that follows.'},
+ {k:'Stage 03',t:'Understand',p:'We work out what the numbers are telling you and why. Patterns get checked against how the business actually operates, so a finding means something rather than merely being true.'},
+ {k:'Stage 04',t:'Identify',p:'We separate what matters from what is merely interesting: the drivers behind performance, the gaps costing you, and the handful of things worth acting on now.'},
+ {k:'Stage 05',t:'Decide',p:'You get findings and clear options, each with what it would take and what it would change. The decision stays yours — we make sure it’s an informed one.'}
+];
+(function(){
+  var host=document.getElementById('stages');
+  STAGES.forEach(function(s,i){
+    var d=document.createElement('div'); d.className='stage';
+    var fig=document.createElement('div'); fig.className='fig';
+    var svg=E('svg',{viewBox:'0 0 78 58','class':'dsc'},fig);
+    var g=E('g',{},svg), sd=11;
+    function rnd(){sd=(sd*16807)%2147483647;return sd/2147483647}
+    if(i===0){ // raw field
+      for(var j=0;j<26;j++)
+        E('circle',{cx:n(4+rnd()*70),cy:n(6+rnd()*46),r:1.9,'class':'body fill',
+          fill:'currentColor','fill-opacity':0.55},g);
+    } else if(i===1){ // measured
+      for(var j2=0;j2<14;j2++){var x=5+j2*5.3;
+        L(g,[x,46],[x,46-(6+((j2*37)%22))],'body',1.6);}
+      L(g,[2,50],[76,50],'faint',1.1);
+    } else if(i===2){ // pattern
+      var pts=[];
+      for(var j3=0;j3<14;j3++){var xx=5+j3*5.3,
+        yy=44-(Math.sin(j3/2.4)*10+j3*1.5);
+        pts.push([xx,yy]);
+        E('circle',{cx:n(xx),cy:n(yy),r:1.9,'class':'body fill',fill:'currentColor'},g);}
+      E('path',{d:'M'+pts.map(function(p){return n(p[0])+' '+n(p[1])}).join('L'),
+        'class':'active','stroke-width':1.8,'stroke-linejoin':'round'},g);
+    } else if(i===3){ // outlier identified — the page's one coral
+      for(var j4=0;j4<14;j4++){var x4=5+j4*5.3,y4=40-(Math.sin(j4/2.4)*7);
+        E('circle',{cx:n(x4),cy:n(y4),r:1.8,'class':'faint fill',fill:'currentColor'},g);}
+      E('circle',{cx:52,cy:14,r:6.5,'class':'mark','stroke-width':1.4},g);
+      E('circle',{cx:52,cy:14,r:2.6,'class':'mark fill',fill:'currentColor'},g);
+    } else { // decision — the sight line resolves
+      L(g,[4,29],[58,29],'active',2.2);
+      E('path',{d:'M54 24L60 29L54 34','class':'active','stroke-width':2.2,
+        'stroke-linejoin':'round','stroke-linecap':'round'},g);
+      L(g,[68,18],[68,40],'ink',2.2);
+    }
+    d.appendChild(fig);
+    d.insertAdjacentHTML('beforeend',
+      '<span class="st">'+s.k+'</span><h3>'+s.t+'</h3><p>'+s.p+'</p>');
+    host.appendChild(d);
+  });
+})();
+
+/* ---------- the chart: monthly revenue, built to the measuring scale ---- */
+(function(){
+  var svg=document.getElementById('chart');
+  var g=E('g',{},svg);
+  var MONTHS=['D','J','F','M','A','M','J','J','A','S','O','N'];
+  // shape of the finding: concentration in Sep–Nov
+  var V=[0.34,0.41,0.33,0.40,0.38,0.44,0.42,0.39,0.47,0.66,0.84,1.00];
+  var x0=44,y0=228,w=344,h=178;
+  // axes
+  L(g,[x0,y0],[x0+w,y0],'body',1.1);
+  L(g,[x0,y0],[x0,y0-h-14],'body',1.1);
+  // y ticks and labels at real values
+  var YL=[[0,'0'],[0.25,'0.5'],[0.5,'1.0'],[0.75,'1.5'],[1,'2.0']];
+  YL.forEach(function(t){
+    var y=y0-t[0]*h;
+    L(g,[x0,y],[x0-6,y],'body',1.1);
+    if(t[0]>0) L(g,[x0,y],[x0+w,y],'faint',1);
+    var tx=E('text',{x:x0-11,y:y+3.5,'text-anchor':'end','font-size':9,
+      'font-family':"'IBM Plex Mono',monospace",fill:'currentColor',
+      'class':'body fill'},g);
+    tx.textContent=t[1];
+  });
+  var yl=E('text',{x:x0-11,y:y0-h-20,'text-anchor':'start','font-size':8.6,
+    'font-family':"'IBM Plex Mono',monospace",'letter-spacing':'0.12em',
+    fill:'currentColor','class':'dim fill',style:'fill:var(--dim)'},g);
+  yl.textContent='REVENUE · £M';
+  // bars as stepped measured marks
+  var bw=w/MONTHS.length;
+  V.forEach(function(v,i){
+    var cx=x0+bw*i+bw/2, top=y0-v*h;
+    var hi=i>=9;
+    L(g,[cx,y0],[cx,top],hi?'active':'body',hi?7:5);
+    L(g,[cx,y0],[cx,y0+(i%3===0?6:3)],'body',1.1);
+    var tx=E('text',{x:cx,y:y0+20,'text-anchor':'middle','font-size':8.6,
+      'font-family':"'IBM Plex Mono',monospace",fill:'currentColor',
+      'class':(hi?'active':'body')+' fill'},g);
+    tx.textContent=MONTHS[i];
+  });
+  // the marked span
+  var sx=x0+bw*9, ex=x0+bw*12;
+  L(g,[sx+3,y0-h-6],[ex-3,y0-h-6],'active',1.2);
+  L(g,[sx+3,y0-h-10],[sx+3,y0-h-2],'active',1.2);
+  L(g,[ex-3,y0-h-10],[ex-3,y0-h-2],'active',1.2);
+  var sp=E('text',{x:(sx+ex)/2,y:y0-h-15,'text-anchor':'middle','font-size':9,
+    'font-family':"'IBM Plex Mono',monospace",'letter-spacing':'0.08em',
+    fill:'currentColor','class':'active fill'},g);
+  sp.textContent='SEP–NOV';
+  // the outlier — the single coral event on this page. It sits ON the month
+  // that contained the excluded transactions, not floating in the plot area.
+  var ox=x0+bw*10+bw/2, oy=y0-V[10]*h-13;
+  E('circle',{cx:ox,cy:oy,r:7,'class':'mark','stroke-width':1.5},g);
+  E('circle',{cx:ox,cy:oy,r:2.8,'class':'mark fill',fill:'currentColor'},g);
+  E('path',{d:'M'+(ox-9)+' '+oy+'H'+(ox-52),'class':'mark','stroke-width':1.1},g);
+  var ot=E('text',{x:ox-57,y:oy+3.2,'text-anchor':'end','font-size':8.6,
+    'font-family':"'IBM Plex Mono',monospace",'letter-spacing':'0.06em',
+    fill:'currentColor','class':'mark fill'},g);
+  ot.textContent='3 txns > £35k removed';
+})();
+
+/* ---------- findings list ---------- */
+var FINDINGS=[
+ 'Revenue concentrated in September–November — not spread evenly across the year.',
+ 'A handful of customers carried a disproportionate share of total sales.',
+ 'Three transactions above £35,000 would distort any average they were left inside.',
+ 'Records with missing customer IDs were flagged, not deleted — removing them would have quietly changed the totals.'
+];
+(function(){
+  var host=document.getElementById('findings');
+  FINDINGS.forEach(function(f,i){
+    var d=document.createElement('div');
+    d.innerHTML='<span>0'+(i+1)+'</span><p>'+f+'</p>';
+    host.appendChild(d);
+  });
+})();
+
+/* ---------- faq ---------- */
+var FAQ=[
+ ['We don’t have anyone who works with data. Is that a problem?',
+  'No — that’s the situation this is built for. You don’t need to prepare anything or know the terminology. You need one person who understands how the business actually runs and can answer questions about it. That’s usually you.'],
+ ['We’re not sure what we need. Can we still talk?',
+  'Yes, and it’s the better place to start. Working out which question is worth answering is part of the job, not a prerequisite for it. Come with the decision you’re stuck on rather than a specification, and we’ll work backwards from there.'],
+ ['Do you need access to our systems, and what happens to our data?',
+  'Usually a read-only connection or a recent export — nothing that lets us change anything. Your data is used only for your project, never shared or reused, and deleted on request. We’ll sign an NDA before you send anything if you’d prefer.'],
+ ['How do we know the work will be any good?',
+  'You don’t yet, and we’d rather not pretend otherwise. What we can offer is a worked example on public data, a first conversation that costs nothing, and a small scoped piece of work before anything larger. Judge the first deliverable, then decide.'],
+ ['What if our data is a mess?',
+  'Expected. Most of it is. Cleaning is a step in the work, not a condition for starting it — and what we find during it is usually informative in its own right. You’d be surprised how often the mess is the finding.']
+];
+(function(){
+  var host=document.getElementById('faq');
+  FAQ.forEach(function(q,i){
+    var d=document.createElement('details');
+    if(i===0) d.open=true;
+    d.innerHTML='<summary>'+q[0]+
+      '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">'+
+      '<path d="M7 4L13 10L7 16" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>'+
+      '</svg></summary><div class="a">'+q[1]+'</div>';
+    host.appendChild(d);
+  });
+})();
+
+/* ---------- form (design demo — not wired to a backend) ---------- */
+document.getElementById('intake').addEventListener('submit',function(e){
+  e.preventDefault();
+  var em=document.getElementById('f-email');
+  var msg=document.getElementById('formMsg');
+  if(!em.value || em.value.indexOf('@')<0){
+    msg.textContent='Add an email so we can reply'; em.focus(); return;
+  }
+  msg.textContent='Design preview — not connected yet';
+});
+
+/* ---------- the measuring edge: live section coordinate ---------- */
+(function(){
+  var ticks=document.getElementById('spineTicks');
+  for(var i=0;i<=40;i++){
+    E('path',{d:'M46 '+(i*20)+'H'+(46+(i%5===0?10:5)),'class':'rdg',
+      'stroke-width':1,'vector-effect':'non-scaling-stroke'},ticks);
+  }
+  var LABELS=[['top','01 · Instinct'],['who','02 · Who we help'],
+    ['services','03 · Services'],['method','04 · Method'],['proof','05 · Proof'],
+    ['about','06 · About'],['faq','07 · Questions'],['contact','08 · Start']];
+  var nodes=LABELS.map(function(l){return [document.getElementById(l[0]),l[1]]});
+  var lab=document.getElementById('spineLab'),
+      cur=document.getElementById('spineCursor'),
+      wrapEl=document.getElementById('spineWrap'),
+      navEl=document.getElementById('nav'), last='';
+  var bands=[].slice.call(document.querySelectorAll('.band'));
+  function overDark(y){
+    for(var i=0;i<bands.length;i++){
+      var r=bands[i].getBoundingClientRect();
+      if(r.top<=y && r.bottom>y) return true;
+    }
+    return false;
+  }
+  function onScroll(){
+    var y=window.scrollY, vh=window.innerHeight;
+    navEl.classList.toggle('solid', y>40);
+    var frac=Math.min(1,Math.max(0, y/Math.max(1,
+      document.body.scrollHeight-vh)));
+    cur.setAttribute('transform','translate(0,'+(frac*800)+')');
+    var cu=null;
+    nodes.forEach(function(p){
+      if(p[0] && p[0].getBoundingClientRect().top<=vh*0.38) cu=p[1];
+    });
+    cu=cu||LABELS[0][1];
+    if(cu!==last){ lab.textContent=cu; last=cu; }
+    // the spine sits over alternating environments
+    // which environment is behind the fixed furniture, by geometry not hit-test
+    // (the spine and nav sit above everything, so elementFromPoint lies here)
+    wrapEl.setAttribute('data-on-dark', overDark(vh*0.5)?'1':'0');
+    navEl.setAttribute('data-on-dark', overDark(26)?'1':'0');
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  onScroll();
+})();
+
+document.getElementById('langToggle').addEventListener('click',function(e){
+  e.preventDefault();
+  var m=document.getElementById('formMsg');
+  if(m) m.textContent='Arabic version not built yet';
+  document.getElementById('contact').scrollIntoView();
+});
+})();
+</script>
+
+</body>
+</html>

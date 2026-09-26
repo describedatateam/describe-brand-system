@@ -1,0 +1,1149 @@
+<title>Typography Decisions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- one request per family: Google Fonts fails a whole css2 request if any one
+     family in it is unknown, which would take every face down together -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prata&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@200..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..600&display=swap">
+<style>
+:root{
+  --ink:#092052; --body:#5A6B85; --faint:#CBD5E1; --active:#0F58E5;
+  --mark:#E5484D; --ok:#0F7B3D; --warn:#B4690E;
+  --ground:#F6F8FC; --panel:#FFFFFF; --rule:#D8E1EF; --dim:#8A99B0;
+  --serif:'Fraunces','Iowan Old Style',Georgia,serif;
+  --prata:'Prata',Georgia,serif;
+  --sans:'IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --amiri:'Amiri',serif; --messiri:'El Messiri',sans-serif;
+  --kufi:'Reem Kufi',sans-serif;
+}
+:root:not([data-theme="light"]){color-scheme:light}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#F6F8FC; --body:#93A4C0; --faint:#1C3566; --active:#5B8DF0;
+    --mark:#F0696D; --ok:#3FBE77; --warn:#D99A3C;
+    --ground:#050F2E; --panel:#08183F; --rule:#152C5E; --dim:#7285A6;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#F6F8FC; --body:#93A4C0; --faint:#1C3566; --active:#5B8DF0;
+  --mark:#F0696D; --ok:#3FBE77; --warn:#D99A3C;
+  --ground:#050F2E; --panel:#08183F; --rule:#152C5E; --dim:#7285A6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;padding-block:0;background:var(--ground);color:var(--ink);
+  font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+::selection{background:var(--active);color:#fff}
+h1,h2{font-family:var(--serif);font-weight:300;margin:0;text-wrap:balance;
+  font-optical-sizing:auto;font-variation-settings:'SOFT' 0,'WONK' 0}
+h1{font-size:clamp(2.4rem,5.4vw,4.4rem);line-height:0.97;letter-spacing:-0.03em}
+h2{font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.06;letter-spacing:-0.022em}
+h3{font-family:var(--sans);font-weight:500;font-size:1.02rem;margin:0}
+p{margin:0}
+.wrap{max-width:1140px;margin-inline:auto;padding-inline:22px}
+@media (min-width:1060px){.wrap{padding-inline:104px 44px}}
+.label{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--body);font-weight:500}
+.lede{font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.52;color:var(--body);
+  font-weight:300;max-width:60ch}
+.note{font-size:13.4px;line-height:1.52;color:var(--body);max-width:66ch}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+section{padding-block:clamp(48px,6vw,86px);border-top:1px solid var(--rule)}
+.shead{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;
+  padding-bottom:12px;margin-bottom:26px;border-bottom:1px solid var(--ink)}
+.shead .k{font-family:var(--mono);font-size:12px;color:var(--active);
+  letter-spacing:.12em}
+.shead .side{margin-inline-start:auto;max-width:42ch}
+
+/* spine */
+.spine{position:fixed;inset-block:0;inset-inline-start:0;width:64px;z-index:5;
+  pointer-events:none;display:none;color:var(--faint)}
+@media (min-width:1060px){.spine{display:block}}
+.spine svg{width:100%;height:100%;stroke:currentColor;fill:none}
+
+/* controls */
+.bar{position:sticky;top:0;z-index:20;background:var(--ground);
+  border-bottom:1px solid var(--rule)}
+.bar .in{max-width:1140px;margin-inline:auto;padding:10px 22px;display:flex;
+  gap:10px 18px;align-items:center;flex-wrap:wrap}
+@media (min-width:1060px){.bar .in{padding-inline:104px 44px}}
+button.sw{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;background:none;color:var(--body);cursor:pointer;
+  border:1px solid var(--rule);padding:7px 12px 6px}
+button.sw:hover{color:var(--ink);border-color:var(--body)}
+button.sw[aria-pressed=true]{color:var(--active);border-color:var(--active)}
+button.sw:focus-visible{outline:2px solid var(--active);outline-offset:2px}
+.seg{display:inline-flex}
+.seg button{border-inline-start-width:0}
+.seg button:first-child{border-inline-start-width:1px}
+
+/* compare grid */
+.cmp{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+  grid-template-columns:1fr}
+@media (min-width:860px){.cmp{grid-template-columns:1fr 1fr}}
+.cmpcell{background:var(--panel);padding:22px 20px 26px;min-width:0;
+  display:flex;flex-direction:column;gap:16px}
+.cmpcell.dark{background:#071A44;color:#F6F8FC;--body:#9FB0CC;--rule:#16346E;
+  --faint:#1C3566;--dim:#7285A6}
+.cmphead{display:flex;gap:10px;align-items:baseline;
+  border-bottom:1px solid var(--rule);padding-bottom:8px}
+.cmphead b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;font-weight:500}
+.cmphead span{font-family:var(--mono);font-size:10px;color:var(--dim);
+  margin-inline-start:auto}
+.sizerow{display:flex;flex-direction:column;gap:3px;padding-block:9px;
+  border-bottom:1px solid var(--rule)}
+.sizerow:last-child{border-bottom:0}
+.sizerow .px{font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+  color:var(--dim)}
+.sizerow .spec{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.f-prata{font-family:var(--prata);font-weight:400}
+.f-fraunces{font-family:var(--serif);font-weight:300;
+  font-variation-settings:'SOFT' 0,'WONK' 0;font-optical-sizing:auto}
+.f-amiri{font-family:var(--amiri)}
+.f-vazir{font-family:'Vazirmatn',sans-serif}
+.f-readex{font-family:'Readex Pro',sans-serif}
+.glyphrow{display:flex;gap:26px;flex-wrap:wrap;align-items:baseline}
+.glyphrow div{display:flex;flex-direction:column;gap:4px;align-items:center}
+.glyphrow .g{font-size:46px;line-height:1.5}
+.glyphrow .cap{font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+  color:var(--dim);text-transform:uppercase}
+.f-messiri{font-family:var(--messiri)}
+.f-kufi{font-family:var(--kufi)}
+
+/* measurement table */
+.tscroll{overflow-x:auto;border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;min-width:560px;
+  font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--body);font-weight:500;padding:11px 14px;
+  border-bottom:1px solid var(--ink);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--rule);color:var(--body);
+  white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.v{color:var(--ink)}
+.verdict{font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.verdict.ok{color:var(--ok)} .verdict.warn{color:var(--warn)}
+.verdict.bad{color:var(--mark)}
+
+/* magnifier */
+.mags{display:grid;gap:18px;grid-template-columns:1fr;margin-top:24px}
+@media (min-width:820px){.mags{grid-template-columns:1fr 1fr}}
+.mag{border:1px solid var(--rule);background:var(--panel);padding:16px}
+.mag canvas{width:100%;height:auto;display:block;image-rendering:pixelated;
+  background:#071A44}
+.mag .cap{display:flex;gap:10px;align-items:baseline;margin-top:11px}
+.mag .cap b{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;font-weight:500}
+.mag .cap span{font-family:var(--mono);font-size:10px;color:var(--dim);
+  margin-inline-start:auto}
+
+/* verdict card */
+.call{border:1px solid var(--active);padding:clamp(22px,3vw,32px);
+  margin-top:clamp(28px,4vw,44px);display:flex;flex-direction:column;gap:14px}
+.call .label{color:var(--active)}
+.call h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.3rem,2.4vw,1.8rem);
+  letter-spacing:-.018em;font-variation-settings:'SOFT' 0,'WONK' 0}
+.call ul{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:7px}
+.call li{font-size:14.6px;line-height:1.5;color:var(--body)}
+.call li b{font-weight:500;color:var(--ink)}
+.rejected{border:1px solid var(--rule);padding:18px 20px;margin-top:16px;
+  display:flex;flex-direction:column;gap:7px}
+.rejected .label{color:var(--mark)}
+
+/* scale table */
+.scale{display:flex;flex-direction:column;border-top:1px solid var(--ink)}
+.srow{display:grid;grid-template-columns:1fr;gap:6px;padding:16px 0;
+  border-bottom:1px solid var(--rule);align-items:baseline}
+@media (min-width:880px){.srow{grid-template-columns:150px 1fr 190px}}
+.srow .tok{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  color:var(--active)}
+.srow .demo{min-width:0;overflow:hidden}
+.srow .spec2{font-family:var(--mono);font-size:10.5px;color:var(--dim);
+  justify-self:start;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media (min-width:880px){.srow .spec2{justify-self:end}}
+
+/* roles */
+.roles{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+  grid-template-columns:1fr}
+@media (min-width:800px){.roles{grid-template-columns:repeat(3,1fr)}}
+.role{background:var(--panel);padding:22px 20px 26px;display:flex;
+  flex-direction:column;gap:12px}
+.role .big{font-size:2.3rem;line-height:1;color:var(--ink)}
+.role p{font-size:13.8px;line-height:1.5;color:var(--body)}
+.role .ex{font-size:13px;color:var(--ink);border-top:1px solid var(--rule);
+  padding-top:11px}
+
+/* bilingual */
+.bi{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+  grid-template-columns:1fr}
+@media (min-width:880px){.bi{grid-template-columns:1fr 1fr}}
+.bicell{background:var(--panel);padding:26px 24px 30px;min-width:0}
+.bicell.rtl{direction:rtl;text-align:right}
+.rules{display:flex;flex-direction:column;border-top:1px solid var(--ink);
+  margin-top:clamp(28px,4vw,44px)}
+.rule{display:grid;grid-template-columns:26px 1fr;gap:14px;padding:15px 0;
+  border-bottom:1px solid var(--rule);align-items:start}
+.rule .n{font-family:var(--mono);font-size:10.5px;color:var(--active);padding-top:3px}
+.rule b{font-weight:500;font-size:15px;color:var(--ink);display:block}
+.rule span{font-size:13.6px;line-height:1.5;color:var(--body);display:block;
+  margin-top:3px}
+.rule code{font-family:var(--mono);font-size:12.4px;color:var(--active)}
+
+/* working sizes */
+.ui{border:1px solid var(--rule);background:var(--panel);padding:clamp(22px,3vw,34px);
+  display:flex;flex-direction:column;gap:22px}
+.ui .uihead{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;
+  border-bottom:1px solid var(--rule);padding-bottom:12px}
+.uitable{width:100%;border-collapse:collapse;font-size:13.6px;min-width:0}
+.uitable th{font-family:var(--mono);font-size:9.5px;padding:8px 12px 8px 0}
+.uitable td{padding:9px 12px 9px 0;font-family:var(--sans);font-weight:300;
+  color:var(--body);border-bottom:1px solid var(--rule)}
+.uitable td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;
+  text-align:right;color:var(--ink);padding-inline-end:0}
+.uibtn{font-family:var(--mono);font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;border:1px solid var(--ink);padding:12px 17px 11px;
+  display:inline-flex;gap:11px;align-self:flex-start}
+.uibtn .a{color:var(--active)}
+footer{padding-block:40px 60px;border-top:1px solid var(--ink);display:flex;
+  gap:18px;flex-wrap:wrap;align-items:center}
+footer .t{font-size:12.8px;color:var(--body)}
+footer .rtl{margin-inline-start:auto;direction:rtl}
+.loading{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--active)}
+</style>
+
+<div class="spine" aria-hidden="true">
+  <svg viewBox="0 0 64 900" preserveAspectRatio="none">
+    <path d="M40 0V900" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    <g id="spineTicks"></g>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header style="padding-block:clamp(44px,6vw,80px) 30px">
+    <div style="display:flex;gap:13px;align-items:center;margin-bottom:22px">
+      <span style="height:1px;width:42px;background:currentColor;opacity:.45"></span>
+      <span class="label">.describe( · role 04 · typography</span>
+    </div>
+    <h1>Bodoni was cut for a<br>measurable reason.<br>So decide the rest<br>the same way.</h1>
+    <p class="lede" style="margin-top:26px">
+      Your brief rejected Bodoni Moda because its hairlines break at working
+      sizes on dark backgrounds. That's a test, not a preference — so this page
+      runs it. Everything below is measured live, in your browser, on the real
+      fonts. Nothing here is my opinion about how a typeface looks.
+    </p>
+  </header>
+</div>
+
+<div class="bar">
+  <div class="in">
+    <span class="label" style="margin-inline-end:4px">Ground</span>
+    <span class="seg">
+      <button class="sw" id="gLight" aria-pressed="true">Paper</button>
+      <button class="sw" id="gDark" aria-pressed="false">Navy</button>
+    </span>
+    <span class="label" style="margin-inline:10px 4px">Page theme</span>
+    <button class="sw" id="theme">Invert</button>
+    <span class="loading" id="status" style="margin-inline-start:auto">Loading fonts…</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ========== 01 · THE HAIRLINE TEST ========== -->
+<section>
+  <div class="shead">
+    <span class="k">01</span>
+    <h2>The hairline test</h2>
+    <p class="note side">Each face is drawn to a canvas at its real pixel size,
+      then the thinnest stroke is measured in device pixels. Below about 1px a
+      hairline stops being a line and becomes a grey smear — worse on dark,
+      where antialiasing eats it.</p>
+  </div>
+
+  <div class="rejected" id="fontWarn" style="display:none;border-color:var(--mark);
+    margin-bottom:22px">
+    <span class="label">Fonts unavailable</span>
+    <p class="note" id="fontWarnText"></p>
+  </div>
+
+  <div class="cmp" id="cmpLatin"></div>
+
+  <h3 style="margin-top:clamp(30px,4vw,48px)">Measured: thinnest stroke, in device pixels</h3>
+  <p class="note" style="margin:8px 0 16px">
+    Measured on the letter <span class="mono">o</span> — for a high-contrast
+    serif, its top and bottom curves are the thinnest points in the face.
+    <span class="mono">contrast</span> is stem ÷ hairline: how dramatic the face
+    is. High contrast is the look you want; the question is whether it survives
+    the size you use it at.
+  </p>
+  <div class="tscroll"><table id="measure">
+    <thead><tr><th>Size</th><th>Used for</th><th>Prata hairline</th>
+      <th>Prata contrast</th><th>Fraunces hairline</th><th>Fraunces contrast</th>
+      <th>Verdict</th></tr></thead>
+    <tbody id="measureBody"><tr><td colspan="7">Measuring…</td></tr></tbody>
+  </table></div>
+
+  <h3 style="margin-top:clamp(30px,4vw,48px)">What 15px on navy actually looks like</h3>
+  <p class="note" style="margin:8px 0 0">
+    The same pixels that were measured, magnified 9×. Not a rendering of the
+    typeface — a rendering of what your reader's screen puts there.
+  </p>
+  <div class="mags">
+    <div class="mag">
+      <canvas id="magPrata"></canvas>
+      <div class="cap"><b>Prata</b><span id="magPrataN"></span></div>
+    </div>
+    <div class="mag">
+      <canvas id="magFraunces"></canvas>
+      <div class="cap"><b>Fraunces</b><span id="magFrauncesN"></span></div>
+    </div>
+  </div>
+
+  <div class="call">
+    <span class="label">The call · Latin display</span>
+    <h3>Fraunces — with the character axes switched off.</h3>
+    <ul>
+      <li><b>It has an optical size axis.</b> Fraunces carries
+        <span class="mono">opsz 9–144</span>, which thickens hairlines
+        automatically as the size drops. That is precisely the Bodoni failure
+        mode, solved in the font rather than worked around in CSS.</li>
+      <li><b>One family covers 88px and 14px.</b> Prata ships a single weight,
+        400, with no italic. Your system needs display headings, section heads,
+        pull quotes and the occasional 15px label. Prata gives you nothing to
+        recover with when a size gets weak.</li>
+      <li><b>The trendiness objection is real, and answerable.</b> Fraunces is
+        everywhere right now — but almost always with
+        <span class="mono">SOFT</span> and <span class="mono">WONK</span>
+        turned up, which is what makes it read as friendly-retro. Set
+        <span class="mono">'SOFT' 0, 'WONK' 0</span> at weight 200–300 and it is
+        a severe, high-contrast face that very few people are using.</li>
+      <li><b>Prata stays in the system</b> as an alternate for single large
+        display moments — a report cover, a poster — where nothing sits below
+        40px. It is the better face at that one job.</li>
+    </ul>
+    <p class="note" style="border-top:1px solid var(--rule);padding-top:13px">
+      Three of those four reasons are facts about the fonts, not measurements —
+      they hold whatever the table says. The table decides one thing: whether
+      either face breaks before 15px. If Prata holds all the way down on your
+      screen, the case for Fraunces rests on range alone, and you should weigh
+      Prata's distinctiveness against it yourself.
+    </p>
+  </div>
+</section>
+
+<!-- ========== 02 · ARABIC ========== -->
+<section>
+  <div class="shead">
+    <span class="k">02</span>
+    <h2>The Arabic display face</h2>
+    <p class="note side">The pairing has to hold as one identity. If the Latin
+      is a high-contrast serif and the Arabic is a low-contrast humanist, they
+      read as two different brands with the same logo on top.</p>
+  </div>
+
+  <div class="cmp" id="cmpArabic" style="grid-template-columns:1fr"></div>
+
+  <h3 style="margin-top:clamp(30px,4vw,48px)">Measured: optical size compensation</h3>
+  <p class="note" style="margin:8px 0 16px">
+    Arabic and Latin set at the same <span class="mono">font-size</span> do not
+    look the same size — Arabic letterforms sit lower and smaller on the line.
+    The multiplier below is measured from actual ink height, so Arabic headings
+    match their Latin equivalents instead of looking timid next to them.
+  </p>
+  <div class="tscroll"><table>
+    <thead><tr><th>Face</th><th>Ink height at 100px</th><th>vs Latin</th>
+      <th>Multiplier to apply</th><th>Line-height</th></tr></thead>
+    <tbody id="arBody"><tr><td colspan="5">Measuring…</td></tr></tbody>
+  </table></div>
+
+  <div class="call">
+    <span class="label">The call · Arabic display</span>
+    <h3>Amiri for headings. Reem Kufi for labels.</h3>
+    <ul>
+      <li><b>Amiri matches the contrast.</b> It is a Naskh revival with real
+        thick–thin modulation, so it sits beside a high-contrast Latin serif as
+        the same idea rather than a substitute for it.</li>
+      <li><b>It is genuinely archival.</b> Amiri revives the Bulaq Press
+        types — actual nineteenth-century Egyptian printing. Your brief asks for
+        Al-Khwarizmi as written lineage rather than portraiture; this is that,
+        as a typeface.</li>
+      <li><b>Reem Kufi earns a second role.</b> It is geometric Kufi — built
+        from circles and straight lines, the same compass-and-rule construction
+        the astrolabe mark uses. Too rigid for running headlines, exactly right
+        for short labels, section markers and tally captions, where Amiri is too
+        delicate.</li>
+      <li><b>Apply the measured multiplier.</b> Amiri needs the compensation in
+        the table above at every size, or Arabic headings undersell themselves
+        next to the English.</li>
+    </ul>
+  </div>
+
+  <div class="rejected">
+    <span class="label">Not taken · El Messiri</span>
+    <p class="note">A contemporary low-contrast humanist. It is a good typeface
+      and the wrong one here: set next to Fraunces at 200–300 weight it reads as
+      a different, softer brand, and it carries none of the archival quality the
+      rest of the system is built on. If the identity ever moves away from
+      high-contrast serif, revisit it — it would be the right answer then.</p>
+  </div>
+</section>
+
+<!-- ========== 03 · THE SCALE ========== -->
+<section>
+  <div class="shead">
+    <span class="k">03</span>
+    <h2>The scale</h2>
+    <p class="note side">Seven steps, no more. Every size is a token; a size
+      that isn't in this list doesn't exist. The base is 16px and the ratio is
+      1.32, which lands close enough to the existing stroke unit
+      (<span class="mono">u = 2</span>) to keep type and geometry on the same
+      grid.</p>
+  </div>
+  <div class="scale" id="scale"></div>
+</section>
+
+<!-- ========== 04 · THE INTERFACE FACE ========== -->
+<section>
+  <div class="shead">
+    <span class="k">04</span>
+    <h2>The interface face</h2>
+    <p class="note side">This is the face that carries almost every word on
+      every surface. It has to be clean enough to disappear, and it has to
+      carry Arabic in the same family — a second family for Arabic is what
+      breaks bilingual systems.</p>
+  </div>
+
+  <div class="rejected" style="border-color:var(--active)">
+    <span class="label" style="color:var(--active)">What Hermes actually uses</span>
+    <p class="note">Inspected directly: their interface runs on
+      <b style="font-weight:500;color:var(--ink)">Rules Variable</b> at weights
+      400–500, 13–16px — a commercial Swiss grotesque. Their display face is
+      Rules Gothic Condensed. Their mono, Aeonik Fono, appears
+      <b style="font-weight:500;color:var(--ink)">only at 10–11px, uppercase,
+      on short labels</b> — never in a sentence, never above 11px.
+      Part of what reads as quality there is simply paid-for type. Rules has no
+      Arabic and isn't licensable for free; the candidates below are the closest
+      free faces that <em>do</em> carry Arabic.</p>
+  </div>
+
+  <div class="cmp" id="cmpUI" style="grid-template-columns:1fr"></div>
+
+  <h3 style="margin-top:clamp(30px,4vw,48px)">Measured: legibility at small sizes</h3>
+  <p class="note" style="margin:8px 0 16px">
+    Two things decide whether a UI face holds at 14px. <b style="font-weight:500;color:var(--ink)">x-height ratio</b>
+    — the lowercase height against the caps — because it is the lowercase you
+    read; higher is more legible small. <b style="font-weight:500;color:var(--ink)">Set width</b>
+    — how much room a fixed sentence takes; narrower fits more into a table cell
+    or a chart label without shrinking the type.
+  </p>
+  <div class="tscroll"><table>
+    <thead><tr><th>Face</th><th>x-height ratio</th><th>Set width at 16px</th>
+      <th>vs Plex</th><th>Arabic in family</th><th>Character</th></tr></thead>
+    <tbody id="uiBody"><tr><td colspan="6">Measuring…</td></tr></tbody>
+  </table></div>
+
+  <div class="call">
+    <span class="label">The call · interface faces</span>
+    <h3>Readex Pro for Latin. Vazirmatn for Arabic.</h3>
+    <ul>
+      <li><b>Readex Pro for the Latin.</b> Low contrast, open apertures,
+        softened terminals — clean without having opinions, which is what lets
+        it sit under a high-contrast serif without fighting it.</li>
+      <li><b>Vazirmatn for the Arabic, on your judgement.</b> You read Arabic
+        every day; I don't. My case for keeping one family was coherence, and
+        coherence is not worth buying at the cost of the script half your
+        market reads. Splitting is normal in bilingual systems — Latin and
+        Arabic are built so differently that one designer rarely nails both.</li>
+      <li><b>A split is only safe if it is matched.</b> Two families at the
+        same nominal weight are almost never the same optical weight, and
+        Arabic sets smaller than Latin at the same size. Both are measured
+        below and corrected with per-script tokens rather than by eye.</li>
+      <li><b>One consequence worth knowing:</b> since Arabic no longer comes
+        from the Latin family, the Arabic-coverage constraint that ruled out
+        Geist, Inter and Manrope no longer binds the Latin slot. You're happy
+        with Readex, so I'd leave it — but the door is open if you ever want
+        to revisit.</li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top:clamp(30px,4vw,48px)">Measured: matching the two faces</h3>
+  <p class="note" style="margin:8px 0 16px">
+    Two joins have to be made invisible. <b style="font-weight:500;color:var(--ink)">Optical
+    size</b> — Arabic sets smaller at the same <span class="mono">font-size</span>,
+    so it needs a multiplier. <b style="font-weight:500;color:var(--ink)">Stroke
+    weight</b> — measured on the two simplest verticals in either script, Latin
+    <span class="mono">l</span> and Arabic alef <span class="f-vazir">ا</span>,
+    which are both a plain stem and therefore directly comparable. If one is
+    thicker, Arabic at 400 will look bolder than Latin at 400 and the page will
+    feel lopsided.
+  </p>
+  <div class="tscroll"><table>
+    <thead><tr><th>Measure</th><th>Readex Pro (Latin)</th><th>Vazirmatn (Arabic)</th>
+      <th>Ratio</th><th>Correction</th></tr></thead>
+    <tbody id="pairBody"><tr><td colspan="5">Measuring…</td></tr></tbody>
+  </table></div>
+
+  <h3 style="margin-top:clamp(30px,4vw,48px)">Check with your own eyes: Arabic or Persian letterforms?</h3>
+  <p class="note" style="margin:8px 0 16px">
+    Vazirmatn is Persian-first. Persian and Arabic share the script but part
+    company on a few letters — kaf and yeh above all. Below, each face sets the
+    Arabic forms <span class="f-vazir">ك ي</span> beside the Persian
+    <span class="f-vazir">ک ی</span>, then the Persian-only letters. This is
+    yours to judge, not mine: if the kaf or the yeh look Persian to you in
+    running Arabic text, say so and we pick differently.
+  </p>
+  <div class="cmp" id="cmpScript" style="grid-template-columns:1fr"></div>
+</section>
+
+<!-- ========== 05 · ROLES ========== -->
+<section>
+  <div class="shead">
+    <span class="k">05</span>
+    <h2>Three faces, three jobs</h2>
+    <p class="note side">From your brief, made literal. If you can't say which
+      of these three a piece of text is, it's probably the sans.</p>
+  </div>
+  <div class="roles">
+    <div class="role">
+      <span class="label">Serif · Fraunces</span>
+      <div class="big f-fraunces">Meaning</div>
+      <p>Statements, concepts, the thing you want remembered. Headlines, pull
+        quotes, section titles, the one sentence on a section opener.</p>
+      <p class="ex f-fraunces" style="font-size:1.05rem">
+        A number doesn't have to be wrong to mislead you.</p>
+    </div>
+    <div class="role">
+      <span class="label">Sans · IBM Plex Sans Arabic</span>
+      <div class="big" style="font-family:var(--sans);font-weight:300">Explanation</div>
+      <p>Everything that has to be read rather than admired. Body copy,
+        interface, form labels, descriptions, navigation.</p>
+      <p class="ex">Cleaning removed duplicates and isolated returns that were
+        inflating volume.</p>
+    </div>
+    <div class="role">
+      <span class="label">Mono · IBM Plex Mono</span>
+      <div class="big mono" style="font-size:2rem">Measurement</div>
+      <p>Numerals, units, axis labels, source lines. <b style="font-weight:500;
+        color:var(--ink)">Ornament, not text.</b> If it forms a sentence, it is
+        the wrong face.</p>
+      <p class="ex mono" style="font-size:11px">n = 534,232 · UCI ML REPOSITORY</p>
+    </div>
+  </div>
+
+  <div class="rejected" style="border-color:var(--mark);margin-top:22px">
+    <span class="label">The correction · mono budget</span>
+    <p class="note"><b style="font-weight:500;color:var(--ink)">The homepage
+      draft broke this rule badly.</b> Every eyebrow, nav link, button, section
+      kicker and caption was mono — which is how a supporting face quietly
+      becomes the brand's voice. Hermes, measured above, never puts mono above
+      11px and never in a sentence. Three hard limits, so this is checkable
+      rather than a matter of taste:</p>
+    <div class="rules" style="margin-top:14px;border-top-color:var(--rule)">
+      <div class="rule"><span class="n">01</span><div>
+        <b>Numerals: mono at any size.</b>
+        <span>Tables, prices, chart values, <span class="mono">n =</span> counts.
+          Always tabular. Numbers are the one thing mono exists for.</span></div></div>
+      <div class="rule"><span class="n">02</span><div>
+        <b>Labels: mono only at ≤11px, uppercase, four words or fewer.</b>
+        <span>Axis labels, source lines, figure numbers, units. One per region
+          of a composition, not one per element.</span></div></div>
+      <div class="rule"><span class="n">03</span><div>
+        <b>Everything else: never.</b>
+        <span>Nav, buttons, eyebrows above headings, section kickers, form
+          labels, captions, body. All of it is the interface sans. If a run of
+          mono would read as a phrase, it is the wrong face.</span></div></div>
+    </div>
+  </div>
+  <div class="rejected" style="border-color:var(--warn)">
+    <span class="label" style="color:var(--warn)">The gap nobody notices until launch</span>
+    <p class="note"><b style="font-weight:500;color:var(--ink)">IBM Plex Mono has
+      no Arabic.</b> Every chart label, <span class="mono">n =</span> line, source
+      credit and timestamp in the Arabic system has no mono to fall back on. The
+      rule: Arabic metadata uses IBM Plex Sans Arabic at weight 400 with
+      <span class="mono">font-variant-numeric: tabular-nums</span> and the mono
+      letter-spacing removed — never a Latin mono with Arabic glyphs substituted
+      in, which is what happens by default and looks broken.</p>
+  </div>
+</section>
+
+<!-- ========== 06 · BILINGUAL ========== -->
+<section>
+  <div class="shead">
+    <span class="k">06</span>
+    <h2>Two directions, one system</h2>
+    <p class="note side">Same content, mirrored. The measuring edge moves to
+      the right, the mark moves with it, and the geometry flips — otherwise the
+      Arabic layout reads as the English one with the text poured backwards.</p>
+  </div>
+  <div class="bi">
+    <div class="bicell">
+      <div class="label" style="margin-bottom:10px">EN · LTR</div>
+      <div class="f-fraunces" style="font-size:2rem;line-height:1.06;
+        letter-spacing:-.022em">From data to decision.</div>
+      <p style="font-size:15px;color:var(--body);margin-top:14px;line-height:1.62">
+        Small businesses generate real data long before they can justify a data
+        hire. We fill that gap.</p>
+      <p class="mono" style="font-size:11px;color:var(--dim);margin-top:16px;
+        letter-spacing:.1em">n = 534,232 · 2026</p>
+    </div>
+    <div class="bicell rtl">
+      <div class="label" style="margin-bottom:10px">AR · RTL</div>
+      <div class="f-amiri" id="arHead" style="font-size:2.4rem;line-height:1.5">
+        من البيانات إلى القرار.</div>
+      <p style="font-size:16.5px;color:var(--body);margin-top:14px;
+        line-height:1.85;font-family:var(--sans)">
+        الفرق الصغيرة تنتج بيانات قيّمة قبل أن تصبح قادرة على توظيف محلل بيانات
+        بوقت طويل. هنا يأتي دورنا.</p>
+      <p style="font-size:12px;color:var(--dim);margin-top:16px;
+        font-family:var(--sans);font-weight:400;font-variant-numeric:tabular-nums">
+        ‎534,232 = n · 2026</p>
+    </div>
+  </div>
+
+  <div class="rules" id="rules"></div>
+</section>
+
+<!-- ========== 07 · WORKING SIZES ========== -->
+<section>
+  <div class="shead">
+    <span class="k">07</span>
+    <h2>At working sizes</h2>
+    <p class="note side">A specimen sheet lies. This is the system doing its
+      actual jobs, at the actual sizes, on the ground it will sit on — switch
+      the ground at the top of the page and check it again.</p>
+  </div>
+  <div class="ui" id="uiDemo">
+    <div class="uihead">
+      <span class="label">Section</span>
+      <div class="f-fraunces" style="font-size:1.75rem;letter-spacing:-.02em">
+        Monthly revenue, cleaned</div>
+      <span class="mono" style="font-size:10.5px;color:var(--dim);
+        margin-inline-start:auto;letter-spacing:.1em">FIG. 03</span>
+    </div>
+    <table class="uitable">
+      <thead><tr><th>Month</th><th style="text-align:right">Revenue</th>
+        <th style="text-align:right">Orders</th>
+        <th style="text-align:right">Mean basket</th></tr></thead>
+      <tbody>
+        <tr><td>September</td><td class="num">1,338,214</td><td class="num">18,402</td><td class="num">72.72</td></tr>
+        <tr><td>October</td><td class="num">1,709,553</td><td class="num">22,118</td><td class="num">77.29</td></tr>
+        <tr><td>November</td><td class="num">2,004,600</td><td class="num">26,940</td><td class="num">74.41</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:14.6px;color:var(--body);line-height:1.6;max-width:56ch">
+      Three transactions above £35,000 were removed before the mean was
+      calculated. They are recorded in the appendix rather than deleted.</p>
+    <span class="uibtn">Run analysis <span class="a">→</span></span>
+    <p class="mono" style="font-size:10.5px;color:var(--dim);letter-spacing:.11em">
+      SOURCE · UCI ML REPOSITORY · RETRIEVED 2026-09-20</p>
+  </div>
+</section>
+
+  <footer>
+    <div class="t"><b style="font-weight:500;color:var(--ink)">Role 04 · Typography</b><br>
+      Measured live. Re-run it on any machine — the numbers are the argument.</div>
+    <div class="t rtl f-amiri" style="font-size:17px">من البيانات إلى القرار</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+
+/* ---------- working sizes the system actually uses ---------- */
+var SIZES=[
+ {px:88,use:'Display / hero'},
+ {px:56,use:'Section opener'},
+ {px:40,use:'H2'},
+ {px:28,use:'H3 / pull quote'},
+ {px:21,use:'Card heading'},
+ {px:17,use:'Small heading'},
+ {px:15,use:'Smallest serif use'}
+];
+
+/* ---------- canvas hairline measurement ---------- */
+function ink(data,i){ // luminance below mid = ink
+  return (data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114) < 140;
+}
+/* Rasterise at SS× resolution while laying the text out at its REAL size, so
+   a hairline thinner than one device pixel is measured as a fraction instead
+   of rounding up to 1. ctx.scale magnifies the raster; ctx.font keeps the
+   used font-size at `size`, which is what a variable font's optical-size axis
+   reads — measuring at 8× the font-size instead would quietly thin it. */
+var SS=8;
+function measureFace(family,weight,size,ch){
+  ch=ch||'o';
+  var pad=Math.ceil(size*0.8);
+  var c=document.createElement('canvas');
+  var w=Math.ceil(size*2.2)+pad*2, h=Math.ceil(size*2.2)+pad*2;
+  c.width=w*SS; c.height=h*SS;
+  var x=c.getContext('2d',{willReadFrequently:true});
+  x.scale(SS,SS);
+  x.fillStyle='#fff'; x.fillRect(0,0,w,h);
+  x.fillStyle='#000'; x.textBaseline='alphabetic';
+  x.font=weight+' '+size+'px '+family;
+  x.fillText(ch,pad,h-pad);
+  var W=c.width,H=c.height,d=x.getImageData(0,0,W,H).data;
+  // ink bounding box
+  var x0=W,y0=H,x1=-1,y1=-1;
+  for(var y=0;y<H;y++)for(var xx=0;xx<W;xx++){
+    if(ink(d,(y*W+xx)*4)){ if(xx<x0)x0=xx; if(xx>x1)x1=xx; if(y<y0)y0=y; if(y>y1)y1=y; }
+  }
+  if(x1<0) return null;
+  var midX=Math.round((x0+x1)/2), midY=Math.round((y0+y1)/2);
+  // hairline: first vertical run down the centre column (top curve of 'o')
+  var thin=0,started=false;
+  for(var y2=y0;y2<=y1;y2++){
+    var on=ink(d,(y2*W+midX)*4);
+    if(on){ thin++; started=true; } else if(started) break;
+  }
+  // stem: runs across the centre row, take the narrowest that isn't noise
+  var runs=[],run=0;
+  for(var x2=x0;x2<=x1+1;x2++){
+    var on2=x2<=x1 && ink(d,(midY*W+x2)*4);
+    if(on2) run++; else { if(run>0) runs.push(run); run=0; }
+  }
+  var stem=runs.length?Math.min.apply(null,runs):0;
+  return {thin:thin/SS, stem:stem/SS, h:(y1-y0+1)/SS, w:(x1-x0+1)/SS};
+}
+/* Is the real face actually here? Without this the table happily reports the
+   fallback serif's measurements as a finding — the exact thing this page
+   exists to stop. */
+var LAT='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+var ARB='من البيانات إلى القرار محمد';
+/* document.fonts.check() is no good here: it resolves through the fallback and
+   answers true for a family that never arrived. Measure instead — set the text
+   in "family, base" and in "base" alone; if the widths match against all three
+   bases, the browser is drawing the base and the face is absent. */
+function loaded(family,weight,probe){
+  probe=probe||LAT;
+  var c=document.createElement('canvas').getContext('2d');
+  var bases=['monospace','serif','sans-serif'];
+  for(var i=0;i<bases.length;i++){
+    c.font=weight+' 72px '+bases[i];
+    var w0=c.measureText(probe).width;
+    c.font=weight+' 72px '+family+','+bases[i];
+    if(Math.abs(c.measureText(probe).width-w0)>0.5) return true;
+  }
+  return false;
+}
+function inkHeight(family,weight,size,text){
+  var pad=Math.ceil(size*1.2);
+  var c=document.createElement('canvas');
+  c.width=Math.ceil(size*text.length*1.6)+pad*2; c.height=Math.ceil(size*3)+pad*2;
+  var x=c.getContext('2d',{willReadFrequently:true});
+  x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height);
+  x.fillStyle='#000'; x.textBaseline='alphabetic';
+  x.font=weight+' '+size+'px '+family;
+  x.fillText(text,pad,c.height-pad);
+  var W=c.width,H=c.height,d=x.getImageData(0,0,W,H).data;
+  var y0=H,y1=-1;
+  for(var y=0;y<H;y++)for(var xx=0;xx<W;xx++){
+    if(ink(d,(y*W+xx)*4)){ if(y<y0)y0=y; if(y>y1)y1=y; break; }
+  }
+  return y1<0?0:(y1-y0+1);
+}
+
+/* ---------- build the side-by-side specimens ---------- */
+var SAMPLE='From data to decision';
+function latinCell(name,cls,dark){
+  var rows=SIZES.map(function(s){
+    return '<div class="sizerow"><span class="px">'+s.px+'px · '+s.use+'</span>'+
+      '<div class="spec '+cls+'" style="font-size:'+s.px+'px;line-height:1.08;'+
+      (cls==='f-fraunces'?'font-variation-settings:\'SOFT\' 0,\'WONK\' 0;':'')+
+      '">'+SAMPLE+'</div></div>';
+  }).join('');
+  return '<div class="cmpcell'+(dark?' dark':'')+'">'+
+    '<div class="cmphead"><b>'+name+'</b><span>'+(dark?'on navy':'on paper')+'</span></div>'+
+    rows+'</div>';
+}
+function renderLatin(dark){
+  $('#cmpLatin').innerHTML = latinCell('Prata','f-prata',dark)+
+                             latinCell('Fraunces 300','f-fraunces',dark);
+}
+
+var AR_SAMPLE='من البيانات إلى القرار';
+function renderArabic(dark){
+  var faces=[['Amiri','f-amiri',''],['El Messiri','f-messiri',''],
+             ['Reem Kufi','f-kufi','']];
+  var html=faces.map(function(f){
+    return '<div class="cmpcell'+(dark?' dark':'')+'" style="direction:rtl">'+
+      '<div class="cmphead" style="direction:ltr"><b>'+f[0]+'</b>'+
+      '<span>'+(dark?'on navy':'on paper')+'</span></div>'+
+      '<div class="'+f[1]+'" style="font-size:44px;line-height:1.55">'+AR_SAMPLE+'</div>'+
+      '<div class="'+f[1]+'" style="font-size:24px;line-height:1.7">'+AR_SAMPLE+'</div>'+
+      '<div class="'+f[1]+'" style="font-size:15px;line-height:1.9">'+AR_SAMPLE+'</div>'+
+      '</div>';
+  }).join('');
+  var el=$('#cmpArabic');
+  el.innerHTML=html;
+  el.style.gridTemplateColumns = window.innerWidth>=860?'repeat(3,1fr)':'1fr';
+}
+
+/* ---------- measurement table ---------- */
+/* ---------- interface face candidates ---------- */
+var UI_FACES=[
+ ["'Readex Pro'",300,'Readex Pro','Drawn bilingual · soft terminals'],
+ ["'Rubik'",300,'Rubik','Rounded corners · warm'],
+ ["'Vazirmatn'",300,'Vazirmatn','Neutral grotesque · closest to Rules'],
+ ["'Alexandria'",300,'Alexandria','Geometric · even'],
+ ["'Cairo'",300,'Cairo','Gulf standard · familiar'],
+ ["'IBM Plex Sans Arabic'",300,'IBM Plex Sans Arabic','Current · technical']
+];
+var UI_EN='Cleaning removed duplicates and isolated returns.';
+var UI_AR='أرقام مبيعاتك وعملائك، محلّلة ومشروحة.';
+function renderUI(dark){
+  var html=UI_FACES.map(function(f){
+    var fam=f[0]+',system-ui,sans-serif';
+    return '<div class="cmpcell'+(dark?' dark':'')+'">'+
+      '<div class="cmphead"><b>'+f[2]+'</b><span>'+f[3]+'</span></div>'+
+      '<div style="font-family:'+fam+';font-weight:300;font-size:21px;line-height:1.45">'+UI_EN+'</div>'+
+      '<div style="font-family:'+fam+';font-weight:300;font-size:16px;line-height:1.62">'+UI_EN+'</div>'+
+      '<div style="font-family:'+fam+';font-weight:400;font-size:14px;line-height:1.55">'+UI_EN+'</div>'+
+      '<div dir="rtl" style="font-family:'+fam+';font-weight:300;font-size:19px;line-height:1.85;text-align:right">'+UI_AR+'</div>'+
+      '<div dir="rtl" style="font-family:'+fam+';font-weight:400;font-size:14px;line-height:1.85;text-align:right">'+UI_AR+'</div>'+
+      '</div>';
+  }).join('');
+  var el=$('#cmpUI');
+  el.innerHTML=html;
+  el.style.gridTemplateColumns = window.innerWidth>=1000?'repeat(3,1fr)':
+                                 (window.innerWidth>=640?'repeat(2,1fr)':'1fr');
+}
+function setWidth(family,weight,size,text){
+  var c=document.createElement('canvas').getContext('2d');
+  c.font=weight+' '+size+'px '+family;
+  return c.measureText(text).width;
+}
+function runUI(){
+  var body=$('#uiBody'); body.innerHTML='';
+  var baseW=0;
+  UI_FACES.forEach(function(f){
+    var ok=loaded(f[0],f[1]);
+    var xh=ok?inkHeight(f[0],f[1],200,'x'):0;
+    var ch=ok?inkHeight(f[0],f[1],200,'H'):0;
+    var w=ok?setWidth(f[0],f[1],16,UI_EN):0;
+    if(f[2]==='IBM Plex Sans Arabic' && w) baseW=w;
+    var tr=document.createElement('tr');
+    tr.setAttribute('data-w',w);
+    tr.innerHTML='<td class="v">'+f[2]+'</td>'+
+      (ok?'<td class="v">'+(ch?(xh/ch).toFixed(3):'—')+'</td>'+
+          '<td>'+(w?w.toFixed(0)+'px':'—')+'</td>'+
+          '<td class="rel">—</td>'
+        :'<td colspan="3" class="verdict bad">not loaded</td>')+
+      '<td class="verdict ok">yes</td><td>'+f[3]+'</td>';
+    body.appendChild(tr);
+  });
+  if(baseW){
+    [].forEach.call(body.querySelectorAll('tr'),function(tr){
+      var w=parseFloat(tr.getAttribute('data-w'))||0, cell=tr.querySelector('.rel');
+      if(!cell) return;
+      if(!w){ cell.textContent='—'; return; }
+      var pct=(w/baseW-1)*100;
+      cell.textContent=(pct>=0?'+':'')+pct.toFixed(1)+'%';
+    });
+  }
+}
+
+/* ---------- pairing: match the two interface faces ---------- */
+/* Stem width of the simplest vertical in each script. Latin 'l' and Arabic
+   alef are both a plain stroke, so their thickness is directly comparable —
+   which is what tells you whether 400 in one equals 400 in the other. */
+function stemWidth(family,weight,size,ch){
+  var pad=Math.ceil(size*0.9);
+  var c=document.createElement('canvas');
+  var w=Math.ceil(size*2)+pad*2, h=Math.ceil(size*2.4)+pad*2;
+  c.width=w*SS; c.height=h*SS;
+  var x=c.getContext('2d',{willReadFrequently:true});
+  x.scale(SS,SS);
+  x.fillStyle='#fff'; x.fillRect(0,0,w,h);
+  x.fillStyle='#000'; x.textBaseline='alphabetic';
+  x.font=weight+' '+size+'px '+family;
+  x.fillText(ch,pad,h-pad);
+  var W=c.width,H=c.height,d=x.getImageData(0,0,W,H).data;
+  var x0=W,y0=H,x1=-1,y1=-1;
+  for(var y=0;y<H;y++)for(var xx=0;xx<W;xx++){
+    if(ink(d,(y*W+xx)*4)){ if(xx<x0)x0=xx; if(xx>x1)x1=xx; if(y<y0)y0=y; if(y>y1)y1=y; }
+  }
+  if(x1<0) return 0;
+  var midY=Math.round((y0+y1)/2), runs=[], run=0;
+  for(var x2=x0;x2<=x1+1;x2++){
+    var on=x2<=x1 && ink(d,(midY*W+x2)*4);
+    if(on) run++; else { if(run>0) runs.push(run); run=0; }
+  }
+  return runs.length?Math.max.apply(null,runs)/SS:0;
+}
+var LATIN_UI="'Readex Pro'", ARABIC_UI="'Vazirmatn'";
+function runPair(){
+  var body=$('#pairBody'); body.innerHTML='';
+  var okL=loaded(LATIN_UI,300), okA=loaded(ARABIC_UI,300,ARB);
+  if(!okL || !okA){
+    body.innerHTML='<tr><td colspan="5" class="verdict bad">Measurement withheld — '+
+      [!okL?'Readex Pro':null,!okA?'Vazirmatn':null].filter(Boolean).join(' and ')+
+      ' unavailable.</td></tr>';
+    return;
+  }
+  var rows=[];
+  // 1 — optical size: Latin x-height vs Arabic body height (no ascenders)
+  var xh=inkHeight(LATIN_UI,300,200,'xnо'.slice(0,2));
+  var ab=inkHeight(ARABIC_UI,300,200,'سح');
+  var sizeRatio = ab?xh/ab:0;
+  rows.push(['Body height at 200px', xh+'px (x-height)', ab+'px (Arabic body)',
+    ab?(ab/xh).toFixed(3):'—',
+    sizeRatio?'Arabic × '+sizeRatio.toFixed(2)+' size':'—']);
+  // 2 — stroke weight: Latin 'l' vs Arabic alef
+  var sl=stemWidth(LATIN_UI,400,160,'l');
+  var sa=stemWidth(ARABIC_UI,400,160,'ا');
+  var wRatio = sl?sa/sl:0;
+  var advice;
+  if(!wRatio) advice='—';
+  else if(wRatio>1.12) advice='Arabic reads heavier — set it one step lighter';
+  else if(wRatio<0.89) advice='Arabic reads lighter — set it one step heavier';
+  else advice='Close enough — no correction needed';
+  rows.push(['Stem width at 160px / w400', sl.toFixed(2)+'px (l)',
+    sa.toFixed(2)+'px (ا)', wRatio?wRatio.toFixed(3):'—', advice]);
+  // 3 — set width, same meaning both scripts
+  var wl=setWidth(LATIN_UI,300,16,UI_EN);
+  var wa=setWidth(ARABIC_UI,300,16,UI_AR);
+  rows.push(['Set width, same sentence at 16px', wl.toFixed(0)+'px',
+    wa.toFixed(0)+'px', wl?(wa/wl).toFixed(3):'—',
+    'Informational — affects column widths, not weight']);
+  rows.forEach(function(r){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td class="v">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+
+      '</td><td class="v">'+r[3]+'</td><td>'+r[4]+'</td>';
+    body.appendChild(tr);
+  });
+  // feed the measured size multiplier into the live RTL specimen
+  if(sizeRatio){
+    var h=$('#arHead');
+    if(h) h.style.fontSize=(2*sizeRatio).toFixed(2)+'rem';
+  }
+}
+
+/* ---------- Arabic vs Persian letterforms — for her eyes, not my opinion -- */
+function renderScript(dark){
+  var GLYPHS=[['ك','kaf · Arabic'],['ک','kaf · Persian'],
+              ['ي','yeh · Arabic'],['ی','yeh · Persian'],
+              ['پ','peh'],['چ','cheh'],['ژ','jeh'],['گ','gaf']];
+  var faces=[[ARABIC_UI,'Vazirmatn'],["'Readex Pro'",'Readex Pro'],
+             ["'IBM Plex Sans Arabic'",'IBM Plex Sans Arabic']];
+  var html=faces.map(function(f){
+    var g=GLYPHS.map(function(gl){
+      return '<div><span class="g" style="font-family:'+f[0]+',sans-serif">'+
+        gl[0]+'</span><span class="cap">'+gl[1]+'</span></div>';
+    }).join('');
+    return '<div class="cmpcell'+(dark?' dark':'')+'">'+
+      '<div class="cmphead"><b>'+f[1]+'</b></div>'+
+      '<div class="glyphrow">'+g+'</div>'+
+      '<div dir="rtl" style="font-family:'+f[0]+',sans-serif;font-weight:300;'+
+      'font-size:19px;line-height:1.9;text-align:right">'+
+      'كيف يمكنك أن تعرف أي قناة تعمل فعلاً؟ الأرقام تكشف ذلك.</div>'+
+      '</div>';
+  }).join('');
+  $('#cmpScript').innerHTML=html;
+}
+
+/* One device pixel is the floor: below it a stroke cannot be drawn, only
+   approximated in grey — and light-on-dark loses that approximation first. */
+function verdict(t){
+  if(t>=1.0) return ['ok','holds'];
+  if(t>=0.7) return ['warn','marginal'];
+  return ['bad','breaks'];
+}
+function fill(v){return v==null?'—':v}
+function runMeasure(){
+  var body=$('#measureBody'); body.innerHTML='';
+  var haveP=loaded("'Prata'",400), haveF=loaded("'Fraunces'",300);
+  if(!haveP || !haveF){
+    var miss=[!haveP?'Prata':null,!haveF?'Fraunces':null].filter(Boolean).join(' and ');
+    $('#fontWarn').style.display='flex';
+    $('#fontWarnText').innerHTML='<b style="font-weight:500;color:var(--ink)">'+
+      miss+' did not load on this device.</b> Every number below would be the '+
+      'fallback serif measured under another name, so the table is switched '+
+      'off rather than shown wrong. Check the connection and reload.';
+    body.innerHTML='<tr><td colspan="7">Measurement withheld — '+miss+
+      ' unavailable.</td></tr>';
+    return;
+  }
+  SIZES.forEach(function(s){
+    var p=measureFace("'Prata'",400,s.px);
+    var f=measureFace("'Fraunces'",300,s.px);
+    var pv=p?verdict(p.thin):['bad','—'], fv=f?verdict(f.thin):['bad','—'];
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td class="v">'+s.px+'px</td><td>'+s.use+'</td>'+
+      '<td class="v">'+(p?p.thin.toFixed(2)+'px':'—')+'</td>'+
+      '<td>'+(p&&p.thin?(p.stem/p.thin).toFixed(1)+':1':'—')+'</td>'+
+      '<td class="v">'+(f?f.thin.toFixed(2)+'px':'—')+'</td>'+
+      '<td>'+(f&&f.thin?(f.stem/f.thin).toFixed(1)+':1':'—')+'</td>'+
+      '<td><span class="verdict '+pv[0]+'">P '+pv[1]+'</span> · '+
+        '<span class="verdict '+fv[0]+'">F '+fv[1]+'</span></td>';
+    body.appendChild(tr);
+  });
+}
+
+/* ---------- pixel magnifier at the critical size ---------- */
+function magnify(canvasId,noteId,family,weight){
+  var size=15, scale=9, text='From data to decision';
+  var src=document.createElement('canvas');
+  var pad=6;
+  src.width=Math.ceil(size*13)+pad*2; src.height=Math.ceil(size*1.9)+pad*2;
+  var sx=src.getContext('2d',{willReadFrequently:true});
+  sx.fillStyle='#071A44'; sx.fillRect(0,0,src.width,src.height);
+  sx.fillStyle='#F6F8FC'; sx.textBaseline='alphabetic';
+  sx.font=weight+' '+size+'px '+family;
+  sx.fillText(text,pad,src.height-pad-2);
+  var out=document.getElementById(canvasId);
+  out.width=src.width*scale; out.height=src.height*scale;
+  var ox=out.getContext('2d');
+  ox.imageSmoothingEnabled=false;
+  ox.drawImage(src,0,0,out.width,out.height);
+  var m=loaded(family,weight)?measureFace(family,weight,size):null;
+  document.getElementById(noteId).textContent =
+    m ? 'hairline ' + m.thin.toFixed(2) + 'px · 15px · magnified 9×'
+      : 'font not loaded';
+}
+
+/* ---------- arabic compensation ---------- */
+function runArabic(){
+  var body=$('#arBody'); body.innerHTML='';
+  var latin=inkHeight("'Fraunces'",300,100,'Hnox');
+  var faces=[["'Amiri'",400,'Amiri','1.85'],
+             ["'El Messiri'",500,'El Messiri','1.75'],
+             ["'Reem Kufi'",500,'Reem Kufi','1.70']];
+  faces.forEach(function(f){
+    var ok=loaded(f[0],f[1],ARB);
+    var h=ok?inkHeight(f[0],f[1],100,'محمد'):0;
+    var ratio=h?latin/h:0;
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td class="v">'+f[2]+'</td>'+
+      (ok?'<td>'+h+'px</td>'+
+          '<td>'+(latin?((h/latin)*100).toFixed(0)+'%':'—')+'</td>'+
+          '<td class="v">'+(ratio?'×'+ratio.toFixed(2):'—')+'</td>'
+        :'<td colspan="3" class="verdict bad">not loaded</td>')+
+      '<td>'+f[3]+'</td>';
+    body.appendChild(tr);
+  });
+  var amiri=loaded("'Amiri'",400,ARB)?inkHeight("'Amiri'",400,100,'محمد'):0;
+  if(amiri && latin){
+    var mult=latin/amiri;
+    var h=$('#arHead');
+    if(h) h.style.fontSize=(2*mult).toFixed(2)+'rem';
+  }
+}
+
+/* ---------- the scale ---------- */
+var SCALE=[
+ ['--t-display','88 / 0.95','Hero, report cover','f-fraunces',88,0.95,'-0.032em'],
+ ['--t-opener','56 / 1.0','Section opener','f-fraunces',56,1.0,'-0.028em'],
+ ['--t-h2','40 / 1.06','Section heading','f-fraunces',40,1.06,'-0.022em'],
+ ['--t-h3','28 / 1.14','Sub-heading, pull quote','f-fraunces',28,1.14,'-0.016em'],
+ ['--t-lede','21 / 1.5','Standfirst, lede','',21,1.5,'0'],
+ ['--t-body','16 / 1.62','Running text','',16,1.62,'0'],
+ ['--t-meta','11 / 1.4','Metadata, axis, source','mono',11,1.4,'0.12em']
+];
+(function(){
+  var host=$('#scale');
+  SCALE.forEach(function(s){
+    var d=document.createElement('div'); d.className='srow';
+    var style='font-size:'+s[4]+'px;line-height:'+s[5]+';letter-spacing:'+s[6]+';';
+    if(s[3]==='f-fraunces') style+="font-variation-settings:'SOFT' 0,'WONK' 0;font-weight:300;";
+    if(s[3]==='mono') style+='text-transform:uppercase;';
+    var cls=s[3]==='mono'?'mono':(s[3]||'');
+    d.innerHTML='<span class="tok">'+s[0]+'</span>'+
+      '<div class="demo '+cls+'" style="'+style+'">From data to decision</div>'+
+      '<span class="spec2">'+s[1]+' · '+s[2]+'</span>';
+    host.appendChild(d);
+  });
+})();
+
+/* ---------- bilingual rules ---------- */
+var RULES=[
+ ['Never letter-space Arabic','Latin labels take <code>letter-spacing: .14em</code>. Applying it to Arabic breaks the joins between letters and turns a word into debris. The Arabic equivalent of an uppercase spaced label is a weight change, not spacing.'],
+ ['Never synthesise bold','Arabic faces that lack a bold get one faked by the browser, and it smears the joins. Use a real weight that ships with the family, or stay at 400.'],
+ ['Arabic needs more leading','Ascenders, descenders and diacritics stack further than Latin. Body copy runs <code>1.85</code> where the English runs <code>1.62</code>; headings <code>1.5</code> where English runs <code>1.06</code>.'],
+ ['Apply the size multiplier','Set Arabic display at the measured multiplier in section 02, not at the Latin size. It is a different number per face, so it lives in the token, not in a designer\'s eye.'],
+ ['Western digits, both languages','<code>0123</code> rather than <code>٠١٢٣</code>. Gulf business context uses Western digits, and it keeps every figure in the system on one set of numerals — which matters more for a data practice than for most brands. If a piece is for a market that expects Eastern Arabic-Indic, that is a per-piece override, not a system change.'],
+ ['Mirror the spine, not just the text','The measuring edge moves to the right margin, ticks point inward from the right, the mark moves with it, and any arc or pointer flips its handedness. Setting <code>direction: rtl</code> alone leaves the graphics facing the wrong way.'],
+ ['One language per piece','Your brief already says it: posts are single-language. A split canvas with both makes each half look like a caption for the other.']
+];
+(function(){
+  var host=$('#rules');
+  RULES.forEach(function(r,i){
+    var d=document.createElement('div'); d.className='rule';
+    d.innerHTML='<span class="n">'+String(i+1).padStart(2,'0')+'</span>'+
+      '<div><b>'+r[0]+'</b><span>'+r[1]+'</span></div>';
+    host.appendChild(d);
+  });
+})();
+
+/* ---------- spine ---------- */
+(function(){
+  var g=$('#spineTicks');
+  for(var i=0;i<=45;i++){
+    var p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M40 '+(i*20)+'H'+(40+(i%5===0?9:4)));
+    p.setAttribute('stroke-width','1');
+    p.setAttribute('vector-effect','non-scaling-stroke');
+    g.appendChild(p);
+  }
+})();
+
+/* ---------- controls ---------- */
+var onDark=false;
+function setGround(d){
+  onDark=d;
+  $('#gLight').setAttribute('aria-pressed',String(!d));
+  $('#gDark').setAttribute('aria-pressed',String(d));
+  renderLatin(d); renderArabic(d); renderUI(d); renderScript(d);
+}
+$('#gLight').addEventListener('click',function(){setGround(false)});
+$('#gDark').addEventListener('click',function(){setGround(true)});
+$('#theme').addEventListener('click',function(){
+  var r=document.documentElement;
+  var dark=getComputedStyle(r).getPropertyValue('color-scheme').trim()==='dark';
+  r.setAttribute('data-theme',dark?'light':'dark');
+});
+window.addEventListener('resize',function(){renderArabic(onDark);renderUI(onDark)});
+
+/* ---------- boot: render first, measure once fonts land ---------- */
+setGround(false);
+function go(){
+  try{
+    runMeasure();
+    magnify('magPrata','magPrataN',"'Prata'",400);
+    magnify('magFraunces','magFrauncesN',"'Fraunces'",300);
+    runArabic();
+    runUI();
+    runPair();
+    $('#status').textContent='Measured on this device';
+  }catch(e){
+    $('#status').textContent='Measurement unavailable';
+  }
+}
+var NEEDED=['400 15px Prata','300 15px Fraunces','400 100px Amiri',
+            '500 100px El Messiri','500 100px Reem Kufi','300 100px Fraunces',
+            '300 16px Readex Pro','300 16px Rubik','300 16px Vazirmatn',
+            '300 16px Alexandria','300 16px Cairo','300 16px IBM Plex Sans Arabic',
+            '400 160px Vazirmatn','400 160px Readex Pro'];
+if(document.fonts && document.fonts.load){
+  Promise.all(NEEDED.map(function(f){return document.fonts.load(f).catch(function(){})}))
+    .then(function(){ return document.fonts.ready; })
+    .then(function(){ setTimeout(go,120); });
+} else { setTimeout(go,900); }
+})();
+</script>

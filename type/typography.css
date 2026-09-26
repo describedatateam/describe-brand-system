@@ -1,0 +1,233 @@
+/* ==========================================================================
+   .describe( — typography tokens                          ROLE 04 deliverable
+   ==========================================================================
+
+   Three faces, three jobs:
+     serif  Fraunces      meaning      — statements, concepts, headlines
+     sans   IBM Plex Sans Arabic
+                          explanation  — body, interface, labels
+     mono   IBM Plex Mono measurement  — numbers, units, metadata, axes
+
+   Arabic display is Amiri; Reem Kufi is the label face. Prata is kept as a
+   display-only alternate for covers and posters where nothing sits under 40px.
+
+   Every size in this file is a token. A size that is not here does not exist.
+   ========================================================================== */
+
+/* One @import per family. Google Fonts fails a whole css2 request if any one
+   family in it is unknown, which would take every face down together. */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  /* ---- families ----
+     The interface face is SPLIT by script, deliberately. Latin and Arabic are
+     built differently enough that one designer rarely does both equally well,
+     and a bilingual system is better served by two faces that are matched than
+     by one family that is only good on one side. The matching is done with
+     measured tokens below, not by eye — see specimen.html §04.            */
+  --font-serif:    'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-sans:     'Readex Pro', system-ui, -apple-system, sans-serif;
+  --font-ar-sans:  'Vazirmatn', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --font-mono:     'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display-alt: 'Prata', Georgia, serif;   /* ≥40px only */
+  --font-ar-display: 'Amiri', serif;
+  --font-ar-label:   'Reem Kufi', sans-serif;
+
+  /* ---- the scale · base 16, ratio ≈1.32 ---- */
+  --t-display: 88px;
+  --t-opener:  56px;
+  --t-h2:      40px;
+  --t-h3:      28px;
+  --t-lede:    21px;
+  --t-body:    16px;
+  --t-meta:    11px;
+
+  /* ---- line-heights, Latin ---- */
+  --lh-display: 0.95;
+  --lh-opener:  1.00;
+  --lh-h2:      1.06;
+  --lh-h3:      1.14;
+  --lh-lede:    1.50;
+  --lh-body:    1.62;
+  --lh-meta:    1.40;
+
+  /* ---- tracking ---- */
+  --tr-display: -0.032em;
+  --tr-opener:  -0.028em;
+  --tr-h2:      -0.022em;
+  --tr-h3:      -0.016em;
+  --tr-body:     0;
+  --tr-meta:     0.12em;   /* Latin only — never applied to Arabic */
+
+  /* ---- weights ---- */
+  --w-display: 300;   /* Fraunces is set light; the contrast does the work */
+  --w-body:    300;
+  --w-body-em: 500;
+  --w-meta:    500;
+
+  /* ---- Arabic optical compensation --------------------------------------
+     Arabic sets smaller than Latin at the same font-size. Read the measured
+     multiplier off the specimen page (section 02) on a machine where the
+     fonts have actually loaded, and put it here. 1.30 is a placeholder that
+     is close for Amiri against Fraunces — it is not a measurement.          */
+  --ar-scale: 1.30;
+  --ar-lh-display: 1.50;
+  --ar-lh-body:    1.85;   /* Arabic needs more leading than Latin's 1.62 */
+
+  /* ---- Arabic body size and weight, against the Latin -------------------
+     Two different families are almost never the same optical weight at the
+     same nominal weight. specimen.html §04 measures the stem of Latin `l`
+     against Arabic alef and says which way to correct. Both values below are
+     placeholders until you read the measured ones off that page.           */
+  --ar-body-scale: 1.10;   /* Vazirmatn body text against Readex Pro       */
+  --ar-w-body:     300;    /* step to 200 or 400 if the stems don't match  */
+  --ar-w-em:       500;
+}
+
+/* ==========================================================================
+   Roles
+   ========================================================================== */
+
+/* Fraunces: SOFT and WONK at 0 give the severe cut, not the friendly-retro
+   one everyone else ships. Do NOT name 'opsz' in font-variation-settings —
+   naming it pins the axis and kills automatic optical sizing, which is the
+   whole reason this face was chosen. */
+.t-serif,
+h1, h2, h3, .t-display, .t-opener, .t-h2, .t-h3{
+  font-family: var(--font-serif);
+  font-weight: var(--w-display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 0, 'WONK' 0;
+  text-wrap: balance;
+  margin: 0;
+}
+.t-display{ font-size:var(--t-display); line-height:var(--lh-display);
+            letter-spacing:var(--tr-display) }
+.t-opener { font-size:var(--t-opener);  line-height:var(--lh-opener);
+            letter-spacing:var(--tr-opener) }
+.t-h2     { font-size:var(--t-h2);      line-height:var(--lh-h2);
+            letter-spacing:var(--tr-h2) }
+.t-h3     { font-size:var(--t-h3);      line-height:var(--lh-h3);
+            letter-spacing:var(--tr-h3) }
+
+.t-lede{ font-family:var(--font-sans); font-weight:200;
+         font-size:var(--t-lede); line-height:var(--lh-lede) }
+.t-body{ font-family:var(--font-sans); font-weight:var(--w-body);
+         font-size:var(--t-body); line-height:var(--lh-body) }
+.t-body strong{ font-weight:var(--w-body-em) }
+
+/* ---- THE MONO BUDGET -----------------------------------------------------
+   Mono is ornament, not text. Three limits, and they are hard:
+
+     1. NUMERALS — mono at any size. Tables, prices, chart values, n = counts.
+        Always tabular. This is what mono is for.
+     2. LABELS — mono only at ≤11px, uppercase, four words or fewer. Axis
+        labels, source lines, figure numbers, units. One per region of a
+        composition, not one per element.
+     3. EVERYTHING ELSE — never. Nav, buttons, eyebrows above headings,
+        section kickers, form labels, captions, body. All interface sans.
+
+   The test: if a run of mono reads as a phrase, it is the wrong face.
+   Benchmark: Hermes, inspected directly, never sets mono above 11px and never
+   inside a sentence.                                                        */
+
+/* Rule 01 — numerals, any size. */
+.t-num{ font-family:var(--font-mono); font-variant-numeric:tabular-nums }
+
+/* Rule 02 — the ONLY mono text. The min() is the limit made structural: the
+   class cannot be used at a larger size by accident. */
+.t-label{ font-family:var(--font-mono); font-weight:var(--w-meta);
+          font-size:min(11px, var(--t-meta)); line-height:var(--lh-meta);
+          letter-spacing:var(--tr-meta); text-transform:uppercase;
+          font-variant-numeric:tabular-nums }
+
+/* Metadata that runs longer than four words is a sentence — it takes the
+   sans, at small size, in the muted ink. Not mono. */
+.t-meta{ font-family:var(--font-sans); font-weight:400;
+         font-size:12.5px; line-height:1.45; letter-spacing:normal;
+         font-variant-numeric:tabular-nums }
+
+/* Display-only alternate. Guarded: never below 40px. */
+.t-alt{ font-family:var(--font-display-alt); font-weight:400;
+        font-size:max(40px, 1em); letter-spacing:-0.02em }
+
+/* ==========================================================================
+   Arabic and RTL
+   ========================================================================== */
+
+:lang(ar) .t-display, [dir="rtl"] .t-display,
+:lang(ar) .t-opener,  [dir="rtl"] .t-opener,
+:lang(ar) .t-h2,      [dir="rtl"] .t-h2,
+:lang(ar) .t-h3,      [dir="rtl"] .t-h3{
+  font-family: var(--font-ar-display);
+  font-weight: 400;
+  font-variation-settings: normal;
+  font-size: calc(var(--_base, 1em) * var(--ar-scale));
+  line-height: var(--ar-lh-display);
+  letter-spacing: normal;            /* rule 01 — never track Arabic */
+}
+:lang(ar) .t-display,[dir="rtl"] .t-display{ --_base: var(--t-display) }
+:lang(ar) .t-opener, [dir="rtl"] .t-opener { --_base: var(--t-opener) }
+:lang(ar) .t-h2,     [dir="rtl"] .t-h2     { --_base: var(--t-h2) }
+:lang(ar) .t-h3,     [dir="rtl"] .t-h3     { --_base: var(--t-h3) }
+
+/* Arabic running text: its own family, its own size, its own weight. */
+:lang(ar) .t-body, [dir="rtl"] .t-body,
+:lang(ar) .t-lede, [dir="rtl"] .t-lede{
+  font-family: var(--font-ar-sans);
+  font-weight: var(--ar-w-body);
+  font-size: calc(var(--_b, 1em) * var(--ar-body-scale));
+  line-height: var(--ar-lh-body);
+  letter-spacing: normal;
+}
+:lang(ar) .t-body, [dir="rtl"] .t-body{ --_b: var(--t-body) }
+:lang(ar) .t-lede, [dir="rtl"] .t-lede{ --_b: var(--t-lede) }
+:lang(ar) .t-body strong, [dir="rtl"] .t-body strong{ font-weight: var(--ar-w-em) }
+
+/* Anything not explicitly classed still needs the right face in Arabic. */
+:lang(ar), [dir="rtl"]{ font-family: var(--font-ar-sans) }
+
+/* Reem Kufi for short Arabic labels — compass-built, like the mark. */
+.t-ar-label{
+  font-family: var(--font-ar-label);
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;              /* Arabic has no case */
+}
+
+/* IBM Plex Mono has NO Arabic. Arabic labels therefore use the sans at 500
+   with tabular figures, no tracking and no case transform — never a Latin
+   mono with Arabic glyphs substituted into it, which is the browser's default
+   and looks broken. Western digits throughout, both languages.
+   Note this also means the mono budget is automatically tighter in Arabic:
+   only numerals ever reach it. */
+:lang(ar) .t-label, [dir="rtl"] .t-label{
+  font-family: var(--font-ar-sans);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: normal;
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Never let the browser synthesise a weight Arabic does not ship. */
+:lang(ar), [dir="rtl"]{ font-synthesis: none }
+
+/* ==========================================================================
+   Fluid sizes — for the web, where 88px is too big on a phone
+   ========================================================================== */
+@media (max-width: 860px){
+  :root{
+    --t-display: clamp(2.6rem, 9vw, 4.2rem);
+    --t-opener:  clamp(2.1rem, 7vw, 3rem);
+    --t-h2:      clamp(1.7rem, 5.4vw, 2.3rem);
+    --t-h3:      clamp(1.25rem, 3.6vw, 1.6rem);
+    --t-lede:    1.12rem;
+  }
+}
