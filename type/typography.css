@@ -72,21 +72,30 @@
   --w-meta:    500;
 
   /* ---- Arabic optical compensation --------------------------------------
-     Arabic sets smaller than Latin at the same font-size. Read the measured
-     multiplier off the specimen page (section 02) on a machine where the
-     fonts have actually loaded, and put it here. 1.30 is a placeholder that
-     is close for Amiri against Fraunces — it is not a measurement.          */
-  --ar-scale: 1.30;
+     Arabic sets smaller than Latin at the same font-size. specimen.html §02
+     measures two anchors against Fraunces 300, ink above the baseline only:
+       Amiri body (ص ـهـ) ↔ x-height    ×1.15
+       Amiri alef          ↔ ascender l  ×1.05
+     They bracket the multiplier. At 40px, ×1.15 puts the alef on the
+     ascender line and the bowls on the x-height; ×1.30 (the old
+     placeholder) sets visibly large. Measured Chromium 141, Linux.         */
+  --ar-scale: 1.15;
   --ar-lh-display: 1.50;
   --ar-lh-body:    1.85;   /* Arabic needs more leading than Latin's 1.62 */
 
   /* ---- Arabic body size and weight, against the Latin -------------------
      Two different families are almost never the same optical weight at the
      same nominal weight. specimen.html §04 measures the stem of Latin `l`
-     against Arabic alef and says which way to correct. Both values below are
-     placeholders until you read the measured ones off that page.           */
-  --ar-body-scale: 1.10;   /* Vazirmatn body text against Readex Pro       */
-  --ar-w-body:     300;    /* step to 200 or 400 if the stems don't match  */
+     against Arabic alef and says which way to correct.
+       Vazirmatn body ↔ Readex x-height   ×1.36
+       Vazirmatn alef ↔ Readex ascender   ×1.12
+     The x-height anchor overshoots here: Readex Pro's x-height is unusually
+     tall (0.75 of cap), and at ×1.36 the Arabic reads a size larger at 16px.
+     ×1.20 is set by eye inside the bracket. At that size and w300 the stems
+     measure 12.13px (l) against 13.13px (ا), ratio 1.08 — inside the
+     0.89–1.12 tolerance, so no weight correction.                          */
+  --ar-body-scale: 1.20;   /* Vazirmatn body text against Readex Pro       */
+  --ar-w-body:     300;    /* measured: matches Readex Pro 300 at ×1.20     */
   --ar-w-em:       500;
 }
 

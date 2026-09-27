@@ -109,10 +109,12 @@ The test: *if a run of mono reads as a phrase, it is the wrong face.*
 
 ## Known open items
 
-- **`--ar-scale`, `--ar-body-scale` and `--ar-w-body` in `type/typography.css`
-  are placeholders, not measurements.** Open `type/specimen.html` on a machine
-  where the fonts load, read the measured values off §02 and §04, and replace
-  them.
+- **The Arabic size and weight tokens are measured but the choice inside the
+  bracket is a visual one.** `--ar-scale: 1.15`, `--ar-body-scale: 1.20` and
+  `--ar-w-body: 300` come from `type/specimen.html` §02 and §04 (see
+  `type/TYPOGRAPHY.md`). The page brackets each multiplier and the value was
+  picked by eye at working size — worth a look from someone who reads Arabic
+  daily before it is locked.
 - **The wordmark does not exist.** `.describe(|` is currently set in IBM Plex
   Mono as a stand-in wherever a lockup is needed. Nothing that needs a lockup
   is finishable until it is drawn.

@@ -79,12 +79,26 @@ and it carries none of the archival quality the rest of the system rests on.
 If the identity ever moves away from high-contrast serif, it becomes the right
 answer.
 
-### The one number you still owe this file
+### The multiplier
 
-`--ar-scale` in `typography.css` is currently **1.30, a placeholder, not a
-measurement.** Open `specimen.html` on a machine where the fonts load, read
-the measured multiplier off section 02, and replace it. Until then Arabic
-headings will be approximately right rather than right.
+`--ar-scale` is **1.15**. `specimen.html` §02 measures two anchors against
+Fraunces 300, from ink above the baseline only (Arabic descenders have no
+Latin counterpart):
+
+| Anchor | Amiri : Fraunces | Multiplier |
+|---|---|---|
+| Body (`ص ـهـ`) against x-height | 75 : 86 px at 200px | ×1.15 |
+| Alef against ascender `l` | 139 : 146 px | ×1.05 |
+
+The two bracket the answer. Set side by side at 40px, ×1.15 puts the alef on
+the ascender line and the bowls on the x-height; the old placeholder of 1.30
+sets visibly large. Measured in Chromium 141 on Linux; font rasterisers
+differ by a pixel or two, not by a step.
+
+An earlier version of the page measured the word `محمد` against `Hnox` and
+reported ×1.06. Amiri stacks `محمد` as a vertical ligature, so the word
+stands almost as tall as a capital — the probe measured the ligature, not
+the face.
 
 ---
 
@@ -119,15 +133,33 @@ well.
 weight are almost never the same optical weight, and Arabic sets smaller at
 the same `font-size`. `specimen.html` §04 measures both joins:
 
-- **Optical size** — Latin x-height against Arabic body height, giving
-  `--ar-body-scale`.
-- **Stroke weight** — the stem of Latin `l` against Arabic alef `ا`. Both are
-  a plain vertical stroke, so they are directly comparable; if one is thicker,
-  Arabic at 400 will read bolder than Latin at 400 and the page will feel
-  lopsided. The table says which way to step `--ar-w-body`.
+- **Optical size** — Arabic body against Latin x-height, and alef against
+  the ascender, giving the range `--ar-body-scale` must fall in.
+- **Stroke weight** — the stem of Latin `l` against Arabic alef `ا`, at the
+  weight body text is actually set at and with the Arabic already scaled.
+  Both are a plain vertical stroke, so they are directly comparable; if one
+  is thicker the page feels lopsided. The table says which way to step
+  `--ar-w-body`.
 
-Both tokens in `typography.css` are **placeholders until you read the measured
-values off the specimen** on a machine where the fonts load.
+Measured values:
+
+| Measure | Readex Pro | Vazirmatn | Result |
+|---|---|---|---|
+| Body against x-height, 200px | 105 px | 77 px | ×1.36 |
+| Alef against ascender, 200px | 149 px | 133 px | ×1.12 |
+| Stem at w300, Arabic ×1.20 | 12.13 px | 13.13 px | 1.08 — no correction |
+
+**`--ar-body-scale: 1.20`, `--ar-w-body: 300`.** The x-height anchor
+overshoots for this pair because Readex Pro's x-height is unusually tall
+(0.75 of cap); at ×1.36 the Arabic reads a full size larger at 16px. ×1.20
+was set by eye inside the bracket — the candidates are set side by side in
+`previews/type/arabic-scale-comparison.png`.
+
+Two bugs in the earlier page are fixed. It measured the Arabic body on `سح`,
+whose final ح hangs a deep bowl below the baseline, and so recommended
+shrinking Arabic to ×0.72. And it compared stems at w400, where Readex Pro
+jumps to 16.5px, and advised stepping Vazirmatn heavier; at the w300 the
+system actually uses, the stems already match.
 
 ### One thing to check with your own eyes
 
