@@ -27,7 +27,7 @@ about 280K.
 | 4,223 products | Not reproducible. The raw file has 4,093 stock codes and 4,220 descriptions; after cleaning, 3,962 stock codes. |
 | "0 edge cases" | True after cleaning, but only because the undocumented price ≤ 0 filter removed the 474 negative-quantity rows with no `C` invoice. Separately, £395K of "sales" are postage, manual and fee lines (`DOT`, `POST`, `M`, `AMAZONFEE`) or a bad-debt adjustment (`A563185`) — not product revenue. |
 
-## What the homepage now says
+## What the homepage should say (pending sign-off)
 
 - Sep–Nov: **36%** of net revenue; every other full month £0.5–0.8M.
 - The three largest "sales" never happened.
