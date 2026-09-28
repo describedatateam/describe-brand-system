@@ -118,11 +118,10 @@ The test: *if a run of mono reads as a phrase, it is the wrong face.*
 - **The wordmark does not exist.** `.describe(|` is currently set in IBM Plex
   Mono as a stand-in wherever a lockup is needed. Nothing that needs a lockup
   is finishable until it is drawn.
-- **`site/` contains unverified figures.** The proof section quotes a UCI
-  Online Retail analysis whose stated numbers do not reconcile:
-  542,014 − 5,270 − 9,252 = 527,492, but the page states n = 534,232. The
-  canonical dataset is also usually cited at 541,909 rows, not 542,014.
-  Re-run the analysis and regenerate the chart before any of it is published.
+- **The proof section in `site/` is recomputed but awaiting sign-off.** Every
+  figure now comes from `site/proof/analysis.py`; `site/proof/README.md` lists
+  where the May report's figures were wrong (currency, the three reversed
+  orders, the growth claim).
 - **Service 02 has no price.** The "when to pick this" text was pasted into the
   price field.
 
