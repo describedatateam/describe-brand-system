@@ -33,7 +33,7 @@ marker all read as the same instrument.
 | `type/` | **Role 04** — typography. Tokens, written rules, and a specimen that measures its own decisions |
 | `specs/logo/` | The logo master spec and the open questions against it |
 | `previews/logo/` | Rendered preview sheet |
-| `site/` | Working draft of the homepage. **Not a deliverable** — see the warning below |
+| `site/` | The homepage, published through Cloudflare Pages (`site/DEPLOY.md`). Open items are listed below |
 | `Logo Design With Astrolabe Inspiration (2)/` | The original exploration exports, kept for provenance |
 
 ---
@@ -122,8 +122,7 @@ The test: *if a run of mono reads as a phrase, it is the wrong face.*
   figure now comes from `site/proof/analysis.py`; `site/proof/README.md` lists
   where the May report's figures were wrong (currency, the three reversed
   orders, the growth claim).
-- **Service 02 has no price.** The "when to pick this" text was pasted into the
-  price field.
+- **Service 02 has no price.** It reads "Priced per project" until one is set.
 
 ---
 

@@ -6,32 +6,35 @@
 <meta name="description" content="Small businesses generate real data long before they can justify a data hire. .describe( analyses your sales, customer and campaign numbers so you know what's working before you bet on it.">
 <!--
   ============================================================================
-  WORKING DRAFT — NOT FOR PUBLICATION
-  ============================================================================
-  Known problems, all recorded in the repository README:
+  Published from site/ via Cloudflare Pages (see site/DEPLOY.md).
+  Still open before launch, recorded in the repository README:
 
   1. The proof section is recomputed from the raw file (site/proof/) and
-     AWAITING SIGN-OFF. It now leads with the finding that the three largest
+     AWAITING SIGN-OFF. It leads with the finding that the three largest
      "sales" were reversed within 16 minutes, which differs from the May
-     report. Confirm before publishing.
-
-  2. Service 02 has no price. The "when to pick this" copy was pasted into the
-     price field; the page marks the gap in coral.
-
+     report.
+  2. Service 02 reads "Priced per project" until a price is set.
   3. The wordmark does not exist. ".describe(" in the nav and footer is set in
      IBM Plex Mono as a stand-in.
-
-  4. Arabic exists for the hero and the who-we're-not-for section only. The
-     site is English-only until the rest is written.
-
-  5. Typography here predates the Role 04 decisions: it uses IBM Plex Sans
-     Arabic and leans on mono far more than the mono budget now allows.
-     Rebuild against type/typography.css.
-
-  6. The intake form is not wired to anything.
+  4. English only. The Arabic toggle is hidden until the Arabic page exists.
+  5. Typography predates the Role 04 decisions (type/typography.css).
+  6. The intake form opens the visitor's email app addressed to
+     info@describe.team. There is no server-side form handler.
   ============================================================================
 -->
 <title>describe — From Data to Decision</title>
+<link rel="canonical" href="https://describe.team/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#092052">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://describe.team/">
+<meta property="og:title" content="describe — From Data to Decision">
+<meta property="og:description" content="We analyse small businesses' sales, customer and campaign numbers so you know what's working before you bet on it.">
+<meta property="og:image" content="https://describe.team/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500&display=swap">
@@ -787,8 +790,7 @@ footer{padding-block:clamp(50px,6vw,80px) 40px}
     <div class="fmeta">
       <span>© 2026 .describe(</span>
       <a href="mailto:info@describe.team">info@describe.team</a>
-      <a href="#">Privacy</a>
-      <a href="#" id="langToggle">العربية</a>
+      <a href="/privacy">Privacy</a>
       <span class="last">describe.team</span>
     </div>
   </div>
@@ -893,7 +895,7 @@ var SERVICES=[
   when:'Pick this when you already know what you want to do with the data, and the only thing in the way is the state it’s in. You have someone who’ll take it from there — an analyst, a developer, or you.'},
  {n:'02',name:'Dashboards and performance tracking',
   line:'A place to look every week that tells you how the business is doing, without anyone rebuilding it by hand.',
-  price:'Price and timeline to set', priceTodo:true,
+  price:'Priced per project', priceTodo:false,
   deliver:['A working dashboard in Power BI or Tableau, connected to your data so it updates without manual work.',
    'A short written definition of every number on it — what counts as a sale, where the figure comes from, what it excludes — so two people reading it reach the same conclusion.',
    'A handover session for whoever will use it day to day.'],
@@ -1089,15 +1091,22 @@ var FAQ=[
   });
 })();
 
-/* ---------- form (design demo — not wired to a backend) ---------- */
+/* ---------- form: no backend yet, so hand off to the visitor's mail app */
 document.getElementById('intake').addEventListener('submit',function(e){
   e.preventDefault();
+  var f=this, v=function(n){return (f.elements[n].value||'').trim()};
   var em=document.getElementById('f-email');
   var msg=document.getElementById('formMsg');
-  if(!em.value || em.value.indexOf('@')<0){
+  if(!v('email') || v('email').indexOf('@')<0){
     msg.textContent='Add an email so we can reply'; em.focus(); return;
   }
-  msg.textContent='Design preview — not connected yet';
+  var body=[v('message'),'',
+    'Name: '+v('name'),'Email: '+v('email'),
+    'Position: '+v('role'),'Organisation: '+v('org')].join('\n');
+  var subject='Enquiry'+(v('org')?' from '+v('org'):'');
+  window.location.href='mailto:info@describe.team?subject='+
+    encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  msg.textContent='Opening your email app. If nothing opens, write to info@describe.team';
 });
 
 /* ---------- the measuring edge: live section coordinate ---------- */
@@ -1146,12 +1155,6 @@ document.getElementById('intake').addEventListener('submit',function(e){
   onScroll();
 })();
 
-document.getElementById('langToggle').addEventListener('click',function(e){
-  e.preventDefault();
-  var m=document.getElementById('formMsg');
-  if(m) m.textContent='Arabic version not built yet';
-  document.getElementById('contact').scrollIntoView();
-});
 })();
 </script>
 
