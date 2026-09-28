@@ -1,0 +1,683 @@
+<title>Instrument UI Kit</title>
+<style>
+/*CSS*/
+
+/* ---- specimen page chrome (not part of the kit) ---- */
+*{box-sizing:border-box}
+body{margin:0;padding-block:0;background:var(--ground);color:var(--ink);
+  font-family:var(--font-sans);font-weight:300;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+::selection{background:var(--active);color:#fff}
+.wrap{max-width:1120px;margin-inline:auto;padding-inline:20px}
+@media (min-width:1060px){.wrap{padding-inline:104px 44px}}
+.spine{position:fixed;inset-block:0;inset-inline-start:0;width:64px;z-index:1;
+  pointer-events:none;display:none;color:var(--faint)}
+@media (min-width:1060px){.spine{display:block}}
+.spine svg{width:100%;height:100%;stroke:currentColor;fill:none}
+.pg-head{padding-block:clamp(40px,6vw,76px) 26px}
+.pg-kick{display:flex;gap:12px;align-items:center;margin-bottom:20px}
+.pg-kick .bar{height:1px;width:40px;background:currentColor;opacity:.45}
+.pg-h1{font-family:var(--font-serif);font-weight:300;font-optical-sizing:auto;
+  font-variation-settings:'SOFT' 0,'WONK' 0;font-size:clamp(2.3rem,5.2vw,4rem);
+  line-height:.98;letter-spacing:-.03em;margin:0;text-wrap:balance}
+.pg-lede{font-size:clamp(1rem,1.5vw,1.16rem);color:var(--body);max-width:60ch;
+  margin:22px 0 0;line-height:1.55}
+.pg-bar{position:sticky;top:0;z-index:30;background:var(--ground);
+  border-block:1px solid var(--rule)}
+.pg-bar .in{max-width:1120px;margin-inline:auto;padding:10px 20px;display:flex;
+  gap:10px 20px;align-items:center;flex-wrap:wrap}
+@media (min-width:1060px){.pg-bar .in{padding-inline:104px 44px}}
+.pg-bar .lab{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--body)}
+.seg{display:inline-flex}
+.seg button{appearance:none;cursor:pointer;background:none;color:var(--body);
+  border:1px solid var(--rule);padding:6px 12px;font-family:var(--font-sans);
+  font-size:13px;font-weight:500}
+.seg button+button{border-inline-start:0}
+.seg button[aria-pressed="true"]{color:var(--active);border-color:var(--active);
+  background:color-mix(in srgb,var(--active) 7%,transparent)}
+.seg button[aria-pressed="true"]+button{border-inline-start:1px solid var(--rule)}
+.seg button:focus-visible{outline:2px solid var(--active);outline-offset:2px}
+.pg-note{font-size:12.5px;color:var(--dim);margin-inline-start:auto}
+section.pg{padding-block:clamp(44px,5.5vw,76px);border-top:1px solid var(--rule)}
+.pg-sh{display:flex;gap:14px 18px;align-items:baseline;flex-wrap:wrap;
+  padding-bottom:11px;margin-bottom:24px;border-bottom:1px solid var(--ink)}
+.pg-sh .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;color:var(--active)}
+.pg-sh h2{font-family:var(--font-serif);font-weight:300;font-optical-sizing:auto;
+  font-variation-settings:'SOFT' 0,'WONK' 0;font-size:clamp(1.6rem,3vw,2.3rem);
+  line-height:1.06;letter-spacing:-.022em;margin:0}
+.pg-sh p{margin:0 0 0 auto;max-width:44ch;font-size:13.6px;color:var(--body);line-height:1.5}
+.pg-row{display:flex;gap:18px 22px;flex-wrap:wrap;align-items:center}
+.pg-grid2{display:grid;gap:24px;grid-template-columns:1fr}
+@media (min-width:820px){.pg-grid2{grid-template-columns:1fr 1fr}}
+.pg-grid3{display:grid;gap:0;grid-template-columns:1fr}
+@media (min-width:760px){.pg-grid3{grid-template-columns:repeat(3,1fr)}}
+.pg-cap{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+.pg-rule{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);
+  font-size:13.4px;color:var(--body);line-height:1.55;max-width:70ch}
+.pg-rule b{font-weight:500;color:var(--ink)}
+.demo{min-width:0}
+.law{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+  grid-template-columns:1fr}
+@media (min-width:760px){.law{grid-template-columns:repeat(4,1fr)}}
+.law div{background:var(--panel);padding:16px 16px 18px;display:flex;flex-direction:column;gap:8px}
+.law i{display:block;width:26px;height:4px}
+.law b{font-weight:500;font-size:14px}
+.law span{font-size:13px;color:var(--body);line-height:1.45}
+.iconset{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+  grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
+.iconset figure{margin:0;background:var(--panel);padding:18px 8px 12px;display:flex;
+  flex-direction:column;align-items:center;gap:10px}
+.iconset figcaption{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;
+  color:var(--dim);text-transform:uppercase}
+.iconset .inst figcaption{color:var(--active)}
+.stack{display:flex;flex-direction:column;gap:14px}
+footer.pg-foot{padding-block:36px 60px;border-top:1px solid var(--ink);
+  font-size:12.8px;color:var(--body)}
+.draftnote{font-size:12px;color:var(--dim);margin-top:8px}
+</style>
+
+<!--SPRITE-->
+
+<div class="spine" aria-hidden="true">
+  <svg viewBox="0 0 64 900" preserveAspectRatio="none">
+    <path d="M40 0V900" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    <g id="spineTicks"></g>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header class="pg-head">
+    <div class="pg-kick"><span class="bar"></span>
+      <span class="t-label" style="color:var(--body)">.describe( · role 07</span></div>
+    <h1 class="pg-h1">The instrument,<br>in use.</h1>
+    <p class="pg-lede">Every component the interface needs, in every state, built
+      on the settled type tokens. Switch the direction to right-to-left and the
+      whole kit mirrors from logical properties alone — only arrows flip — and
+      its Arabic renders in Vazirmatn. Switch the ground and dark mode is its own
+      environment, not an inversion.</p>
+  </header>
+</div>
+
+<div class="pg-bar">
+  <div class="in">
+    <span class="lab">Ground</span>
+    <span class="seg">
+      <button type="button" id="thLight" aria-pressed="true">Paper</button>
+      <button type="button" id="thDark" aria-pressed="false">Navy</button>
+    </span>
+    <span class="lab">Direction</span>
+    <span class="seg">
+      <button type="button" id="dirLtr" aria-pressed="true">English · LTR</button>
+      <button type="button" id="dirRtl" aria-pressed="false">العربية · RTL</button>
+    </span>
+    <span class="pg-note" id="dirNote">All data on this page is example data.</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ================= 00 · COLOUR LAW ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">00</span><h2>The colour law</h2>
+    <p>UI is where it is most tempting to break it — a coral error message
+      looks right and means the wrong thing.</p></div>
+  <div class="law">
+    <div><i style="background:var(--active)"></i><b>Blue is live</b>
+      <span>Active, selected, in progress, the one primary action.</span></div>
+    <div><i style="background:var(--mark)"></i><b>Coral is an outlier</b>
+      <span>In data, and nowhere else. Never an error, a warning or an accent.</span></div>
+    <div><i style="background:var(--neg)"></i><b>Red is negative</b>
+      <span>A value that went down in a bad way, or an action that failed.</span></div>
+    <div><i style="background:var(--pos)"></i><b>Green is positive</b>
+      <span>A value that moved in a good way, or an action that completed.</span></div>
+  </div>
+</section>
+
+<!-- ================= 01 · BUTTONS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">01</span><h2>Buttons</h2>
+    <p>Not pills. A label and a direction. The one action that matters gets
+      calibration ticks either side — and there is only ever one per view.</p></div>
+  <div class="demo stack">
+    <p class="pg-cap">Primary · default · secondary · quiet · danger</p>
+    <div class="pg-row">
+      <button class="d-btn d-btn--primary" type="button" id="runBtn">
+        <span data-ar="تشغيل التحليل">Run analysis</span>
+        <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg>
+        <span class="d-tally-mini" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </button>
+      <button class="d-btn" type="button"><span data-ar="عرض البيانات">View data</span>
+        <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+      <button class="d-btn d-btn--quiet" type="button"><span data-ar="تنزيل">Download</span>
+        <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+      <button class="d-btn d-btn--danger" type="button"><span data-ar="حذف مجموعة البيانات">Delete dataset</span></button>
+    </div>
+    <p class="pg-cap" style="margin-top:14px">Small · disabled · busy</p>
+    <div class="pg-row">
+      <button class="d-btn d-btn--sm" type="button"><span data-ar="حفظ">Save</span></button>
+      <button class="d-btn d-btn--sm d-btn--quiet" type="button"><span data-ar="إلغاء">Cancel</span></button>
+      <button class="d-btn" type="button" disabled><span data-ar="تصدير">Export</span>
+        <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+      <button class="d-btn is-busy" type="button" aria-busy="true">
+        <span data-ar="جارٍ التحليل">Analysing</span>
+        <span class="d-tally-mini" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+    </div>
+  </div>
+  <p class="pg-rule"><b>The technical feel comes from the ticks and the mark, not
+    the typeface.</b> Your brief shows buttons as <span class="t-num">[ RUN ANALYSIS → ]</span>,
+    which reads as mono — but you've since ruled mono out of anything that isn't
+    numerals or tiny labels, and your later direction wins. Labels are Readex Pro,
+    uppercase and tracked in English; in Arabic there is no case and no tracking, so
+    weight carries it. Tab to any button to see focus: a sighting frame, not a glow.
+    Busy replaces the arrow with a tally that counts while the work runs.</p>
+</section>
+
+<!-- ================= 02 · FIELDS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">02</span><h2>Fields</h2>
+    <p>Your real intake form. Submit it empty to see an error written the way the
+      rest of the system talks.</p></div>
+  <div class="pg-grid2">
+    <form class="demo stack" id="intake" novalidate>
+      <div class="pg-grid2" style="gap:16px">
+        <div class="d-field"><label class="d-label" for="f-name" data-ar="الاسم الكامل">Full name</label>
+          <input class="d-input" id="f-name" autocomplete="name"></div>
+        <div class="d-field" id="fld-email"><label class="d-label" for="f-email" data-ar="البريد الإلكتروني">Email</label>
+          <input class="d-input" id="f-email" type="email" autocomplete="email"
+            placeholder="you@company.com" aria-describedby="f-email-msg">
+          <div class="d-msg" id="f-email-msg" hidden><svg class="d-icon"><use href="#i-error"/></svg>
+            <span data-ar="أضف بريدًا إلكترونيًا لنتمكن من الرد.">Add an email so we can reply.</span></div></div>
+      </div>
+      <div class="pg-grid2" style="gap:16px">
+        <div class="d-field"><label class="d-label" for="f-role"><span data-ar="المنصب">Your position</span>
+          <span class="d-opt" data-ar="اختياري">optional</span></label>
+          <input class="d-input" id="f-role"></div>
+        <div class="d-field"><label class="d-label" for="f-org" data-ar="المؤسسة">Organisation</label>
+          <input class="d-input" id="f-org" autocomplete="organization"></div>
+      </div>
+      <div class="d-field"><label class="d-label" for="f-msg" data-ar="كيف يمكننا مساعدتك؟">What can we help you with?</label>
+        <textarea class="d-textarea" id="f-msg" data-ar-ph="القرار الذي تتردد فيه، أو الرقم الذي لا تثق به."
+          placeholder="The decision you're stuck on, or the number you don't trust."></textarea>
+        <span class="d-hint" data-ar="لا بأس بصياغة أولية.">Rough is fine.</span></div>
+      <div class="pg-row"><button class="d-btn d-btn--primary" type="submit">
+        <span data-ar="إرسال">Send</span><svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button></div>
+    </form>
+    <div class="demo stack">
+      <div class="d-field"><label class="d-label" for="f-spend" data-ar="الإنفاق الإعلاني الشهري">Monthly ad spend</label>
+        <div class="d-affix"><input class="d-input" id="f-spend" inputmode="decimal" value="4,200">
+          <span class="d-affix__unit" data-ar="دولار">USD</span></div>
+        <span class="d-hint" data-ar="الوحدة جزء من الحقل: قراءة، لا زخرفة.">The unit is part of the field — a readout, not decoration.</span></div>
+      <div class="d-field"><label class="d-label" for="f-src" data-ar="مصدر البيانات">Data source</label>
+        <div class="d-select"><select id="f-src">
+          <option data-ar="تصدير من Shopify">Shopify export</option>
+          <option>Google Sheets</option>
+          <option data-ar="رفع ملف CSV">CSV upload</option></select>
+          <svg class="d-icon"><use href="#i-chevron"/></svg></div></div>
+      <div class="d-field"><label class="d-label" for="f-dis" data-ar="المعرّف">Workspace ID</label>
+        <input class="d-input" id="f-dis" value="dsc-0419" disabled>
+        <span class="d-hint" data-ar="مقفل: يُحدَّد عند الإعداد.">Locked — set at onboarding.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 · SELECTION ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">03</span><h2>Selection</h2>
+    <p>A checked radio is a ring with a positional dot — the mark's own grammar.
+      A switch is an index mark that travels a scale, not a knob on a pill.</p></div>
+  <div class="pg-grid2 demo">
+    <div class="stack">
+      <label class="d-check"><input type="checkbox" checked>
+        <span><span data-ar="احتساب المرتجعات ضمن الإيرادات">Include returns in revenue</span>
+          <span class="d-hint" data-ar="معطّل افتراضيًا — المرتجعات تضخّم الحجم.">Off by default — returns inflate volume.</span></span></label>
+      <label class="d-check"><input type="checkbox">
+        <span data-ar="استبعاد الطلبات التجريبية">Exclude test orders</span></label>
+      <label class="d-check"><input type="checkbox" disabled>
+        <span data-ar="دمج الحسابات (غير متاح)">Merge accounts (unavailable)</span></label>
+      <div style="height:6px"></div>
+      <label class="d-switch"><input type="checkbox" checked role="switch">
+        <span data-ar="تمييز القيم الشاذة">Flag outliers</span></label>
+      <label class="d-switch"><input type="checkbox" role="switch">
+        <span data-ar="المزامنة اليومية">Daily sync</span></label>
+    </div>
+    <div class="stack">
+      <fieldset style="border:0;padding:0;margin:0" class="stack">
+        <legend class="d-label" style="margin-bottom:10px" data-ar="التجميع">Group by</legend>
+        <label class="d-check"><input type="radio" name="grp">
+          <span data-ar="أسبوعي">Weekly</span></label>
+        <label class="d-check"><input type="radio" name="grp" checked>
+          <span data-ar="شهري">Monthly</span></label>
+        <label class="d-check"><input type="radio" name="grp">
+          <span data-ar="ربع سنوي">Quarterly</span></label>
+      </fieldset>
+      <div class="d-field" style="margin-top:8px"><label class="d-label" for="f-conf" data-ar="مستوى الثقة">Confidence level</label>
+        <div class="d-range"><input type="range" id="f-conf" min="80" max="99" step="1" value="95">
+          <output for="f-conf" id="f-conf-o">95%</output></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 · TABS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">04</span><h2>Tabs</h2>
+    <p>A scale with a pointer that travels to the selected reading. Use the arrow
+      keys once a tab has focus.</p></div>
+  <div class="demo">
+    <div class="d-tabs" role="tablist" id="tabs">
+      <button class="d-tab" role="tab" aria-selected="true" id="t1" aria-controls="p1">
+        <span data-ar="نظرة عامة">Overview</span></button>
+      <button class="d-tab" role="tab" aria-selected="false" id="t2" aria-controls="p2" tabindex="-1">
+        <span data-ar="القنوات">Channels</span><span class="d-count">5</span></button>
+      <button class="d-tab" role="tab" aria-selected="false" id="t3" aria-controls="p3" tabindex="-1">
+        <span data-ar="العملاء">Customers</span></button>
+      <button class="d-tab" role="tab" aria-selected="false" id="t4" aria-controls="p4" tabindex="-1">
+        <span data-ar="المرتجعات">Returns</span><span class="d-count">412</span></button>
+      <span class="d-tabs__pointer" id="tabPtr" aria-hidden="true"></span>
+    </div>
+    <div class="d-tabpanel" role="tabpanel" id="p1" aria-labelledby="t1">
+      <p class="t-body" style="color:var(--body);max-width:60ch" data-ar="ملخّص الشهر: الإيرادات والطلبات ونسبة الإرجاع.">September at a glance: revenue, orders and return rate.</p></div>
+    <div class="d-tabpanel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+      <p class="t-body" style="color:var(--body)" data-ar="خمس قنوات، مرتّبة حسب الإيرادات.">Five channels, ranked by revenue.</p></div>
+    <div class="d-tabpanel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+      <p class="t-body" style="color:var(--body)" data-ar="العملاء الجدد مقابل العائدين.">New against returning customers.</p></div>
+    <div class="d-tabpanel" role="tabpanel" id="p4" aria-labelledby="t4" hidden>
+      <p class="t-body" style="color:var(--body)" data-ar="412 مرتجعًا، مستبعدة من الإيرادات.">412 returns, isolated from revenue.</p></div>
+  </div>
+</section>
+
+<!-- ================= 05 · TABLES ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">05</span><h2>Tables</h2>
+    <p>Where a data practice lives or dies. Click a column heading to sort. One
+      cell is coral — it is the only coral in the entire kit.</p></div>
+  <div class="demo">
+    <div class="d-tablewrap">
+      <table class="d-table" id="tbl">
+        <thead><tr>
+          <th scope="col"><button class="d-sort" data-k="0" data-ar="القناة">Channel</button></th>
+          <th scope="col" class="num"><button class="d-sort" data-k="1" data-ar="الطلبات">Orders</button></th>
+          <th scope="col" class="num"><button class="d-sort" data-k="2" aria-sort="descending" data-ar="الإيرادات">Revenue</button></th>
+          <th scope="col" class="num"><button class="d-sort" data-k="3" data-ar="مقابل آب">vs Aug</button></th>
+          <th scope="col" class="num"><button class="d-sort" data-k="4" data-ar="نسبة الإرجاع">Return rate</button></th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-ar="البحث العضوي">Organic search</td><td class="num">1,284</td><td class="num">48,210</td><td class="num pos">+6.2%</td><td class="num">3.1%</td></tr>
+          <tr><td data-ar="الإحالات">Referral</td><td class="num">188</td><td class="num"><span class="d-outlier">41,300</span></td><td class="num pos">+212.0%</td><td class="num">1.1%</td></tr>
+          <tr aria-selected="true"><td data-ar="التواصل المدفوع">Paid social</td><td class="num">902</td><td class="num">31,480</td><td class="num neg">−4.8%</td><td class="num">7.9%</td></tr>
+          <tr><td data-ar="البريد الإلكتروني">Email</td><td class="num">611</td><td class="num">22,905</td><td class="num pos">+11.4%</td><td class="num">2.4%</td></tr>
+          <tr><td data-ar="مباشر">Direct</td><td class="num">423</td><td class="num">15,090</td><td class="num null" title="No August baseline — tracking began in September">—</td><td class="num">4.0%</td></tr>
+        </tbody>
+        <caption data-ar="n = 3,408 طلبًا · بيانات توضيحية · أيلول 2026">n = 3,408 orders · Example data · Sep 2026</caption>
+      </table>
+    </div>
+  </div>
+  <p class="pg-rule"><b>Referral's revenue is circled, not removed</b> — the marker sits on the value, because the value is what's anomalous, not the channel. One order of about
+    34,000 USD carries most of that channel — so the +212% is real and misleading at
+    once. The marker says <em>look here</em>; deleting the row would hide exactly the
+    thing worth a conversation. Direct has <b>no August baseline</b>, so its change
+    is shown as a null, not as zero — "we don't know" and "nothing happened" are
+    different findings. Negatives use a true minus sign (−), not a hyphen.</p>
+</section>
+
+<!-- ================= 06 · NAVIGATION ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">06</span><h2>Navigation</h2>
+    <p>The current page is marked with an index tick, like a reading on a scale.
+      Narrow the window and the links collapse behind a menu.</p></div>
+  <div class="demo" style="position:relative;border:1px solid var(--rule)">
+    <nav class="d-nav" id="demoNav" aria-label="Example">
+      <a class="d-nav__brand" href="#" onclick="return false">
+        <svg viewBox="-20 -20 240 240" aria-hidden="true" class="dsc-mark"><g id="navMark"></g></svg>
+        <span class="t-num" style="font-size:15px;font-weight:500;letter-spacing:-.02em">.describe<span style="color:var(--active)">(</span></span>
+      </a>
+      <div class="d-nav__links" id="navLinks">
+        <a class="d-nav__link" href="#" onclick="return false" data-ar="الخدمات">Services</a>
+        <a class="d-nav__link" href="#" onclick="return false" aria-current="page" data-ar="المنهجية">Method</a>
+        <a class="d-nav__link" href="#" onclick="return false" data-ar="الأعمال">Work</a>
+        <a class="d-nav__link" href="#" onclick="return false" data-ar="من نحن">About</a>
+      </div>
+      <button class="d-btn d-btn--sm d-nav__cta" type="button"><span data-ar="ابدأ">Start</span>
+        <svg class="d-icon d-icon--dir d-icon--sm"><use href="#i-arrow"/></svg></button>
+      <button class="d-btn d-btn--sm d-btn--quiet d-nav__toggle" type="button" id="navToggle"
+        aria-expanded="false" aria-controls="navLinks">
+        <svg class="d-icon"><use href="#i-menu"/></svg><span data-ar="القائمة">Menu</span></button>
+    </nav>
+  </div>
+  <p class="pg-rule"><b>The wordmark here is a stand-in</b> — <span class="t-num">.describe(</span>
+    set in IBM Plex Mono. It is the one place the kit knowingly breaks the mono budget,
+    because the real wordmark hasn't been drawn yet.</p>
+</section>
+
+<!-- ================= 07 · NOTIFICATIONS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">07</span><h2>Notifications</h2>
+    <p>Banners stay until they're resolved. Toasts leave on their own — the
+      countdown is a measurement sweep along the bottom edge, and it pauses
+      while you hover.</p></div>
+  <div class="demo stack">
+    <div class="d-banner" data-tone="info" role="status">
+      <svg class="d-icon"><use href="#i-info"/></svg>
+      <div><div class="d-banner__title" data-ar="الأرقام أولية.">Figures are provisional.</div>
+        <div class="d-banner__body" data-ar="مصدران ما زالا قيد المزامنة. قد تتغير الإجماليات بما يصل إلى 2% حتى تكتمل.">Two sources are still syncing. Totals may move by up to 2% until they finish.</div></div>
+    </div>
+    <div class="d-banner" data-tone="success" role="status">
+      <svg class="d-icon"><use href="#i-check"/></svg>
+      <div><div class="d-banner__title" data-ar="تم تسليم التحليل.">Analysis delivered.</div>
+        <div class="d-banner__body" data-ar="ملاحظة النتائج ومجموعة البيانات المنظّفة في المجلد المشترك.">The findings note and the cleaned dataset are in the shared folder.</div></div>
+      <button class="d-btn d-btn--sm d-btn--quiet d-banner__action" type="button"><span data-ar="فتح">Open</span>
+        <svg class="d-icon d-icon--dir d-icon--sm"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="d-banner" data-tone="warning" role="status">
+      <svg class="d-icon d-icon--dir"><use href="#i-warning"/></svg>
+      <div><div class="d-banner__title" data-ar="اقتربت من الحد الشهري للصفوف.">You're near your monthly row limit.</div>
+        <div class="d-banner__body" data-ar="استُخدم 9,400 من أصل 10,000 صف. الملفات التي تتجاوز الحد تُوضع في قائمة الانتظار ولا تضيع.">9,400 of 10,000 rows used. Uploads over the limit are queued, not lost.</div></div>
+    </div>
+    <div class="d-banner" data-tone="error" role="alert">
+      <svg class="d-icon"><use href="#i-error"/></svg>
+      <div><div class="d-banner__title" data-ar="فشل الاتصال بـ Shopify.">The Shopify connection failed.</div>
+        <div class="d-banner__body" data-ar="انتهت صلاحية رمز الوصول في 24 أيلول. أعد الاتصال لاستئناف المزامنة اليومية.">The access token expired on 24 Sep. Reconnect to resume the daily sync.</div></div>
+      <button class="d-btn d-btn--sm d-banner__action" type="button"><span data-ar="إعادة الاتصال">Reconnect</span>
+        <svg class="d-icon d-icon--dir d-icon--sm"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="pg-row" style="margin-top:8px">
+      <span class="pg-cap" style="margin:0">Toasts →</span>
+      <button class="d-btn d-btn--sm" type="button" data-toast="info" data-ar="معلومة">Info</button>
+      <button class="d-btn d-btn--sm" type="button" data-toast="success" data-ar="نجاح">Success</button>
+      <button class="d-btn d-btn--sm" type="button" data-toast="warning" data-ar="تنبيه">Warning</button>
+      <button class="d-btn d-btn--sm" type="button" data-toast="error" data-ar="خطأ">Error</button>
+    </div>
+  </div>
+  <p class="pg-rule"><b>Warning has no colour of its own, on purpose.</b> Your palette
+    has none to give it — and coral would be the obvious grab and exactly the wrong
+    one, since coral means a data outlier. So a warning is told apart by <b>form</b>:
+    its icon is a pointer arriving at a limit, and its edge rule is heavier. If you'd
+    rather it had a colour, that is a decision to add one to the palette deliberately
+    — see the open questions.</p>
+</section>
+
+<!-- ================= 08 · PANELS, STATS, CHIPS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">08</span><h2>Panels, readouts, status</h2>
+    <p>Panels are instrument plates: no shadow, no radius. Not everything is a
+      card.</p></div>
+  <div class="demo stack">
+    <div class="d-panel">
+      <div class="d-panel__head"><span class="d-panel__title" data-ar="أيلول 2026">September 2026</span>
+        <span class="d-panel__meta" data-ar="n = 3,408 طلبًا">n = 3,408 orders</span></div>
+      <div class="pg-grid3">
+        <div class="d-stat">
+          <span class="d-stat__label" data-ar="الإيرادات">Revenue</span>
+          <span class="d-stat__value">158,985<small>USD</small></span>
+          <span class="d-stat__delta pos"><span class="d-num">+8.3%</span> <span data-ar="مقابل آب">vs Aug</span></span></div>
+        <div class="d-stat" style="border-inline-start:1px solid var(--rule)">
+          <span class="d-stat__label" data-ar="نسبة الإرجاع">Return rate</span>
+          <span class="d-stat__value">4.2<small>%</small></span>
+          <span class="d-stat__delta pos"><span class="d-num">−0.6 pts</span> <span data-ar="تحسّن">better</span></span></div>
+        <div class="d-stat" style="border-inline-start:1px solid var(--rule)">
+          <span class="d-stat__label" data-ar="السلة الوسيطة">Median basket</span>
+          <span class="d-stat__value">46.60<small>USD</small></span>
+          <span class="d-stat__delta neg"><span class="d-num">−2.1%</span> <span data-ar="مقابل آب">vs Aug</span></span></div>
+      </div>
+    </div>
+    <div class="d-panel d-panel--edge">
+      <div class="d-panel__head"><span class="d-panel__title" data-ar="حافة القياس">Measuring-edge variant</span>
+        <span class="d-panel__meta" data-ar="تقرير">Report</span></div>
+      <div class="d-panel__body t-body" style="color:var(--body);max-width:62ch" data-ar="للمحتوى الذي يُقرأ كوثيقة: تقرير أو ملاحظة نتائج. الحافة المدرّجة تنتقل إلى اليمين في العربية.">For content that reads as a document — a report, a findings note. The graduated edge moves to the right in Arabic.</div>
+    </div>
+    <div class="pg-row">
+      <span class="d-chip" data-state="draft" data-ar="مسودة">Draft</span>
+      <span class="d-chip" data-state="live" data-ar="قيد التنفيذ">In progress</span>
+      <span class="d-chip" data-state="done" data-ar="تم التسليم">Delivered</span>
+      <span class="d-chip" data-state="blocked" data-ar="متوقف">Blocked</span>
+    </div>
+  </div>
+  <p class="pg-rule"><b>Colour follows meaning, not the sign.</b> Return rate fell by
+    0.6 points — a negative number and a good outcome — so it is green. A kit that
+    colours by sign would have painted it red. <b>A figure read as a statement is
+    serif</b> (the readouts, in Fraunces); <b>a figure read as one measurement in a set
+    is mono</b> (the table). The delta and the count are measurements, so they're mono.</p>
+</section>
+
+<!-- ================= 09 · PROGRESS & LOADING ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">09</span><h2>Progress & loading</h2>
+    <p>Never "Loading…" and a spinner. Five proprietary states, each an
+      instrument doing something recognisable. With reduced motion on, each shows
+      its resolved frame instead.</p></div>
+  <div class="demo stack">
+    <div class="d-progress" style="max-width:560px">
+      <span class="d-progress__label" data-ar="التنظيف — 3 من 5 ملفات">Cleaning — 3 of 5 files</span>
+      <div class="d-progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60">
+        <div class="d-progress__fill" style="--v:60"></div></div>
+      <output>60%</output>
+    </div>
+    <div class="pg-row" style="gap:34px;margin-top:18px;align-items:flex-start">
+      <!--LOADERS-->
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 · EMPTY & ERROR ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">10</span><h2>Empty & error states</h2>
+    <p>Honest sentences. No sad robots, no illustrations of absence. An error
+      says what went wrong and exactly how to fix it.</p></div>
+  <div class="demo stack">
+    <div class="d-state">
+      <div class="d-state__figure"><!--EMPTYFIG--></div>
+      <div>
+        <div class="d-state__title" data-ar="لم تُربط أي بيانات بعد.">No data connected yet.</div>
+        <p class="d-state__body" data-ar="اربط مصدرًا أو ارفع ملفًا، وستظهر أولى القراءات هنا. لا يُحلَّل شيء حتى تطلب ذلك.">Connect a source or upload a file and the first readings appear here. Nothing is analysed until you say so.</p>
+        <button class="d-btn" type="button"><span data-ar="ربط مصدر">Connect a source</span>
+          <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+    <div class="d-state d-state--error" role="alert">
+      <div class="d-state__figure"><svg class="d-icon" style="width:56px;height:56px" viewBox="0 0 24 24"><use href="#i-error"/></svg></div>
+      <div>
+        <div class="d-state__title" data-ar="هذا الملف لا يطابق آخر ملف مرفوع.">This file doesn't match the last upload.</div>
+        <p class="d-state__body" data-ar="فيه عمودان غير متوقعين — refund_reason و channel_v2 — وينقصه عمود order_date. اربط الأعمدة الجديدة أو أعد تسميتها، ثم ارفع الملف مجددًا.">It has two columns we didn't expect — <span class="t-num">refund_reason</span> and <span class="t-num">channel_v2</span> — and is missing <span class="t-num">order_date</span>. Map the new columns or rename them, then upload again.</p>
+        <div class="pg-row">
+          <button class="d-btn" type="button"><span data-ar="ربط الأعمدة">Map columns</span>
+            <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+          <button class="d-btn d-btn--quiet" type="button"><span data-ar="رفع ملف آخر">Upload a different file</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11 · ICONS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">11</span><h2>Icons</h2>
+    <p>Miniature instruments on a 24-grid, one stroke weight, drawn from the same
+      θ as the mark. Blue captions are the eight your brief specified. The ⇄ ones
+      mirror in right-to-left.</p></div>
+  <div class="iconset demo"><!--ICONGRID--></div>
+</section>
+
+<footer class="pg-foot">
+  <b style="font-weight:500;color:var(--ink)">Role 07 · UI language</b> — built on
+  <span class="t-num">type/typography.css</span>. Arabic strings on this page are
+  drafts for review, not approved copy.
+</footer>
+</div>
+
+<div class="d-toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+var NS='http://www.w3.org/2000/svg';
+
+/* ---------- 5a mark for the nav ---------- */
+(function(){
+  var C=100,R=86,T=-40.6,r=42,GAP=28,STEM=64.77;
+  function P(cx,cy,rr,d){var a=d*Math.PI/180;return[cx+rr*Math.cos(a),cy+rr*Math.sin(a)]}
+  function n(v){return Math.round(v*100)/100}
+  var g=$('#navMark'); if(!g) return;
+  function add(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);g.appendChild(e);return e}
+  var b=P(C,C,R-r,T+180),s=P(C,C,R,T),d=P(C,C,R,T+180),p0=P(C,C,R,T+GAP/2),p1=P(C,C,R,T-GAP/2);
+  var ink='var(--ink)',blue='var(--active)';
+  add('path',{d:'M'+n(p0[0])+' '+n(p0[1])+'A86 86 0 1 1 '+n(p1[0])+' '+n(p1[1]),fill:'none',stroke:ink,'stroke-width':6,'stroke-linecap':'round'});
+  add('circle',{cx:n(b[0]),cy:n(b[1]),r:r,fill:'none',stroke:ink,'stroke-width':6});
+  add('path',{d:'M'+n(b[0]-r)+' '+n(b[1])+'H'+n(b[0]+r),stroke:ink,'stroke-width':6,'stroke-linecap':'round'});
+  add('path',{d:'M'+n(b[0]+r)+' '+n(b[1]-r-STEM)+'V'+n(b[1]+r),stroke:blue,'stroke-width':10,'stroke-linecap':'round'});
+  for(var k=0;k<8;k++){var L=k===0?30:(k%2===0?10:6),q=P(s[0],s[1],L,T+45*k);
+    add('path',{d:'M'+n(s[0])+' '+n(s[1])+'L'+n(q[0])+' '+n(q[1]),stroke:ink,'stroke-width':4.5,'stroke-linecap':'round'});}
+  add('circle',{cx:n(d[0]),cy:n(d[1]),r:8,fill:ink});
+})();
+
+/* ---------- spine ---------- */
+(function(){var g=$('#spineTicks');for(var i=0;i<=45;i++){var p=document.createElementNS(NS,'path');
+  p.setAttribute('d','M40 '+(i*20)+'H'+(40+(i%5===0?9:4)));p.setAttribute('stroke-width','1');
+  p.setAttribute('vector-effect','non-scaling-stroke');g.appendChild(p);}})();
+
+/* ---------- ground ---------- */
+function setTheme(dark){
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  $('#thLight').setAttribute('aria-pressed',String(!dark));
+  $('#thDark').setAttribute('aria-pressed',String(dark));
+}
+$('#thLight').addEventListener('click',function(){setTheme(false)});
+$('#thDark').addEventListener('click',function(){setTheme(true)});
+if(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) setTheme(true);
+
+/* ---------- direction: flip every demo, swap its copy ---------- */
+var rtl=false;
+function swapCopy(toAr){
+  $$('[data-ar]').forEach(function(el){
+    if(el.dataset.en===undefined) el.dataset.en=el.innerHTML;
+    el.innerHTML = toAr ? el.dataset.ar : el.dataset.en;
+  });
+  $$('[data-ar-ph]').forEach(function(el){
+    if(el.dataset.enPh===undefined) el.dataset.enPh=el.getAttribute('placeholder')||'';
+    el.setAttribute('placeholder', toAr ? el.dataset.arPh : el.dataset.enPh);
+  });
+}
+function setDir(isRtl){
+  rtl=isRtl;
+  $$('.demo').concat([$('#toasts')]).forEach(function(d){
+    d.setAttribute('dir',isRtl?'rtl':'ltr'); d.setAttribute('lang',isRtl?'ar':'en');
+  });
+  swapCopy(isRtl);
+  $('#dirLtr').setAttribute('aria-pressed',String(!isRtl));
+  $('#dirRtl').setAttribute('aria-pressed',String(isRtl));
+  $('#dirNote').textContent = isRtl
+    ? 'Arabic strings are drafts for your review. All data is example data.'
+    : 'All data on this page is example data.';
+  placePointer();
+}
+$('#dirLtr').addEventListener('click',function(){setDir(false)});
+$('#dirRtl').addEventListener('click',function(){setDir(true)});
+
+/* ---------- busy button ---------- */
+$('#runBtn').addEventListener('click',function(){
+  var b=this; if(b.classList.contains('is-busy')) return;
+  b.classList.add('is-busy'); b.setAttribute('aria-busy','true');
+  setTimeout(function(){ b.classList.remove('is-busy'); b.removeAttribute('aria-busy');
+    toast('success', rtl?'اكتمل التحليل.':'Analysis complete.',
+                     rtl?'ثلاث نتائج، واحدة منها قيمة شاذة.':'Three findings, one of them an outlier.'); }, 2600);
+});
+
+/* ---------- form ---------- */
+$('#intake').addEventListener('submit',function(e){
+  e.preventDefault();
+  var em=$('#f-email'), f=$('#fld-email'), m=$('#f-email-msg');
+  var ok = /.+@.+\..+/.test(em.value.trim());
+  f.classList.toggle('is-invalid', !ok); m.hidden = ok;
+  em.setAttribute('aria-invalid', String(!ok));
+  if(!ok){ em.focus(); return; }
+  toast('info', rtl?'معاينة فقط.':'Preview only.', rtl?'لم يُرسَل شيء — هذا النموذج غير موصول.':'Nothing was sent — this form isn’t wired to anything.');
+});
+
+/* ---------- range ---------- */
+$('#f-conf').addEventListener('input',function(){ $('#f-conf-o').textContent=this.value+'%' });
+
+/* ---------- tabs ---------- */
+var tabs=$$('#tabs .d-tab');
+function placePointer(){
+  var sel=tabs.filter(function(t){return t.getAttribute('aria-selected')==='true'})[0];
+  var ptr=$('#tabPtr'), box=$('#tabs'); if(!sel||!ptr) return;
+  var start = rtl ? box.clientWidth-(sel.offsetLeft+sel.offsetWidth) : sel.offsetLeft;
+  ptr.style.insetInlineStart=start+'px'; ptr.style.inlineSize=sel.offsetWidth+'px';
+}
+function selectTab(t,focus){
+  tabs.forEach(function(x){ var on=x===t;
+    x.setAttribute('aria-selected',String(on)); x.tabIndex=on?0:-1;
+    $('#'+x.getAttribute('aria-controls')).hidden=!on; });
+  if(focus) t.focus(); placePointer();
+}
+tabs.forEach(function(t,i){
+  t.addEventListener('click',function(){selectTab(t)});
+  t.addEventListener('keydown',function(e){
+    var fwd = rtl ? 'ArrowLeft' : 'ArrowRight', back = rtl ? 'ArrowRight' : 'ArrowLeft';
+    if(e.key===fwd){ e.preventDefault(); selectTab(tabs[(i+1)%tabs.length],true) }
+    if(e.key===back){ e.preventDefault(); selectTab(tabs[(i-1+tabs.length)%tabs.length],true) }
+  });
+});
+window.addEventListener('resize',placePointer);
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(placePointer);
+setTimeout(placePointer,60);
+
+/* ---------- table sort ---------- */
+function val(td){
+  var t=td.textContent.trim(); if(t==='—') return null;
+  var num=parseFloat(t.replace(/[,%+\s]/g,'').replace('−','-'));
+  return isNaN(num)?t.toLowerCase():num;
+}
+$$('#tbl .d-sort').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var k=+btn.dataset.k, cur=btn.getAttribute('aria-sort');
+    var dir = cur==='descending' ? 'ascending' : 'descending';
+    $$('#tbl .d-sort').forEach(function(b){ b.removeAttribute('aria-sort') });
+    btn.setAttribute('aria-sort',dir);
+    var body=$('#tbl tbody'), rows=$$('tr',body);
+    rows.sort(function(a,b){
+      var x=val(a.children[k]), y=val(b.children[k]);
+      if(x===null) return 1; if(y===null) return -1;       // nulls last, always
+      if(x<y) return dir==='ascending'?-1:1; if(x>y) return dir==='ascending'?1:-1; return 0;
+    }).forEach(function(r){ body.appendChild(r) });
+  });
+});
+
+/* ---------- nav ---------- */
+$('#navToggle').addEventListener('click',function(){
+  var n=$('#demoNav'), open=!n.classList.contains('is-open');
+  n.classList.toggle('is-open',open); this.setAttribute('aria-expanded',String(open));
+});
+
+/* ---------- toasts ---------- */
+var ICON={info:'info',success:'check',warning:'warning',error:'error'};
+var COPY={
+  info:['Figures updated.','Two sources finished syncing.','تم تحديث الأرقام.','اكتملت مزامنة مصدرين.'],
+  success:['Dataset cleaned.','96 duplicates removed, 412 returns isolated.','تم تنظيف البيانات.','حُذف 96 تكرارًا وعُزل 412 مرتجعًا.'],
+  warning:['Row limit at 94%.','Uploads over the limit will be queued.','بلغ حد الصفوف 94%.','الملفات التي تتجاوز الحد ستُوضع في قائمة الانتظار.'],
+  error:['Upload failed.','The file is larger than 20 MB. Split it and try again.','فشل الرفع.','حجم الملف أكبر من 20 ميغابايت. قسّمه وأعد المحاولة.']
+};
+function toast(tone,title,body){
+  var host=$('#toasts'), el=document.createElement('div');
+  el.className='d-toast'; el.setAttribute('data-tone',tone);
+  el.setAttribute('role', tone==='error'?'alert':'status');
+  var now=new Date(), t=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+  el.innerHTML='<svg class="d-icon'+(tone==='warning'?' d-icon--dir':'')+'"><use href="#i-'+ICON[tone]+'"/></svg>'+
+    '<div><div class="d-toast__title"></div><div class="d-toast__body"></div>'+
+    '<div class="d-toast__time">'+t+'</div></div>'+
+    '<button class="d-toast__close" type="button" aria-label="'+(rtl?'إغلاق':'Dismiss')+'">'+
+    '<svg class="d-icon d-icon--sm"><use href="#i-close"/></svg></button>';
+  $('.d-toast__title',el).textContent=title; $('.d-toast__body',el).textContent=body;
+  function bye(){ if(el.parentNode) el.parentNode.removeChild(el) }
+  $('.d-toast__close',el).addEventListener('click',bye);
+  el.addEventListener('animationend',function(e){ if(e.animationName==='d-sweep') bye() });
+  host.appendChild(el);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(bye,8000);
+}
+$$('[data-toast]').forEach(function(b){
+  b.addEventListener('click',function(){ var c=COPY[b.dataset.toast];
+    toast(b.dataset.toast, rtl?c[2]:c[0], rtl?c[3]:c[1]); });
+});
+})();
+</script>

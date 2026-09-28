@@ -1,0 +1,988 @@
+<title>.describe( — From data to decision</title>
+<style>
+/*CSS*/
+
+/* ==========================================================================
+   .describe( homepage, phase 2
+   Built on typography.css + ui.css above. The page is a scale: a measuring
+   edge down the left margin, a numeral and tally at each section, and real
+   numbers drawn to scale where a picture used to be. Coral appears in one
+   place: the flagged June line in the proof chart (and its table key).
+   ========================================================================== */
+:root{
+  --gut: clamp(16px, 4vw, 48px);
+  --max: 1200px;
+  --col: clamp(16px, 2.4vw, 32px);
+  --sec: clamp(72px, 8.5vw, 124px);
+  --nav-h: 61px;
+  --spx: calc(max(var(--gut), (100% - var(--max)) / 2) - 24px);   /* the spine, 24px outside the content edge */
+  --lead: color-mix(in srgb, var(--faint) 55%, var(--body));       /* leaders: construction that must survive dark */
+}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:no-preference){ html{scroll-behavior:smooth} }
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans);
+  font-weight:300;font-size:var(--t-body);line-height:var(--lh-body);
+  -webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+p,ul,ol,dl,dd,figure,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+strong{font-weight:500;color:var(--ink)}
+::selection{background:var(--active);color:var(--active-ink)}
+:where(a,summary,button,[tabindex],input,textarea):focus-visible{outline:2px solid var(--active);outline-offset:3px}
+.vh{position:absolute!important;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip{position:absolute;inset-inline-start:var(--gut);inset-block-start:-80px;z-index:60;
+  background:var(--ink);color:var(--ground);padding:10px 14px;font-weight:500;font-size:14px;text-decoration:none}
+.skip:focus{inset-block-start:10px}
+
+.wrap{max-inline-size:calc(var(--max) + 2*var(--gut));margin-inline:auto;padding-inline:var(--gut)}
+.g{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--col)}
+.g > *{grid-column:1 / -1;min-inline-size:0}
+section[id]{scroll-margin-block-start:var(--nav-h)}
+html{scroll-padding-block-start:calc(var(--nav-h) + 24px)}
+
+.copy{color:var(--body);max-inline-size:62ch}
+.copy + .copy{margin-block-start:1em}
+.sub{font-family:var(--font-sans);font-size:13px;font-weight:500;color:var(--ink);letter-spacing:.01em;margin:0 0 14px}
+/* type as graphics: Fraunces numerals */
+.fr{font-family:var(--font-serif);font-weight:300;font-variation-settings:'SOFT' 0,'WONK' 0;
+  font-variant-numeric:lining-nums proportional-nums;letter-spacing:-.02em}
+/* mono labels: numerals and <=4-word uppercase labels only */
+.lab{font-family:var(--font-mono);font-size:10.5px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;color:var(--body)}
+
+/* ---- graphics: semantic classes -> theme tokens (same drawing in light, dark, one ink) ---- */
+svg.gx{display:block;overflow:visible}
+svg.gx .ink{stroke:var(--ink);color:var(--ink)}
+svg.gx .body{stroke:var(--body);color:var(--body)}
+svg.gx .faint{stroke:var(--faint);color:var(--faint)}
+svg.gx .active{stroke:var(--active);color:var(--active)}
+svg.gx .proj, svg.gx .lead, svg.gx .zero{stroke:var(--lead)}
+svg.gx .gap{stroke:var(--ground)}
+svg.gx .fill{stroke:none;fill:currentColor}
+svg.gx line{stroke-linecap:butt}
+svg.gx text[class]{stroke:none;fill:currentColor}
+svg.gx .mo{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em}
+svg.gx .fr{font-family:var(--font-serif);font-weight:300;font-size:26px;font-variation-settings:'SOFT' 0,'WONK' 0;
+  font-variant-numeric:lining-nums proportional-nums}
+svg.gx.wedge{display:inline-block;flex:0 0 auto}
+svg.tally .active{stroke:var(--body)}
+.sec.is-here svg.tally .active{stroke:var(--active)}
+svg.hr--m .fr{font-size:21px} svg.hr--m .mo{font-size:10px}
+
+/* ==========================================================================
+   The measuring edge — the page spine. A ticked rule in the margin; each
+   section's major tick sits level with its numeral; the section you are in
+   reads active. Logical properties, so it mirrors for RTL.
+   ========================================================================== */
+main{position:relative}
+@media (min-width:1000px){
+  main::before{content:"";position:absolute;z-index:1;pointer-events:none;inset-block:600px 0;inset-inline-start:var(--spx);inline-size:6px;
+    background:
+      linear-gradient(var(--faint),var(--faint)) 0 0 / 1px 100% no-repeat,
+      repeating-linear-gradient(to bottom, var(--faint) 0 1px, transparent 1px 24px) 0 0 / 5px 100% no-repeat}
+  [dir="rtl"] main::before{background-position:100% 0, 100% 0}
+}
+
+/* ---- section head: numeral + tally index, then the statement ---- */
+.sec{position:relative;padding-block:var(--sec);border-block-start:1px solid var(--rule)}
+.sec--plate{background:var(--panel)}
+.sech{position:relative;row-gap:26px;margin-block-end:clamp(40px,5vw,72px);align-items:start}
+.sech__n{display:flex;flex-direction:column;gap:12px}
+.sech__num{font-size:56px;line-height:.8;color:var(--body)}
+.sech__num + svg{margin-inline-start:3px}
+.h2{font-size:var(--t-opener);line-height:var(--lh-opener);letter-spacing:var(--tr-opener);color:var(--ink);max-inline-size:22ch;text-wrap:balance}
+.sech__aside{color:var(--body);max-inline-size:44ch;margin-block-start:18px}
+@media (min-width:1000px){
+  .sech__n{grid-column:1 / span 2}
+  .sech__t{grid-column:3 / span 10}
+  .sech__num{font-size:96px}
+  /* the section's reading on the spine: a major tick level with the numeral */
+  .sech::before{content:"";position:absolute;inset-inline-start:-24px;inset-block-start:12px;
+    inline-size:8px;block-size:1.5px;background:var(--body);z-index:2}
+  .sec.is-here .sech::before{inline-size:16px;background:var(--active)}
+  .sec.is-here .sech::after{content:"";position:absolute;inset-inline-start:-28px;inset-block-start:9px;
+    inline-size:8px;block-size:8px;border-radius:50%;background:var(--active);z-index:2}
+  .sech--flat .sech__t{align-self:end}
+}
+@media (max-width:999px){
+  /* no spine on narrow screens: each head carries its own tick row instead */
+  .sech{padding-block-start:26px}
+  .sech::before{content:"";position:absolute;inset-inline:0;inset-block-start:0;block-size:12px;
+    background:
+      linear-gradient(var(--body),var(--body)) 0 100% / 100% 1px no-repeat,
+      linear-gradient(var(--body),var(--body)) 0 0 / 1.5px 100% no-repeat,
+      repeating-linear-gradient(to right, var(--faint) 0 1px, transparent 1px 12px) 0 100% / 100% 6px no-repeat}
+  [dir="rtl"] .sech::before{background-position:0 100%, 100% 0, 0 100%}
+  .sech__n{gap:16px}
+}
+
+/* ==========================================================================
+   Nav — sticky, on the ground, hairline beneath. Collapses under 760px.
+   ========================================================================== */
+.top{position:sticky;inset-block-start:0;z-index:40;
+  background:var(--ground);
+  border-block-end:1px solid var(--rule)}
+.top .d-nav{position:relative;background:transparent;border:0;min-block-size:60px;
+  max-inline-size:calc(var(--max) + 2*var(--gut));margin-inline:auto;padding-inline:var(--gut)}
+.d-nav__brand{gap:11px}
+.mark .ink{stroke:var(--ink);color:var(--ink)}
+.mark .active{stroke:var(--active)}
+.mark .fill{fill:var(--ink);stroke:none}
+.mark--nav{inline-size:30px;block-size:30px}
+.wm{font-family:var(--font-sans);font-weight:500;font-size:17px;letter-spacing:-.005em;color:var(--ink);white-space:nowrap}
+.wm b{font-weight:500;color:var(--active)}
+.d-nav__links{gap:2px}
+.d-nav__link[aria-current="location"]{color:var(--ink)}
+.d-nav__link[aria-current="location"]::before{content:"";position:absolute;left:50%;inset-block-end:-2px;
+  inline-size:1.5px;block-size:7px;background:var(--active);translate:-50% 0}
+.d-nav__cta{margin-inline-start:12px}
+@media (min-width:761px){ .d-nav__link--m{display:none} }
+@media (max-width:760px){
+  .d-nav__links{background:var(--ground);padding-block:8px 16px;box-shadow:var(--elev)}
+  .d-nav__link{padding:13px var(--gut);font-size:16px;border-block-end:1px solid var(--rule)}
+  .d-nav__link:last-child{border-block-end:0}
+  .d-nav__link[aria-current="location"]::before{left:auto;inset-inline-start:calc(var(--gut) - 10px);
+    inset-block-end:auto;inset-block-start:50%;translate:0 -50%;inline-size:4px;block-size:1.5px}
+}
+.d-nav__toggle .d-icon{color:var(--ink)}
+.d-nav__toggle:hover .d-icon{color:currentColor;transform:none}
+
+/* ==========================================================================
+   Hero — the night plate (founder, round 5). A navy band, brand navy in BOTH
+   themes; the text on plain navy; the sky in a hard-edged window beside it
+   (a strip above it on phones). The mask is never scaled: 2400x1200 CSS px,
+   integer offsets, the @2x file at >= 2dppx, so every screen pixel is lit or
+   not. Nothing is drawn over the sky. Local tokens make the kit read on navy.
+   ========================================================================== */
+.hero__band{position:relative;overflow:hidden;
+  --ink:#F6F8FC;--body:#CBD5E1;--faint:#64748B;--ground:#092052;--active:#0F58E5;--active-ink:#FFFFFF;
+  background:var(--ground);color:var(--ink)}
+.hero__sky{background:var(--ink);image-rendering:pixelated;  /* exact at 1x/2x/3x; nearest-neighbour (still 2 colours) between */
+  --m1:url(<!--SKY1-->);
+  -webkit-mask:var(--m1) 0 0 / 1020px 600px no-repeat;mask:var(--m1) 0 0 / 1020px 600px no-repeat}
+@media (min-resolution:2dppx){ .hero__sky{--m2:url(<!--SKY2-->);-webkit-mask-image:var(--m2);mask-image:var(--m2)} }
+.hero__in{position:relative}
+.hero h1{font-size:clamp(40px,5.5vw,72px);line-height:1.04;letter-spacing:-.024em;color:var(--ink);text-wrap:balance;margin:0}
+.hero__lede{margin-block:24px 28px;max-inline-size:34em;color:var(--ink);font-size:clamp(17px,1.5vw,19px);line-height:1.5;font-weight:400}
+.hero__ctas{display:flex;flex-wrap:wrap;align-items:center;gap:16px 20px}
+.hero__band .d-btn:focus-visible::after{--c:var(--ink)}
+@media (min-width:1000px){
+  .hero__band{block-size:600px}
+  .hero__sky{position:absolute;inset-block:0;right:0;left:max(round(down, max(736px, 50% + 96px), 1px), calc(100% - 1020px))}  /* always meets the right edge; never wider than the 1020px crop */
+  .hero__in{padding-block-start:88px}
+  .hero__in > *{max-inline-size:624px}
+}
+@media (max-width:999px){
+  .hero__sky{block-size:240px;-webkit-mask-position:-20px -50px;mask-position:-20px -50px}
+  .hero__in{padding-block:40px 48px}
+}
+@media (max-width:999px) and (min-resolution:3dppx){
+  .hero__sky{--m3:url(<!--SKY3-->);-webkit-mask:var(--m3) 0 0 / 1000px 240px no-repeat;mask:var(--m3) 0 0 / 1000px 240px no-repeat}
+}
+@media (max-width:760px){ .hero__ctas .d-btn{inline-size:calc(100% - 24px);justify-content:center} }
+
+/* ---- the ruler pair: the page's first data graphic, on the ground, below the band ---- */
+.rows{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"cap" "figs" "plot";
+  padding-block:96px;align-items:last baseline}
+.rows__cap{grid-area:cap;font-size:15px;color:var(--body);margin-block-end:32px}
+.rows__cap a{color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--faint)}
+.rows__cap a:hover{color:var(--active)}
+.rows__fig{margin:0;grid-area:figs}
+.rows__fig .lab{display:block;margin-block-end:16px}
+.rows__fig .fr{display:block;line-height:1;margin-inline-start:-.04em}
+.rows__fig--big .fr{font-size:112px;color:var(--body)}
+.rows__fig--clean{justify-self:end;text-align:end;margin-inline-end:<!--XC_END-->}
+.rows__fig--clean .fr{font-size:84px;color:var(--ink);margin-inline:0 -.03em}
+.rows__plot{grid-area:plot;margin-block-start:34px}
+svg.hr--m{display:none}
+@media (max-width:1199px){
+  .rows{grid-template-areas:"cap" "big" "plot" "clean"}
+  .rows__fig--big{grid-area:big}
+  .rows__fig--clean{grid-area:clean;justify-self:start;text-align:start;margin:40px 0 0}
+  .rows__fig--clean .fr{margin-inline:-.04em 0}
+  svg.hr--d{display:none} svg.hr--m{display:block}
+}
+@media (max-width:999px){
+  .rows{padding-block:64px}
+  .rows__fig .lab{margin-block-end:12px}
+  .rows__fig--big .fr, .rows__fig--clean .fr{font-size:56px}
+  .rows__plot{margin-block-start:10px}
+}
+
+/* ==========================================================================
+   01 Who we help
+   ========================================================================== */
+.sym{display:grid;grid-template-columns:1fr;border-block-start:1px solid var(--ink)}
+.sym li{padding-block:20px 22px;border-block-end:1px solid var(--rule)}
+.sym p{font-family:var(--font-serif);font-weight:300;font-variation-settings:'SOFT' 0,'WONK' 0;
+  font-size:clamp(1.25rem,2vw,1.55rem);line-height:1.24;letter-spacing:-.012em;color:var(--ink);text-wrap:pretty}
+@media (min-width:900px){
+  .sym{grid-template-columns:repeat(3,1fr);column-gap:var(--col)}
+  .sym li{padding-block:20px 0;border-block-end:0}
+}
+.notfor{margin-block-start:clamp(56px,7vw,96px);row-gap:20px}
+.notfor__l{display:grid;grid-template-columns:1fr;border-block-start:1px solid var(--rule)}
+.notfor__l > div{padding-block:16px 18px;border-block-end:1px solid var(--rule)}
+.notfor__l dt{font-weight:500;color:var(--ink);line-height:1.4}
+.notfor__l dd{color:var(--body);margin-block-start:4px;font-size:15px;line-height:1.5}
+@media (min-width:640px){ .notfor__l{grid-template-columns:1fr 1fr;column-gap:var(--col)} }
+@media (min-width:1000px){
+  .notfor__h{grid-column:3 / span 3}
+  .notfor__l{grid-column:6 / span 7}
+}
+
+/* ==========================================================================
+   02 Services — three columns, one spec row each: figures, not sentences
+   ========================================================================== */
+.svcs{display:grid;grid-template-columns:1fr;border-block-start:1px solid var(--ink)}
+.svc{padding-block:28px 32px;border-block-end:1px solid var(--rule);display:flex;flex-direction:column;gap:14px}
+@media (min-width:900px){
+  .svcs{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(6,auto)}
+  /* subgrid: the spec rows of all three services share one baseline */
+  .svc{display:grid;grid-row:span 6;grid-template-rows:subgrid;row-gap:14px;align-content:start;
+    padding:28px var(--col) 8px;border-block-end:0;border-inline-start:1px solid var(--rule)}
+  .svc .spec{align-self:stretch;align-content:end}
+  .svc:first-child{padding-inline-start:0;border-inline-start:0}
+  .svc:last-child{padding-inline-end:0}
+}
+.svc__n{font-family:var(--font-mono);font-size:11px;color:var(--dim);letter-spacing:.06em}
+.svc__t{font-size:var(--t-h3);line-height:var(--lh-h3);letter-spacing:var(--tr-h3);color:var(--ink);margin:0}
+.svc__line{color:var(--body);font-size:16px;line-height:1.5}
+.spec{display:flex;flex-wrap:wrap;gap:12px 28px;padding-block:16px 14px;border-block:1px solid var(--rule)}
+.spec li{display:grid;grid-template-rows:40px auto;row-gap:13px}
+.spec__v{align-self:end;font-size:44px;line-height:.8;color:var(--ink)}
+.spec__v small{font-family:var(--font-sans);font-size:14px;letter-spacing:0;color:var(--body);margin-inline-end:10px}
+.spec__v--txt{font-family:var(--font-sans);font-size:17px;line-height:1.1;font-weight:400;letter-spacing:0}
+.spec__v--tbd{color:var(--dim)}
+.spec__k{font-size:13px;color:var(--body);line-height:1.2}
+.get{display:grid;gap:8px}
+.get li{position:relative;padding-inline-start:20px;color:var(--body);font-size:15px;line-height:1.5}
+.get li::before{content:"";position:absolute;inset-inline-start:0;inset-block-start:.75em;inline-size:11px;block-size:1px;background:var(--body)}
+.when{margin-block-start:auto;padding-block-start:14px;color:var(--ink);font-size:15px;line-height:1.5}
+.when b{font-weight:500}
+
+/* ==========================================================================
+   03 Method — five stations on one scale, each counted in wedges
+   ========================================================================== */
+.stages{position:relative;display:grid;grid-template-columns:1fr;border-inline-start:1px solid var(--ink)}
+.stages li{position:relative;padding:0 0 26px 26px;display:grid;grid-template-columns:84px 1fr;column-gap:14px;align-items:center}
+.stages li:last-child{padding-block-end:0}
+.stages li::before{content:"";position:absolute;inset-inline-start:0;inset-block-start:17px;inline-size:14px;block-size:1.5px;background:var(--ink)}
+.stages .cnt{grid-row:span 2;display:flex;align-items:flex-start;gap:8px}
+.stages .cnt .fr{font-size:24px;line-height:.9;color:var(--body)}
+.stages h3{font-size:24px;line-height:1.15;letter-spacing:-.01em;margin:0;color:var(--ink)}
+.stages p{color:var(--body);font-size:15px;line-height:1.5;max-inline-size:36ch;margin-block-start:4px}
+@media (min-width:900px){
+  .stages{grid-template-columns:repeat(5,minmax(0,1fr));column-gap:var(--col);
+    border-inline-start:0;border-block-start:1px solid var(--body);padding-block-start:26px;
+    background:repeating-linear-gradient(to right, var(--faint) 0 1px, transparent 1px 12px) 0 0 / 100% 7px no-repeat}
+  .stages li{padding:0;display:block}
+  .stages li::before{inset-block-start:-34px;inline-size:1.5px;block-size:17px;background:var(--ink)}
+  .stages .cnt{min-block-size:40px;align-items:flex-end;margin-block-end:14px}
+  .stages p{margin-block-start:8px}
+}
+.needs{margin-block-start:clamp(56px,7vw,96px);padding-block-start:22px;border-block-start:1px solid var(--rule);row-gap:18px;align-items:start}
+.needs__list{display:grid;grid-template-columns:1fr;gap:16px var(--col)}
+.needs__list li{padding-block-start:12px;border-block-start:1px solid var(--ink);color:var(--ink);font-size:16px;line-height:1.45}
+@media (min-width:640px){ .needs__list{grid-template-columns:repeat(3,1fr)} }
+@media (min-width:1000px){
+  .needs__h{grid-column:3 / span 3;line-height:1;margin-block-start:-5px}
+  .needs__list{grid-column:6 / span 7}
+}
+
+/* ==========================================================================
+   04 Proof — the chart is the finding; the figures are the rest
+   ========================================================================== */
+.proof__main{row-gap:40px;align-items:start}
+@media (min-width:1000px){
+  .proof__main .chart{grid-column:1 / span 8}
+  .proof__main .findings{grid-column:9 / span 4}
+}
+.chart{padding:clamp(18px,2.6vw,32px)}
+.chart svg.frule--window{margin-block:22px 4px}
+svg.frule--window .narrow{display:none}
+@media (max-width:639px){ svg.frule--window .wide{display:none} svg.frule--window .narrow{display:inline} }
+.chart__title{font-size:var(--t-h3);line-height:var(--lh-h3);letter-spacing:var(--tr-h3);color:var(--ink);max-inline-size:26ch;text-wrap:balance}
+.chart__plot{position:relative;margin-block-start:22px}
+.chart__svg{display:block;inline-size:100%;block-size:auto;overflow:visible}
+.chart__svg--d{max-inline-size:720px}
+.chart__svg--m, .chart__svg--x{display:none;max-inline-size:326px}
+.chart__svg--x{max-inline-size:272px}
+@media (max-width:640px){ .chart__svg--d{display:none} .chart__svg--m{display:block;margin-inline:auto} }
+@media (max-width:374px){ .chart__svg--m{display:none} .chart__svg--x{display:block;margin-inline:auto} }
+.chart__key{display:flex;flex-wrap:wrap;gap:10px 22px;margin-block-start:18px;font-size:13px;color:var(--body)}
+.chart__key span{display:inline-flex;align-items:center;gap:8px}
+.chart__key .sw{inline-size:14px;block-size:10px;border-radius:2px 2px 0 0;background:var(--c-context)}
+.chart__key .sw--story{background:var(--c-story)}
+.chart__key .d-outlier{color:var(--body)}
+@media (max-width:640px){
+  .chart__plot{margin-block-start:14px}
+  .chart__key{display:grid;grid-template-columns:auto auto;justify-content:start;gap:8px 22px}
+  .chart__key > :last-child{grid-column:1 / -1}
+}
+.chart__prov{margin-block-start:16px;padding-block-start:14px;border-block-start:1px solid var(--rule);color:var(--dim)}
+.chart__prov b{font-weight:500;color:var(--ink)}
+svg.dsc-chart text{pointer-events:none}
+svg.dsc-chart .c-cross{stroke:var(--c-ink);stroke-width:1;opacity:.35;pointer-events:none}
+svg.dsc-chart .c-proj{stroke:var(--lead)}
+svg.dsc-chart:focus, svg.dsc-chart :focus{outline:none}
+svg.dsc-chart .c-sep, svg.dsc-chart .c-ringhalo{stroke:var(--c-panel)}
+svg.dsc-chart .c-hit:focus-visible{fill:color-mix(in srgb, var(--c-story) 8%, transparent);stroke:var(--c-ink);stroke-width:1.5}
+svg.dsc-chart .c-focusring{stroke:var(--c-ink);opacity:0}
+svg.dsc-chart .c-flag{cursor:crosshair}
+svg.dsc-chart .c-flag:focus-visible .c-focusring{opacity:1}
+svg.dsc-chart .c-flag:focus-visible{stroke:none}
+.tip{position:fixed;z-index:50;pointer-events:none;max-inline-size:280px;background:var(--ink);color:var(--ground);
+  font:400 12.5px/1.45 var(--font-sans);padding:7px 10px;border-radius:var(--r);opacity:0;translate:0 4px;
+  transition:opacity .12s linear, translate .12s var(--ease)}
+.tip.on{opacity:1;translate:0 0}
+@media (prefers-reduced-motion:reduce){ .tip{transition:none} }
+
+.twin{margin-block-start:18px;border-block-start:1px solid var(--rule)}
+.twin summary{display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;padding-block:14px 4px;
+  font-size:14px;font-weight:500;color:var(--ink)}
+.twin summary::-webkit-details-marker{display:none}
+.twin summary .d-icon{inline-size:16px;block-size:16px;color:var(--active);transition:rotate var(--t2) var(--ease)}
+.twin[open] summary .d-icon{rotate:180deg}
+.twin summary:hover{color:var(--active)}
+.twin .d-tablewrap{margin-block-start:12px}
+.twin__table{min-inline-size:0}
+.twin__table tbody th{font-family:var(--font-sans);font-weight:400;font-size:14px;letter-spacing:0;text-transform:none;
+  color:var(--ink);position:static;padding:10px var(--s4);border-block-end:var(--hair) solid var(--rule);background:transparent}
+.twin__table tr.is-story th{box-shadow:inset 3px 0 0 var(--c-story)}
+.twin__table tr.is-total th, .twin__table tr.is-total td{font-weight:500;border-block-start:1px solid var(--ink);border-block-end:0}
+.flagmark{display:inline-block;inline-size:10px;block-size:10px;border-radius:50%;margin-inline-start:8px;vertical-align:-1px;
+  border:1.25px solid var(--mark);background:radial-gradient(var(--mark) 0 2px, transparent 2.5px)}
+.twin__table tbody tr:hover > th, .twin__table tbody tr:hover > td{background:color-mix(in srgb, var(--active) 5%, transparent)}
+.twin__note{margin-block-start:10px;font-size:12.5px;color:var(--dim);line-height:1.5}
+@media (max-width:374px){ .twin__table th, .twin__table td{padding-inline:4px!important} .chart{padding-inline:14px} }
+@media (max-width:640px){ .twin__table th, .twin__table td{padding-inline:8px} .twin__table td.num{font-size:12.5px} .twin__table tbody th{font-size:13.5px;white-space:nowrap} }
+
+.findings li{padding-block:26px 24px;border-block-end:1px solid var(--rule)}
+.findings li:first-child{border-block-start:1px solid var(--ink)}
+.findings .fr{display:block;font-size:clamp(40px,4.4vw,52px);line-height:.9;color:var(--ink);margin-block-end:18px}
+.findings svg.frule{margin-block-start:14px}
+.findings p{font-size:15px;line-height:1.5;color:var(--body)}
+
+.discovery{margin-block-start:40px}
+.discovery blockquote{font-family:var(--font-serif);font-weight:300;font-variation-settings:'SOFT' 0,'WONK' 0;
+  font-size:clamp(1.35rem,2vw,1.6rem);line-height:1.22;letter-spacing:-.016em;color:var(--ink);max-inline-size:32ch;text-wrap:pretty}
+.discovery .copy{margin-block-start:14px}
+
+
+/* ==========================================================================
+   05 Where we are — the honest count, in wedges; zero is the empty place
+   ========================================================================== */
+.count{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block-start:1px solid var(--ink)}
+.count li{display:flex;flex-direction:column;gap:12px;padding:20px 16px 4px;border-inline-start:1px solid var(--rule)}
+.count li:first-child{border-inline-start:0;padding-inline-start:0}
+.count .v{display:flex;align-items:flex-end;gap:17px}
+.count .fr{font-size:clamp(48px,6vw,72px);line-height:.8;color:var(--ink)}
+.count .is-zero .fr{color:var(--body)}
+.count .k{font-size:14px;line-height:1.35;color:var(--body)}
+.where__note{margin-block-start:22px;color:var(--ink);max-inline-size:52ch}
+@media (min-width:1000px){ .where__b{grid-column:3 / span 8} }
+@media (max-width:480px){ .count li{padding-inline:10px} .count .k{font-size:13px} .count .v{gap:17px} .count .v svg{block-size:28px;inline-size:auto} }
+
+/* ==========================================================================
+   06 About
+   ========================================================================== */
+.about{row-gap:36px;align-items:start}
+@media (min-width:1000px){
+  .about__name{grid-column:3 / span 4}
+  .about__prose{grid-column:8 / span 5}
+}
+.namebox{border:1px solid var(--rule);background:var(--panel);padding:clamp(22px,3vw,32px)}
+.namebox__big{font-family:var(--font-sans);font-weight:500;
+  font-size:clamp(2.4rem,4.4vw,3.2rem);line-height:1;letter-spacing:-.02em;color:var(--ink);margin-block-end:22px;white-space:nowrap}
+.namebox__big b{font-weight:500;color:var(--active)}
+.caret{display:inline-block;inline-size:2px;block-size:.82em;background:var(--active);margin-inline-start:4px;vertical-align:-.04em}
+@media (prefers-reduced-motion:no-preference){ .caret{animation:blink 1.1s steps(1) 6} }
+@keyframes blink{50%{opacity:0}}
+.namebox .copy{font-size:15px;line-height:1.6}
+.code{font-family:var(--font-sans);font-weight:500;color:var(--ink);white-space:nowrap}
+.about__prose .copy{font-size:16.5px;line-height:1.65}
+.about__prose .team{margin-block-start:1.2em;padding-block-start:1.1em;border-block-start:1px solid var(--rule)}
+.belief{margin-block-start:clamp(56px,7vw,96px);row-gap:18px;align-items:end}
+.belief blockquote{font-size:clamp(30px,3.2vw,40px);line-height:1.1;letter-spacing:var(--tr-opener);color:var(--ink);max-inline-size:17ch}
+@media (min-width:1000px){
+  .belief__q{grid-column:3 / span 5}
+  .belief__b{grid-column:8 / span 5}
+}
+
+/* ==========================================================================
+   07 Questions
+   ========================================================================== */
+@media (min-width:1000px){ .faq{grid-column:3 / span 8} }
+.faq{border-block-start:1px solid var(--ink)}
+.faq details{border-block-end:1px solid var(--rule)}
+.faq summary{display:grid;grid-template-columns:1fr 24px;gap:20px;align-items:start;cursor:pointer;list-style:none;
+  padding-block:20px;font-size:17.5px;font-weight:400;line-height:1.4;color:var(--ink)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--active)}
+.faq summary .d-icon{color:var(--active);margin-block-start:2px;transition:rotate var(--t2) var(--ease)}
+.faq details[open] summary .d-icon{rotate:180deg}
+.faq .a{padding:0 44px 24px 0;color:var(--body);font-size:15.5px;line-height:1.6;max-inline-size:62ch}
+@media (prefers-reduced-motion:reduce){ .faq summary .d-icon, .twin summary .d-icon{transition:none} }
+
+/* ==========================================================================
+   08 Contact
+   ========================================================================== */
+.contact{row-gap:40px;align-items:start}
+@media (min-width:1000px){
+  .contact__l{grid-column:3 / span 4}
+  .contact__f{grid-column:8 / span 5}
+}
+.email{padding-block-start:16px;border-block-start:1px solid var(--ink)}
+.email__addr{display:block;font-family:var(--font-serif);font-weight:300;font-variation-settings:'SOFT' 0,'WONK' 0;
+  font-size:clamp(1.6rem,2.8vw,2.1rem);line-height:1.15;letter-spacing:-.02em;color:var(--ink);
+  -webkit-user-select:all;user-select:all;overflow-wrap:anywhere;margin-block:0 14px}
+.email__acts{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.email__done{font-size:13px;color:var(--pos)}
+.reach{margin-block-start:28px;border-block-start:1px solid var(--rule)}
+.reach > div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding-block:11px;border-block-end:1px solid var(--rule);font-size:14.5px}
+.reach dt{color:var(--body)}
+.reach dd{color:var(--ink)}
+.form{background:var(--ground);border:1px solid var(--rule);padding:clamp(20px,3vw,32px);display:grid;gap:20px}
+.form .d-input,.form .d-textarea{font-size:16px}
+.form__foot{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;margin-block-start:4px}
+.form__note{font-size:12.5px;color:var(--body);line-height:1.5}
+.form .d-banner[hidden], .form .d-msg[hidden]{display:none}
+:root{--ph:var(--dim)}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){--c-context:var(--body)} }
+:root[data-theme="dark"]{--c-context:var(--body)}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){--ph:#8093B4} }
+:root[data-theme="dark"]{--ph:#8093B4}
+.d-input::placeholder, .d-textarea::placeholder{color:var(--ph)}
+/* the motto, set large once: Latin and Arabic at matched weight on one shared rule */
+.motto{margin-block-start:clamp(64px,8vw,112px);display:grid;grid-template-columns:1fr;row-gap:6px;position:relative}
+.motto p{font-weight:300;color:var(--ink);line-height:1.15;padding-block:0 12px}
+.motto__en{font-family:var(--font-serif);font-variation-settings:'SOFT' 0,'WONK' 0;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.018em}
+.motto__ar{font-family:var(--font-ar-display);font-size:clamp(34px,4.1vw,53px);line-height:1.3!important;text-align:right}
+.motto::after{content:"";grid-row:2;block-size:1px;background:var(--ink)}
+.motto .motto__ar{grid-row:3;padding-block:10px 0}
+@media (min-width:760px){
+  .motto{grid-template-columns:1fr 1fr;column-gap:var(--col);align-items:end}
+  .motto::after{grid-column:1 / -1}
+  .motto .motto__ar{grid-row:1;grid-column:2;padding-block:0 6px}
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.foot{border-block-start:1px solid var(--ink);padding-block:clamp(40px,5vw,64px) 36px}
+.foot__top{row-gap:28px;align-items:center}
+.lock{display:flex;align-items:center;gap:14px}
+.mark--foot{inline-size:48px;block-size:48px;flex:0 0 auto}
+.lock .wm{font-size:22px}
+@media (min-width:900px){
+  .foot__lock{grid-column:1 / span 6}
+  .foot__cta{grid-column:8 / span 5;justify-self:end}
+}
+.foot__meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-block-start:32px;padding-block-start:16px;
+  border-block-start:1px solid var(--rule);font-size:13px;color:var(--body)}
+.foot__meta a{text-decoration:none}
+.foot__meta a:hover{color:var(--active)}
+.foot__notes{margin-block-start:14px;font-size:12.5px;line-height:1.5;color:var(--dim)}
+
+/* ---- one focus style: the kit's sighting frame, everywhere it wasn't yet ---- */
+.d-nav__brand, summary, .reach a, .foot__meta a, .copy a, .rows__cap a{position:relative}
+.d-nav__brand:focus-visible, summary:focus-visible, .reach a:focus-visible, .foot__meta a:focus-visible,
+.copy a:focus-visible, .rows__cap a:focus-visible{outline:2px solid transparent;outline-offset:4px}
+.d-nav__brand:focus-visible::after, summary:focus-visible::after, .reach a:focus-visible::after, .foot__meta a:focus-visible::after,
+.copy a:focus-visible::after, .rows__cap a:focus-visible::after{
+  content:"";position:absolute;inset:-6px;pointer-events:none;
+  --c:var(--active);--l:7px;--w:2px;
+  background:
+    linear-gradient(var(--c),var(--c)) left  top    / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) left  top    / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) right top    / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) right top    / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) left  bottom / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) left  bottom / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) right bottom / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) right bottom / var(--w) var(--l);
+  background-repeat:no-repeat}
+.twin__table thead th.num{font-size:10.5px}
+.foot__meta a, .rows__cap a{display:inline-block;padding-block:2px}
+.flagnote{margin-inline-start:8px;font-size:12.5px;color:var(--dim);white-space:nowrap}
+@media (max-width:640px){ .flagnote{display:block;margin-inline-start:0;font-size:12px;white-space:normal;max-inline-size:14ch;line-height:1.35} }
+</style>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <nav class="d-nav" id="nav" aria-label="Main">
+    <a class="d-nav__brand" href="#top" aria-label=".describe( — back to top"><!--MARK:nav--><span class="wm">.describe<b>(</b></span></a>
+    <button class="d-btn d-btn--sm d-nav__toggle" type="button" aria-expanded="false" aria-controls="navlinks">{{icon:menu}}Menu</button>
+    <div class="d-nav__links" id="navlinks">
+      <a class="d-nav__link" href="#who">Who we help</a>
+      <a class="d-nav__link" href="#services">Services</a>
+      <a class="d-nav__link" href="#method">Method</a>
+      <a class="d-nav__link" href="#proof">Proof</a>
+      <a class="d-nav__link" href="#about">About</a>
+      <a class="d-nav__link d-nav__link--m" href="#contact">Contact</a>
+    </div>
+    <a class="d-btn d-btn--sm d-nav__cta" href="#contact">Contact{{icon:arrow}}</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ===================================================================== HERO -->
+<section class="hero" id="top" aria-labelledby="h-hero">
+  <div class="hero__band">
+    <div class="hero__sky" aria-hidden="true"></div>
+    <div class="wrap hero__in">
+      <h1 id="h-hero">You built your business on instinct. Grow it on evidence.</h1>
+      <p class="hero__lede">Analytics for small companies: sales and customer numbers, read before you bet on them.</p>
+      <div class="hero__ctas">
+        <a class="d-btn d-btn--primary" href="#contact">Tell us about your data{{icon:arrow}}</a>
+      </div>
+    </div>
+  </div>
+
+  <figure class="wrap rows" aria-labelledby="rows-cap">
+    <figcaption class="rows__cap" id="rows-cap">The worked example, <a href="#proof">UCI Online Retail</a></figcaption>
+    <p class="rows__fig rows__fig--big"><span class="lab">Rows in the file</span><span class="fr">{{n:rows}}</span></p>
+    <p class="rows__fig rows__fig--clean"><span class="lab">Clean sale lines</span><span class="fr">{{n:clean}}</span></p>
+    <div class="rows__plot">
+      <!--G:hero:d-->
+      <!--G:hero:m-->
+    </div>
+    <p class="vh">{{hero_desc}}</p>
+  </figure>
+</section>
+
+<!-- ===================================================================== 01 WHO -->
+<section class="sec" id="who" aria-labelledby="h-who">
+  <div class="wrap">
+    <header class="g sech">
+      <div class="sech__n" aria-hidden="true"><span class="fr sech__num">01</span><!--TALLY:1--></div>
+      <div class="sech__t"><h2 class="h2" id="h-who">You already have the data. Nobody has the time.</h2></div>
+    </header>
+
+    <div class="g">
+      <div class="sech__t">
+        <ol class="sym">
+          <li><p>A customer tells you how they found you, and it never reaches the system.</p></li>
+          <li><p>Two reports, two different totals for the same month.</p></li>
+          <li><p>Three channels, and only a guess at which one carries the other two.</p></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="g notfor">
+      <h3 class="t-h3 notfor__h">Who we’re not for</h3>
+      <dl class="notfor__l">
+        <div><dt>You have an analyst in-house.</dt><dd>Give them the time instead.</dd></div>
+        <div><dt>You haven’t launched yet.</dt><dd>Come back after a few months of real activity.</dd></div>
+        <div><dt>You need pipelines built.</dt><dd>That’s engineering, and a different team.</dd></div>
+        <div><dt>You’ve decided, and want numbers to back it.</dt><dd>Sometimes the data says the plan isn’t working.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== 02 SERVICES -->
+<section class="sec" id="services" aria-labelledby="h-svc">
+  <div class="wrap">
+    <header class="g sech">
+      <div class="sech__n" aria-hidden="true"><span class="fr sech__num">02</span><!--TALLY:2--></div>
+      <div class="sech__t"><h2 class="h2" id="h-svc">Three ways in.</h2></div>
+    </header>
+
+    <div class="svcs">
+      <article class="svc" aria-labelledby="h-s1">
+        <span class="svc__n">01</span>
+        <h3 class="svc__t" id="h-s1">Cleaning up messy data</h3>
+        <p class="svc__line">The data you already hold, made usable before anyone analyses it.</p>
+        <ul class="spec">
+          <li><span class="fr spec__v"><small>From</small>$30</span><span class="spec__k">price</span></li>
+          <li><span class="fr spec__v">4</span><span class="spec__k">days</span></li>
+          <li><span class="fr spec__v">2</span><span class="spec__k">revisions</span></li>
+        </ul>
+        <ul class="get">
+          <li>A clean dataset in Excel, CSV or Google Sheets.</li>
+          <li>A log of what we found and did. Outliers flagged, never quietly deleted.</li>
+          <li>Repeatable work that you keep.</li>
+        </ul>
+        <p class="when"><b>Pick this when</b> you know what to do with the data, and its state is in the way.</p>
+      </article>
+
+      <article class="svc" aria-labelledby="h-s2">
+        <span class="svc__n">02</span>
+        <h3 class="svc__t" id="h-s2">Dashboards and performance tracking</h3>
+        <p class="svc__line">One place to look each week, updated without anyone rebuilding it.</p>
+        <ul class="spec">
+          <li><span class="spec__v spec__v--txt spec__v--tbd">To be set</span><span class="spec__k">price and timeline</span></li>
+        </ul>
+        <ul class="get">
+          <li>A Power BI or Tableau dashboard, connected to your data.</li>
+          <li>A written definition of every number on it.</li>
+          <li>A handover session for whoever uses it.</li>
+        </ul>
+        <p class="when"><b>Pick this when</b> the same report is rebuilt every month, or the team works from different numbers.</p>
+      </article>
+
+      <article class="svc" aria-labelledby="h-s3">
+        <span class="svc__n">03</span>
+        <h3 class="svc__t" id="h-s3">Testing whether it’s real</h3>
+        <p class="svc__line">A real effect, or a coincidence you’re about to spend money on?</p>
+        <ul class="spec">
+          <li><span class="fr spec__v">1–2</span><span class="spec__k">weeks</span></li>
+          <li><span class="spec__v spec__v--txt">Per project</span><span class="spec__k">price</span></li>
+        </ul>
+        <ul class="get">
+          <li>What we tested, what we found, and how confident to be.</li>
+          <li>Charts of the pattern.</li>
+          <li>What the result supports, and what it doesn’t.</li>
+        </ul>
+        <p class="when"><b>Pick this when</b> a decision is expensive. Did the change work, or was that the season?</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== 03 METHOD -->
+<section class="sec sec--plate" id="method" aria-labelledby="h-method">
+  <div class="wrap">
+    <header class="g sech">
+      <div class="sech__n" aria-hidden="true"><span class="fr sech__num">03</span><!--TALLY:3--></div>
+      <div class="sech__t"><h2 class="h2" id="h-method">Five stages. Each one stops the next being guesswork.</h2></div>
+    </header>
+
+    <ol class="stages">
+      <li><span class="cnt" aria-hidden="true"><!--WEDGE:1:40--><span class="fr">1</span></span><h3>Observe</h3><p>How the business really runs, and where the data comes from.</p></li>
+      <li><span class="cnt" aria-hidden="true"><!--WEDGE:2:40--><span class="fr">2</span></span><h3>Measure</h3><p>What’s captured, missing or inconsistent. This sets the ceiling.</p></li>
+      <li><span class="cnt" aria-hidden="true"><!--WEDGE:3:40--><span class="fr">3</span></span><h3>Understand</h3><p>What the numbers say, checked against how you operate.</p></li>
+      <li><span class="cnt" aria-hidden="true"><!--WEDGE:4:40--><span class="fr">4</span></span><h3>Identify</h3><p>The few things worth acting on now.</p></li>
+      <li><span class="cnt" aria-hidden="true"><!--WEDGE:5:40--><span class="fr">5</span></span><h3>Decide</h3><p>Clear options, with what each would take. The decision stays yours.</p></li>
+    </ol>
+
+    <div class="g needs">
+      <h3 class="t-h3 needs__h">What we need to start</h3>
+      <ol class="needs__list">
+        <li>Access to the data.</li>
+        <li>One person who knows how the business really works.</li>
+        <li>About two hours of their time, up front.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== 04 PROOF -->
+<section class="sec" id="proof" aria-labelledby="h-proof">
+  <div class="wrap">
+    <header class="g sech">
+      <div class="sech__n" aria-hidden="true"><span class="fr sech__num">04</span><!--TALLY:4--></div>
+      <div class="sech__t">
+        <h2 class="h2" id="h-proof">What a year of e&#8209;commerce sales shows.</h2>
+        <p class="sech__aside">A UK retailer’s transactions, cleaned as shown at the top. Public data: check us.</p>
+      </div>
+    </header>
+
+    <div class="g proof__main">
+      <figure class="chart d-panel" aria-labelledby="h-chart">
+        <figcaption>
+          <h3 class="chart__title" id="h-chart">September to November: a quarter of the calendar, over a third of the money.</h3>
+        </figcaption>
+        <!--FRULE:window-->
+        <p class="vh">Of the {{n:clean}} clean sale lines, {{n:win_out}} fall in December 2011, a partial month, and are left out: {{n:win_n}} are in the chart’s window.</p>
+        <div class="chart__plot">
+          <!--CHART:desktop-->
+          <!--CHART:mobile-->
+          <!--CHART:xs-->
+        </div>
+        <div class="chart__key" aria-hidden="true">
+          <span><i class="sw"></i>Dec to Aug</span>
+          <span><i class="sw sw--story"></i>Sep to Nov</span>
+          <span><span class="d-outlier">Outlier: robust z &gt; 7 on log line value</span></span>
+        </div>
+        <p class="chart__prov t-meta"><b>n = {{n:win_n}}</b> sale lines, Dec 2010 – Nov 2011, {{n:win_canc}} cancellations netted.
+          December 2011 (partial) left out · Online Retail, UCI ML Repository · computed&nbsp;{{n:computed}}</p>
+        <details class="twin">
+          <summary>{{icon:chevron}}Every value, as a table</summary>
+          <!--TABLE-->
+          <p class="twin__note">The flagged June line: {{n:flag_q}} × {{n:flag_p}}, re-ordered as one set five minutes later. Kept: the retailer’s question, not ours to delete.
+            Two other lines pass the test: one cancelled in January, one outside the window.</p>
+        </details>
+      </figure>
+
+      <div class="findings">
+        <p class="sub">Same twelve months</p>
+        <ol>
+          <li><span class="fr">{{n:half}}</span><p>customers, about 1 in {{n:one_in}}, brought half of identified customers’ revenue.</p><!--FRULE:half--></li>
+          <li><span class="fr">{{n:jan_val}}</span><p>The largest order: {{n:jan_q}} storage jars, cancelled 16 minutes later. Left in, January reads {{n:jan_pct}} high.</p><!--FRULE:jan--></li>
+          <li><span class="fr">{{n:nocust_share}}</span><p>of net revenue has no customer ID ({{n:nocust}} sale lines). Flagged, not deleted.</p><!--FRULE:nocust--></li>
+        </ol>
+        <div class="discovery">
+          <p class="sub">From a real conversation</p>
+          <blockquote>Reporting gaps and missing history were the symptom, not the thing to fix.</blockquote>
+          <p class="copy">We expected dashboard work. The problems sat a level below, in how information was captured. Shared with permission.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== 05 WHERE WE ARE -->
+<section class="sec sec--plate" id="where" aria-labelledby="h-where">
+  <div class="wrap">
+    <header class="g sech">
+      <div class="sech__n" aria-hidden="true"><span class="fr sech__num">05</span><!--TALLY:5--></div>
+      <div class="sech__t"><h2 class="h2" id="h-where">We are a new practice.</h2></div>
+    </header>
+    <div class="g">
+      <div class="where__b">
+        <ul class="count">
+          <li><span class="v"><!--WEDGE:1:48--><span class="fr">1</span></span><span class="k">exploratory session</span></li>
+          <li><span class="v"><!--WEDGE:1:48--><span class="fr">1</span></span><span class="k">proposal written</span></li>
+          <li class="is-zero"><span class="v"><!--WEDGE:0:48--><span class="fr">0</span></span><span class="k">completed commercial projects</span></li>
+        </ul>
+        <p class="where__note">So: a worked example on public data, not a client list. <strong>We price accordingly.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== 06 ABOUT -->
+<section class="sec" id="about" aria-labelledby="h-about">
+  <div class="wrap">
+    <header class="g sech">
+      <div class="sech__n" aria-hidden="true"><span class="fr sech__num">06</span><!--TALLY:6--></div>
+      <div class="sech__t"><h2 class="h2" id="h-about">The name is the method.</h2></div>
+    </header>
+
+    <div class="g about">
+      <div class="about__name">
+        <div class="namebox">
+          <p class="namebox__big" aria-label=".describe(">.describe<b>(</b><span class="caret" aria-hidden="true"></span></p>
+          <p class="copy">In Python, <span class="code">.describe()</span> is the first thing you run on an unfamiliar dataset:
+            rows, averages, extremes, gaps. You look first. The bracket stays open: what goes inside is your business.</p>
+        </div>
+      </div>
+      <div class="about__prose">
+        <p class="copy">I’m <strong>Wafa’a Al-Hayek</strong>, and I run .describe( from Gaza.</p>
+        <p class="copy">I studied business administration, joined a software bootcamp in 2022, and moved to data analytics in 2023:
+          analytics, monitoring and evaluation, reporting. <strong>Most data work goes wrong on the question, not the technique.</strong></p>
+        <p class="copy team">The team is me, for now; a software engineer and a data analyst join as work grows. You’ll always know who’s on your project.</p>
+      </div>
+    </div>
+
+    <div class="g belief">
+      <blockquote class="t-serif belief__q">A number doesn’t have to be wrong to mislead you.</blockquote>
+      <p class="copy belief__b">We show our method, name what we excluded, and say when a finding is weaker than you hoped. <strong>You should be able to check us.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== 07 FAQ -->
+<section class="sec" id="faq" aria-labelledby="h-faq">
+  <div class="wrap">
+    <header class="g sech">
+      <div class="sech__n" aria-hidden="true"><span class="fr sech__num">07</span><!--TALLY:7--></div>
+      <div class="sech__t"><h2 class="h2" id="h-faq">Before you write.</h2></div>
+    </header>
+    <div class="g">
+      <div class="faq">
+        <details open>
+          <summary>We don’t have anyone who works with data. Is that a problem?{{icon:chevron}}</summary>
+          <div class="a">No, that’s who this is for. We need one person who knows how the business runs. Usually that’s you.</div>
+        </details>
+        <details>
+          <summary>We’re not sure what we need. Can we still talk?{{icon:chevron}}</summary>
+          <div class="a">Yes. Bring the decision you’re stuck on, not a specification. Finding the right question is part of the job.</div>
+        </details>
+        <details>
+          <summary>What happens to our data?{{icon:chevron}}</summary>
+          <div class="a">A read-only connection or a recent export, so we can’t change anything. Used only for your project, never shared, deleted on request. We’ll sign an NDA first if you prefer.</div>
+        </details>
+        <details>
+          <summary>How do we know the work will be any good?{{icon:chevron}}</summary>
+          <div class="a">You don’t yet. Judge the worked example, then a small scoped first piece, before anything larger. The first conversation costs nothing.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== 08 CONTACT -->
+<section class="sec sec--plate" id="contact" aria-labelledby="h-contact">
+  <div class="wrap">
+    <header class="g sech">
+      <div class="sech__n" aria-hidden="true"><span class="fr sech__num">08</span><!--TALLY:8--></div>
+      <div class="sech__t">
+        <h2 class="h2" id="h-contact">Tell us about your data.</h2>
+      </div>
+    </header>
+
+    <div class="g contact">
+      <div class="contact__l">
+        <div class="email">
+          <span class="email__addr" id="email">info@describe.team</span>
+          <div class="email__acts">
+            <button class="d-btn d-btn--sm" type="button" id="copyEmail">Copy address</button>
+            <a class="d-btn d-btn--quiet d-btn--sm" href="mailto:info@describe.team">Open mail app{{icon:arrow}}</a>
+            <span class="email__done" id="copyDone" role="status" aria-live="polite"></span>
+          </div>
+        </div>
+        <dl class="reach">
+          <div><dt>First reply</dt><dd>Within 24 hours</dd></div>
+          <div><dt>Languages</dt><dd>English, Arabic</dd></div>
+        </dl>
+      </div>
+
+      <div class="contact__f">
+        <form class="form" id="intake" novalidate aria-labelledby="h-form">
+          <h3 class="vh" id="h-form">Intake form</h3>
+          <div class="d-field">
+            <label class="d-label" for="f-name">Name <span class="d-opt">optional</span></label>
+            <input class="d-input" id="f-name" name="name" type="text" autocomplete="name">
+          </div>
+          <div class="d-field" id="fld-email">
+            <label class="d-label" for="f-email">Email</label>
+            <input class="d-input" id="f-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required aria-required="true" aria-describedby="e-email">
+            <p class="d-msg" id="e-email" hidden>{{icon:error}}<span id="e-email-t">Add an email so we can reply.</span></p>
+          </div>
+          <div class="d-field" id="fld-msg">
+            <label class="d-label" for="f-msg">What can we help with?</label>
+            <textarea class="d-textarea" id="f-msg" name="message" rows="4" required aria-required="true" aria-describedby="h-msg e-msg"></textarea>
+            <p class="d-hint" id="h-msg">The decision you’re stuck on, or the number you don’t trust.</p>
+            <p class="d-msg" id="e-msg" hidden>{{icon:error}}<span>Add a line about your data.</span></p>
+          </div>
+          <div class="form__foot">
+            <button class="d-btn d-btn--primary" type="submit">Send{{icon:arrow}}</button>
+            <p class="form__note">Used only to reply. Deleted on request.</p>
+          </div>
+          <div class="d-banner" data-tone="info" id="formDone" role="status" hidden tabindex="-1">
+            {{icon:info}}
+            <div>
+              <p class="d-banner__title">This preview doesn’t send yet.</p>
+              <p class="d-banner__body">Nothing was sent: email <strong>info@describe.team</strong> instead.</p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="motto">
+      <p class="motto__en">From data to decision</p>
+      <p class="motto__ar" lang="ar" dir="rtl">من البيانات إلى القرار</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================================================================== FOOTER -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="g foot__top">
+      <div class="foot__lock"><div class="lock"><!--MARK:foot--><p class="wm">.describe<b>(</b></p></div></div>
+      <div class="foot__cta"><a class="d-btn" href="#contact">Tell us about your data{{icon:arrow}}</a></div>
+    </div>
+    <div class="foot__meta">
+      <span>© 2026 .describe(</span>
+      <a href="mailto:info@describe.team">info@describe.team</a>
+      <a href="https://www.linkedin.com/company/describeteam" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/describedatateam" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <p class="foot__notes">The wordmark is still being drawn; until then the name is set in type beside the mark.</p>
+  </div>
+</footer>
+
+<div class="tip" id="tip" aria-hidden="true"></div>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)},
+      $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+
+  /* ---- nav: menu toggle under 760px ---- */
+  var nav=$('#nav'), tog=$('.d-nav__toggle',nav);
+  function setOpen(on){ nav.classList.toggle('is-open',on); tog.setAttribute('aria-expanded',String(on)); }
+  tog.addEventListener('click',function(){ setOpen(!nav.classList.contains('is-open')); });
+  $$('.d-nav__link',nav).forEach(function(a){ a.addEventListener('click',function(){ setOpen(false); }); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&nav.classList.contains('is-open')){ setOpen(false); tog.focus(); } });
+
+  /* ---- the page is a scale: the section you are in reads active, on the spine and in the nav ---- */
+  var links={}; $$('.d-nav__link',nav).forEach(function(a){ links[a.getAttribute('href').slice(1)]=a; });
+  var map={where:'proof',faq:'about'}, secs=$$('main section[id]');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        secs.forEach(function(s){ s.classList.toggle('is-here', s===e.target); });
+        var id=map[e.target.id]||e.target.id;
+        Object.keys(links).forEach(function(k){ if(k===id) links[k].setAttribute('aria-current','location'); else links[k].removeAttribute('aria-current'); });
+      });
+    },{rootMargin:'-45% 0px -50% 0px'});
+    secs.forEach(function(s){ io.observe(s); });
+  }
+
+  /* ---- chart: tooltips enhance, never gate (every value is in the table) ---- */
+  var tip=$('#tip'), cross=null;
+  function clearCross(){ if(cross&&cross.parentNode) cross.parentNode.removeChild(cross); cross=null; }
+  function show(el,x,y){
+    tip.textContent=el.getAttribute('data-tip');
+    tip.classList.add('on');
+    var w=tip.offsetWidth,h=tip.offsetHeight;
+    var L=Math.min(Math.max(8,x-w/2),innerWidth-w-8), T=el.hasAttribute('data-below')?y+22:y-h-12; if(T<8) T=y+18;
+    tip.style.left=L+'px'; tip.style.top=T+'px';
+    clearCross();
+    if(el.classList.contains('c-hit')){
+      var svg=el.ownerSVGElement, cx=+el.getAttribute('x')+(+el.getAttribute('width'))/2;
+      cross=document.createElementNS('http://www.w3.org/2000/svg','path');
+      cross.setAttribute('class','c-cross');
+      cross.setAttribute('d','M'+cx+' '+el.getAttribute('y')+'V'+(+el.getAttribute('y')+(+el.getAttribute('height'))));
+      svg.insertBefore(cross,svg.firstChild);
+    }
+  }
+  var dismissed=false;
+  function hide(){ tip.classList.remove('on'); clearCross(); }
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&tip.classList.contains('on')){ dismissed=true; hide(); } });
+  function anchor(t){ var r=t.getBoundingClientRect(); show(t,r.left+r.width/2,t.classList.contains('c-hit')?r.top+r.height*(t.hasAttribute('data-below')?0.8:0.35):r.top-4); }
+  $$('svg.dsc-chart').forEach(function(svg){
+    svg.addEventListener('pointermove',function(e){
+      var t=e.target&&e.target.closest?e.target.closest('[data-tip]'):null;
+      dismissed=false;
+      if(t) show(t,e.clientX,e.clientY); else hide();
+    });
+    svg.addEventListener('pointerleave',hide);
+    svg.addEventListener('focusin',function(e){ dismissed=false; if(e.target.hasAttribute('data-tip')) anchor(e.target); });
+    svg.addEventListener('focusout',hide);
+  });
+  addEventListener('scroll',function(){
+    var a=document.activeElement;
+    if(!dismissed&&a&&a.closest&&a.closest('svg.dsc-chart')&&a.hasAttribute('data-tip')) anchor(a); else hide();
+  },{passive:true});
+
+  /* ---- email: selectable text, plus a copy button that says what happened ---- */
+  var done=$('#copyDone');
+  $('#copyEmail').addEventListener('click',function(){
+    var addr=$('#email').textContent.trim();
+    function selectIt(){ var r=document.createRange(); r.selectNodeContents($('#email')); var s=getSelection(); s.removeAllRanges(); s.addRange(r); done.textContent='Selected. Press Ctrl+C or ⌘C to copy.'; done.style.color='var(--body)'; }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(addr).then(function(){ done.textContent='Copied.'; done.style.color=''; },selectIt);
+    } else selectIt();
+  });
+
+  /* ---- form: nothing is wired up, so it says so, and never claims to have sent ---- */
+  var form=$('#intake'), ok=$('#formDone');
+  var checks=[
+    {f:$('#fld-email'), i:$('#f-email'), m:$('#e-email'), good:function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }},
+    {f:$('#fld-msg'),   i:$('#f-msg'),   m:$('#e-msg'),   good:function(v){ return v.length>=3; }}
+  ];
+  function mark(c,good){ c.f.classList.toggle('is-invalid',!good); c.m.hidden=good;
+    if(good) c.i.removeAttribute('aria-invalid'); else c.i.setAttribute('aria-invalid','true'); }
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    $('#e-email-t').textContent=$('#f-email').value.trim()?'Check the address, for example name@company.com.':'Add an email so we can reply.';
+    var first=null;
+    checks.forEach(function(c){ var g=c.good(c.i.value.trim()); mark(c,g); if(!g&&!first) first=c; });
+    if(first){ ok.hidden=true; first.i.focus(); return; }
+    ok.hidden=false; ok.focus({preventScroll:false});
+  });
+  checks.forEach(function(c){ c.i.addEventListener('input',function(){ if(c.f.classList.contains('is-invalid')&&c.good(c.i.value.trim())) mark(c,true); }); });
+})();
+</script>

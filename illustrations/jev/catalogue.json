@@ -1,0 +1,10 @@
+{
+  "_note": "What each illustration MEANS in the .describe( system. Jev reads text only, so these descriptions are what it judges. Written in English because Jev is most accurate in English.",
+  "libra": "The scales (Libra) from al-Sufi's star catalogue: a balance with two pans. Means fairness, weighing evidence, testing whether something is real, comparing two options honestly.",
+  "cygnus": "The swan (Cygnus) from al-Sufi, shown as stars first with the figure as a faint trace. Means evidence versus the story people tell about it; instinct versus data; the difference between what was measured and what was drawn through it.",
+  "cygnus-outside": "Two stars al-Sufi marked as outside the figure, kept and labelled. Means outliers, anomalies, cleaning data without deleting what does not fit, flagging exceptions.",
+  "cancer-two-views": "The same constellation (Cancer) drawn twice: as seen on the globe and as seen in the sky, mirrored. Means perspective, method, the same data seen from two viewpoints, checking which view a number came from, bilingual reading.",
+  "astrolabe-plate": "An astrolabe plate from an Arabic treatise: a precise instrument with circles and scales. Means instruments, dashboards, measurement you repeat the same way every time, tracking over time, orientation.",
+  "none": "No illustration. The section is operational (a form, a price list, legal text, contact details) and an image would only decorate it.",
+  "hero-sky": "A faint dithered night sky (the Milky Way) with no figure. Atmosphere only: the brand's sense of observation. Use for the homepage hero background and nothing else."
+}

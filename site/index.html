@@ -10,11 +10,9 @@
   ============================================================================
   Known problems, all recorded in the repository README:
 
-  1. The proof section's figures do not reconcile.
-       542,014 - 5,270 - 9,252 = 527,492
-     but the page states n = 534,232. The canonical UCI Online Retail dataset
-     is also usually cited at 541,909 rows, not 542,014. Re-run the analysis
-     and regenerate the chart before this goes anywhere.
+  1. RESOLVED 27 Sep 2026: proof figures recomputed from the canonical UCI
+     file (541,909 rows). See decisions/uci_retail.py and uci_audit.json.
+     The old n = 534,232 and "3 txns > £35k removed" were wrong.
 
   2. Service 02 has no price. The "when to pick this" copy was pasted into the
      price field; the page marks the gap in coral.
@@ -52,7 +50,7 @@
 
   /* light environment — technical drawing on paper */
   --ink:#092052; --body:#5A6B85; --faint:#CBD5E1; --active:#0F58E5;
-  --mark:#E5484D; --ground:#F6F8FC; --rule:#D8E1EF; --dim:#8A99B0;
+  --mark:#E5484D; --ground:#F6F8FC; --rule:#D8E1EF; --dim:#63738D;
   --panel:#FFFFFF;
 }
 :root:not([data-theme="light"]){color-scheme:light}
@@ -572,19 +570,19 @@ footer{padding-block:clamp(50px,6vw,80px) 40px}
         <p class="copy">
           We analysed the <strong>UCI Online Retail dataset</strong> — a year of
           transactions from a UK online retailer, publicly available and
-          citable. Cleaning removed duplicates, isolated returns that were
-          inflating volume, and flagged records with missing customer IDs
-          rather than deleting them.
+          citable. Cleaning removed 5,268 duplicate rows, netted 9,251 cancellation lines
+          against the orders they cancelled, set aside postage and fee lines,
+          and flagged records with missing customer IDs rather than deleting them.
         </p>
         <div class="findings" id="findings"></div>
       </div>
       <div class="chartbox">
         <svg id="chart" class="dsc" viewBox="0 0 420 290" role="img"
-          aria-label="Monthly revenue across the year, with the September to November concentration marked and one outlier transaction flagged"></svg>
+          aria-label="Net monthly revenue, December 2010 to November 2011, with September to November marked and one flagged line in June"></svg>
         <div class="chartmeta">
-          <span>n = 534,232 cleaned transactions</span>
+          <span>n = 522,568 sale lines after cleaning, of 541,909</span>
           <span>Source · UCI ML Repository</span>
-          <span class="out">● Outlier — excluded from the mean</span>
+          <span class="out">● Flagged by |z| &gt; 7 on line value, kept</span>
         </div>
       </div>
     </div>
@@ -985,8 +983,9 @@ var STAGES=[
   var svg=document.getElementById('chart');
   var g=E('g',{},svg);
   var MONTHS=['D','J','F','M','A','M','J','J','A','S','O','N'];
-  // shape of the finding: concentration in Sep–Nov
-  var V=[0.34,0.41,0.33,0.40,0.38,0.44,0.42,0.39,0.47,0.66,0.84,1.00];
+  // Net monthly revenue, Dec 2010 – Nov 2011, as a fraction of the £2.0M axis.
+  // Recomputed from source: decisions/uci_retail.py → uci_audit.json.
+  var V=[0.3791,0.2895,0.2498,0.3397,0.2411,0.3655,0.3620,0.3384,0.3507,0.5057,0.5309,0.7136];
   var x0=44,y0=228,w=344,h=178;
   // axes
   L(g,[x0,y0],[x0+w,y0],'body',1.1);
@@ -1028,23 +1027,24 @@ var STAGES=[
     fill:'currentColor','class':'active fill'},g);
   sp.textContent='SEP–NOV';
   // the outlier — the single coral event on this page. It sits ON the month
-  // that contained the excluded transactions, not floating in the plot area.
-  var ox=x0+bw*10+bw/2, oy=y0-V[10]*h-13;
+  // that contains the flagged line (June), and states its rule in the note.
+  var ox=x0+bw*6+bw/2, oy=y0-V[6]*h-13;
   E('circle',{cx:ox,cy:oy,r:7,'class':'mark','stroke-width':1.5},g);
   E('circle',{cx:ox,cy:oy,r:2.8,'class':'mark fill',fill:'currentColor'},g);
-  E('path',{d:'M'+(ox-9)+' '+oy+'H'+(ox-52),'class':'mark','stroke-width':1.1},g);
-  var ot=E('text',{x:ox-57,y:oy+3.2,'text-anchor':'end','font-size':8.6,
+  E('path',{d:'M'+ox+' '+(oy-9)+'V'+(oy-40),'class':'body','stroke-width':1.1},g);
+  var ot=E('text',{x:ox,y:oy-45,'text-anchor':'middle','font-size':8.6,
     'font-family':"'IBM Plex Mono',monospace",'letter-spacing':'0.06em',
-    fill:'currentColor','class':'mark fill'},g);
-  ot.textContent='3 txns > £35k removed';
+    fill:'currentColor','class':'fill',style:'fill:var(--ink)'},g);
+  ot.textContent='1 LINE FLAGGED';
 })();
 
 /* ---------- findings list ---------- */
 var FINDINGS=[
- 'Revenue concentrated in September–November — not spread evenly across the year.',
- 'A handful of customers carried a disproportionate share of total sales.',
- 'Three transactions above £35,000 would distort any average they were left inside.',
- 'Records with missing customer IDs were flagged, not deleted — removing them would have quietly changed the totals.'
+ 'September to November brought in 37.5% of the year’s revenue: a quarter of the calendar, over a third of the money.',
+ '234 customers, about 1 in 18, accounted for half of the revenue from identified customers.',
+ 'The largest order of the year, 74,215 storage jars worth £77,184, was cancelled 16 minutes later. Counted before cleaning, it would have inflated January by 13%.',
+ 'One line looks like a keying error: 60 wicker picnic sets at £649.50, re-ordered as a single set five minutes later. We flagged it and kept it. It’s a question for the retailer, not ours to delete.',
+ '131,418 sale lines, 14.7% of revenue, have no customer ID. They’re flagged, not deleted: removing them would quietly cut the total by a seventh.'
 ];
 (function(){
   var host=document.getElementById('findings');

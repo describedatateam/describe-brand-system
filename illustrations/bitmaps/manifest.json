@@ -1,0 +1,191 @@
+[
+  {
+    "name": "cygnus",
+    "size": [
+      1900,
+      2187
+    ],
+    "layers": {
+      "lines": "cygnus_lines.png",
+      "dotted": "cygnus_dotted.png",
+      "stars": "cygnus_stars.png",
+      "outside": "cygnus_outside.png"
+    },
+    "colours": {
+      "lines": "ink",
+      "outside": "ink",
+      "stars": "active"
+    },
+    "source": "al-Sufi, Book of the Images of the Fixed Stars, Iran, late 15th c. The Met 446297, public domain (DP232491)"
+  },
+  {
+    "name": "cygnus-outside",
+    "size": [
+      1400,
+      1316
+    ],
+    "layers": {
+      "lines": "cygnus-outside_lines.png",
+      "stars": "cygnus-outside_stars.png",
+      "outside": "cygnus-outside_outside.png"
+    },
+    "colours": {
+      "lines": "ink",
+      "stars": "active",
+      "outside": "mark"
+    },
+    "source": "al-Sufi, Book of the Images of the Fixed Stars, Iran, late 15th c. The Met 446297, public domain (DP232491), detail"
+  },
+  {
+    "name": "astrolabe-plate",
+    "size": [
+      1500,
+      1580
+    ],
+    "layers": {
+      "lines": "astrolabe-plate_lines.png"
+    },
+    "colours": {
+      "lines": "ink"
+    },
+    "source": "Arabic astrolabe treatise, British Library Or 14270, f. 0149 — SOURCE RECORD TO CONFIRM (upscaled 2x from an 894 px scan)"
+  },
+  {
+    "name": "libra",
+    "size": [
+      1550,
+      1006
+    ],
+    "layers": {
+      "lines": "libra_lines.png",
+      "stars": "libra_stars.png",
+      "outside": "libra_outside.png"
+    },
+    "colours": {
+      "lines": "ink",
+      "outside": "ink",
+      "stars": "active"
+    },
+    "source": "al-Sufi, Book of the Images of the Fixed Stars, Iran, late 15th c. The Met 446297, public domain (DP232533)"
+  },
+  {
+    "name": "cancer-globe",
+    "size": [
+      1300,
+      839
+    ],
+    "layers": {
+      "lines": "cancer-globe_lines.png",
+      "stars": "cancer-globe_stars.png",
+      "outside": "cancer-globe_outside.png"
+    },
+    "colours": {
+      "lines": "ink",
+      "outside": "ink",
+      "stars": "active"
+    },
+    "source": "al-Sufi, Book of the Images of the Fixed Stars, Iran, late 15th c. The Met 446297, public domain (DP232528, upper figure)"
+  },
+  {
+    "name": "cancer-sky",
+    "size": [
+      1300,
+      861
+    ],
+    "layers": {
+      "lines": "cancer-sky_lines.png",
+      "stars": "cancer-sky_stars.png",
+      "outside": "cancer-sky_outside.png"
+    },
+    "colours": {
+      "lines": "ink",
+      "outside": "ink",
+      "stars": "active"
+    },
+    "source": "al-Sufi, Book of the Images of the Fixed Stars, Iran, late 15th c. The Met 446297, public domain (DP232528, lower figure)"
+  },
+  {
+    "name": "sky-band",
+    "size": [
+      2400,
+      471
+    ],
+    "layers": {
+      "sky": "sky-band_sky.png",
+      "sky-nofade": "sky-band_sky-nofade.png"
+    },
+    "colours": {
+      "sky": "faint"
+    },
+    "source": "Milky Way star chart, 19th-century book, British Library Flickr scan 11241855653 — SOURCE BOOK TO CONFIRM"
+  },
+  {
+    "name": "encke-comet",
+    "size": [
+      1621,
+      1621
+    ],
+    "layers": {
+      "stars": "encke-comet_stars.png",
+      "comet-glow": "encke-comet_comet-glow.png",
+      "window": "encke-comet_window.png",
+      "window-edge": "encke-comet_window-edge.png"
+    },
+    "source": "\"Encke's Comet, as seen at its re-appearance, 22 Sept 1848\", engraved by J. Basire. British Library Flickr scan 11034974776 — SOURCE BOOK TO CONFIRM",
+    "note": "Stars and glow are the light of the plate, drawn as ink: a star-chart convention, dots on paper."
+  },
+  {
+    "name": "earth-orbit",
+    "size": [
+      1214,
+      914
+    ],
+    "layers": {
+      "light": "earth-orbit_light.png",
+      "lines": "earth-orbit_lines.png",
+      "glow": "earth-orbit_glow.png"
+    },
+    "source": "Fig. 2, \"Orbite de la terre autour du soleil\", engraved by M. Rapine. British Library Flickr scan 11243281064 — SOURCE BOOK TO CONFIRM",
+    "note": "Carries French month labels (Janv … Déc). Crop or accept them."
+  },
+  {
+    "name": "moon-observatory",
+    "size": [
+      1314,
+      977
+    ],
+    "layers": {
+      "dark": "moon-observatory_dark.png",
+      "light": "moon-observatory_light.png"
+    },
+    "source": "Moon and starfield over an observatory on a ridge, 19th-century wood engraving. British Library Flickr scan 11292565783 — SOURCE BOOK TO CONFIRM",
+    "note": "navy preview uses the light layer: stars and moon as ink on the navy ground."
+  },
+  {
+    "name": "eclipse",
+    "size": [
+      972,
+      980
+    ],
+    "layers": {
+      "dark": "eclipse_dark.png",
+      "light": "eclipse_light.png"
+    },
+    "source": "\"Appearance of Sun in an Eclipse\", 19th-century engraving. British Library Flickr scan 11300111425 — SOURCE BOOK TO CONFIRM",
+    "note": ""
+  },
+  {
+    "name": "scorpio",
+    "size": [
+      1614,
+      1824
+    ],
+    "layers": {
+      "lines": "scorpio_lines.png",
+      "stars": "scorpio_stars.png",
+      "outside": "scorpio_outside.png"
+    },
+    "source": "Scorpio, صورة العقرب على ما يُرى في الكرة, al-Sufi tradition. DP1.jpg — SOURCE UNKNOWN, do not publish until found",
+    "note": "Page was photographed sideways; turned upright. Four grey stars sit outside the figure."
+  }
+]

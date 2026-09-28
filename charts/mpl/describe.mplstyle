@@ -1,0 +1,59 @@
+# describe.mplstyle — the .describe( chart look for matplotlib (light ground).
+# Use with mpl_describe.py, which adds the parts a style file cannot express:
+# story/context emphasis, the outlier marker with its rule, and the provenance line.
+#   import matplotlib.pyplot as plt; plt.style.use("charts/mpl/describe.mplstyle")
+
+font.family          : sans-serif
+font.sans-serif      : Readex Pro, Vazirmatn, DejaVu Sans
+font.monospace       : IBM Plex Mono, DejaVu Sans Mono
+font.size            : 10
+text.color           : 092052
+
+figure.facecolor     : FFFFFF
+figure.dpi           : 150
+savefig.dpi          : 200
+savefig.facecolor    : FFFFFF
+savefig.bbox         : tight
+
+axes.facecolor       : FFFFFF
+axes.edgecolor       : 5A6B85
+axes.linewidth       : 0.75
+axes.labelcolor      : 63738D
+axes.labelsize       : 8
+axes.titlesize       : 13
+axes.titleweight     : normal
+axes.titlelocation   : left
+axes.titlecolor      : 092052
+axes.spines.top      : False
+axes.spines.right    : False
+axes.spines.left     : False
+axes.grid            : True
+axes.grid.axis       : y
+axes.axisbelow       : True
+# One story blue, then context grey. There is no second identity colour — measured, CHARTS.md §2.
+axes.prop_cycle      : cycler('color', ['0F58E5', '64748B'])
+
+grid.color           : D8E1EF
+grid.linewidth       : 0.75
+grid.linestyle       : -
+
+xtick.color          : 5A6B85
+ytick.color          : 5A6B85
+xtick.labelsize      : 8
+ytick.labelsize      : 8
+xtick.major.size     : 4
+xtick.major.width    : 0.75
+xtick.minor.size     : 2
+ytick.major.size     : 0
+ytick.left           : False
+
+lines.linewidth      : 1.5
+lines.solid_capstyle : round
+lines.solid_joinstyle: round
+lines.markersize     : 5
+
+legend.frameon       : False
+legend.fontsize      : 8.5
+legend.handlelength  : 1.4
+
+patch.linewidth      : 0
