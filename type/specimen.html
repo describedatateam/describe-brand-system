@@ -362,12 +362,18 @@ footer .rtl{margin-inline-start:auto;direction:rtl}
   <p class="note" style="margin:8px 0 16px">
     Arabic and Latin set at the same <span class="mono">font-size</span> do not
     look the same size — Arabic letterforms sit lower and smaller on the line.
-    The multiplier below is measured from actual ink height, so Arabic headings
-    match their Latin equivalents instead of looking timid next to them.
+    Two anchors are measured against Fraunces, both from ink <em>above the
+    baseline</em> only, because Arabic descenders have no Latin counterpart:
+    the <b style="font-weight:500;color:var(--ink)">body</b> (dotless,
+    ascender-free bowls <span class="f-amiri">ص ـهـ</span>) against the
+    x-height, and the <b style="font-weight:500;color:var(--ink)">alef</b>
+    against the ascender of <span class="mono">l</span>. They bracket the
+    multiplier; where inside the bracket it lands is checked by eye at working
+    size, and that value is the token.
   </p>
   <div class="tscroll"><table>
-    <thead><tr><th>Face</th><th>Ink height at 100px</th><th>vs Latin</th>
-      <th>Multiplier to apply</th><th>Line-height</th></tr></thead>
+    <thead><tr><th>Face</th><th>Body / alef at 200px</th><th>Body ↔ x-height</th>
+      <th>Alef ↔ ascender</th><th>Line-height</th></tr></thead>
     <tbody id="arBody"><tr><td colspan="5">Measuring…</td></tr></tbody>
   </table></div>
 
@@ -387,9 +393,9 @@ footer .rtl{margin-inline-start:auto;direction:rtl}
         the astrolabe mark uses. Too rigid for running headlines, exactly right
         for short labels, section markers and tally captions, where Amiri is too
         delicate.</li>
-      <li><b>Apply the measured multiplier.</b> Amiri needs the compensation in
-        the table above at every size, or Arabic headings undersell themselves
-        next to the English.</li>
+      <li><b>Apply <span class="mono">--ar-scale</span>.</b> Amiri needs
+        ×1.15 at every size, or Arabic headings undersell themselves next to
+        the English.</li>
     </ul>
   </div>
 
@@ -490,7 +496,9 @@ footer .rtl{margin-inline-start:auto;direction:rtl}
     <span class="mono">l</span> and Arabic alef <span class="f-vazir">ا</span>,
     which are both a plain stem and therefore directly comparable. If one is
     thicker, Arabic at 400 will look bolder than Latin at 400 and the page will
-    feel lopsided.
+    feel lopsided. Stems are compared at the weight body text actually uses,
+    with the Arabic already scaled by <span class="mono">--ar-body-scale</span>
+    — a stem grows with the size it is set at.
   </p>
   <div class="tscroll"><table>
     <thead><tr><th>Measure</th><th>Readex Pro (Latin)</th><th>Vazirmatn (Arabic)</th>
@@ -603,9 +611,9 @@ footer .rtl{margin-inline-start:auto;direction:rtl}
     </div>
     <div class="bicell rtl">
       <div class="label" style="margin-bottom:10px">AR · RTL</div>
-      <div class="f-amiri" id="arHead" style="font-size:2.4rem;line-height:1.5">
+      <div class="f-amiri" id="arHead" style="font-size:2.3rem;line-height:1.5">
         من البيانات إلى القرار.</div>
-      <p style="font-size:16.5px;color:var(--body);margin-top:14px;
+      <p style="font-size:18px;color:var(--body);margin-top:14px;
         line-height:1.85;font-family:var(--sans)">
         الفرق الصغيرة تنتج بيانات قيّمة قبل أن تصبح قادرة على توظيف محلل بيانات
         بوقت طويل. هنا يأتي دورنا.</p>
@@ -758,6 +766,33 @@ function inkHeight(family,weight,size,text){
   }
   return y1<0?0:(y1-y0+1);
 }
+/* Ink ABOVE the alphabetic baseline only. Arabic bowls hang below the line
+   (final ح, isolated س ص) where Latin x-height has nothing, so a full ink
+   height compares a descender against a lowercase and gets the sign wrong. */
+function inkAbove(family,weight,size,text){
+  var pad=Math.ceil(size*1.2), base=Math.ceil(size*2)+pad;
+  var c=document.createElement('canvas');
+  c.width=Math.ceil(size*text.length*1.6)+pad*2; c.height=base+Math.ceil(size*1.2);
+  var x=c.getContext('2d',{willReadFrequently:true});
+  x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height);
+  x.fillStyle='#000'; x.textBaseline='alphabetic';
+  x.font=weight+' '+size+'px '+family;
+  x.fillText(text,pad,base);
+  var W=c.width,d=x.getImageData(0,0,W,base).data;
+  for(var y=0;y<base;y++)for(var xx=0;xx<W;xx++){
+    if(ink(d,(y*W+xx)*4)) return base-y;
+  }
+  return 0;
+}
+/* Arabic body: dotless, ascender-free bowls. Not محمد — Amiri stacks it as a
+   vertical ligature and the word stands nearly as tall as a capital. */
+var AR_BODY=['ص','ـهـ'];
+function arBody(family,weight,size){
+  return AR_BODY.reduce(function(s,t){return s+inkAbove(family,weight,size,t)},0)/AR_BODY.length;
+}
+/* Mirrors of the tokens in typography.css — keep them in step. The measured
+   anchors bracket each one; the value itself was set by eye inside it. */
+var AR_SCALE=1.15, AR_BODY_SCALE=1.20, AR_W_BODY=300;
 
 /* ---------- build the side-by-side specimens ---------- */
 var SAMPLE='From data to decision';
@@ -898,24 +933,31 @@ function runPair(){
     return;
   }
   var rows=[];
-  // 1 — optical size: Latin x-height vs Arabic body height (no ascenders)
-  var xh=inkHeight(LATIN_UI,300,200,'xnо'.slice(0,2));
-  var ab=inkHeight(ARABIC_UI,300,200,'سح');
-  var sizeRatio = ab?xh/ab:0;
-  rows.push(['Body height at 200px', xh+'px (x-height)', ab+'px (Arabic body)',
-    ab?(ab/xh).toFixed(3):'—',
-    sizeRatio?'Arabic × '+sizeRatio.toFixed(2)+' size':'—']);
-  // 2 — stroke weight: Latin 'l' vs Arabic alef
-  var sl=stemWidth(LATIN_UI,400,160,'l');
-  var sa=stemWidth(ARABIC_UI,400,160,'ا');
+  // 1 — optical size, two anchors, ink above the baseline only
+  var xh=inkAbove(LATIN_UI,300,200,'x'), ab=arBody(ARABIC_UI,300,200);
+  var asc=inkAbove(LATIN_UI,300,200,'l'), alef=inkAbove(ARABIC_UI,300,200,'ا');
+  var mBody=ab?xh/ab:0, mAlef=alef?asc/alef:0;
+  rows.push(['Body at 200px', xh+'px · x-height', ab.toFixed(0)+'px · <bdi class="f-vazir">ص ـهـ</bdi>',
+    ab?(ab/xh).toFixed(3):'—', mBody?'Arabic × '+mBody.toFixed(2)+' to match':'—']);
+  rows.push(['Ascender at 200px', asc+'px · l', alef+'px · <bdi class="f-vazir">ا</bdi>',
+    asc?(alef/asc).toFixed(3):'—', mAlef?'Arabic × '+mAlef.toFixed(2)+' to match':'—']);
+  var lo=Math.min(mBody,mAlef), hi=Math.max(mBody,mAlef);
+  rows.push(['--ar-body-scale', '', '', '×'+AR_BODY_SCALE.toFixed(2),
+    (AR_BODY_SCALE>=lo-0.005 && AR_BODY_SCALE<=hi+0.005)
+      ? 'Inside the measured range — set by eye at 16px'
+      : 'Outside ×'+lo.toFixed(2)+'–'+hi.toFixed(2)+' — re-check']);
+  // 2 — stroke weight at the weight and size body text is actually set at
+  var sl=stemWidth(LATIN_UI,AR_W_BODY,160,'l');
+  var sa=stemWidth(ARABIC_UI,AR_W_BODY,160*AR_BODY_SCALE,'ا');
   var wRatio = sl?sa/sl:0;
   var advice;
   if(!wRatio) advice='—';
   else if(wRatio>1.12) advice='Arabic reads heavier — set it one step lighter';
   else if(wRatio<0.89) advice='Arabic reads lighter — set it one step heavier';
   else advice='Close enough — no correction needed';
-  rows.push(['Stem width at 160px / w400', sl.toFixed(2)+'px (l)',
-    sa.toFixed(2)+'px (ا)', wRatio?wRatio.toFixed(3):'—', advice]);
+  rows.push(['Stem at w'+AR_W_BODY+', Arabic ×'+AR_BODY_SCALE.toFixed(2),
+    sl.toFixed(2)+'px · l', sa.toFixed(2)+'px · <bdi class="f-vazir">ا</bdi>',
+    wRatio?wRatio.toFixed(3):'—', advice]);
   // 3 — set width, same meaning both scripts
   var wl=setWidth(LATIN_UI,300,16,UI_EN);
   var wa=setWidth(ARABIC_UI,300,16,UI_AR);
@@ -928,11 +970,6 @@ function runPair(){
       '</td><td class="v">'+r[3]+'</td><td>'+r[4]+'</td>';
     body.appendChild(tr);
   });
-  // feed the measured size multiplier into the live RTL specimen
-  if(sizeRatio){
-    var h=$('#arHead');
-    if(h) h.style.fontSize=(2*sizeRatio).toFixed(2)+'rem';
-  }
 }
 
 /* ---------- Arabic vs Persian letterforms — for her eyes, not my opinion -- */
@@ -1021,29 +1058,34 @@ function magnify(canvasId,noteId,family,weight){
 /* ---------- arabic compensation ---------- */
 function runArabic(){
   var body=$('#arBody'); body.innerHTML='';
-  var latin=inkHeight("'Fraunces'",300,100,'Hnox');
+  if(!loaded("'Fraunces'",300)){
+    body.innerHTML='<tr><td colspan="5" class="verdict bad">Measurement withheld — '+
+      'Fraunces unavailable.</td></tr>';
+    return;
+  }
+  var xh=inkAbove("'Fraunces'",300,200,'x'), asc=inkAbove("'Fraunces'",300,200,'l');
   var faces=[["'Amiri'",400,'Amiri','1.85'],
              ["'El Messiri'",500,'El Messiri','1.75'],
              ["'Reem Kufi'",500,'Reem Kufi','1.70']];
   faces.forEach(function(f){
     var ok=loaded(f[0],f[1],ARB);
-    var h=ok?inkHeight(f[0],f[1],100,'محمد'):0;
-    var ratio=h?latin/h:0;
+    var b=ok?arBody(f[0],f[1],200):0, a=ok?inkAbove(f[0],f[1],200,'ا'):0;
     var tr=document.createElement('tr');
     tr.innerHTML='<td class="v">'+f[2]+'</td>'+
-      (ok?'<td>'+h+'px</td>'+
-          '<td>'+(latin?((h/latin)*100).toFixed(0)+'%':'—')+'</td>'+
-          '<td class="v">'+(ratio?'×'+ratio.toFixed(2):'—')+'</td>'
+      (ok?'<td>'+b.toFixed(0)+'px / '+a+'px</td>'+
+          '<td class="v">'+(b?'×'+(xh/b).toFixed(2):'—')+'</td>'+
+          '<td class="v">'+(a?'×'+(asc/a).toFixed(2):'—')+'</td>'
         :'<td colspan="3" class="verdict bad">not loaded</td>')+
       '<td>'+f[3]+'</td>';
     body.appendChild(tr);
   });
-  var amiri=loaded("'Amiri'",400,ARB)?inkHeight("'Amiri'",400,100,'محمد'):0;
-  if(amiri && latin){
-    var mult=latin/amiri;
-    var h=$('#arHead');
-    if(h) h.style.fontSize=(2*mult).toFixed(2)+'rem';
-  }
+  var tr=document.createElement('tr');
+  tr.innerHTML='<td class="v">--ar-scale</td><td colspan="3">×'+AR_SCALE.toFixed(2)+
+    ' for Amiri — set by eye inside its range, at 40px against Fraunces 300</td><td></td>';
+  body.appendChild(tr);
+  // the live RTL specimen uses the token, not a raw measurement
+  var h=$('#arHead');
+  if(h) h.style.fontSize=(2*AR_SCALE).toFixed(2)+'rem';
 }
 
 /* ---------- the scale ---------- */
@@ -1076,7 +1118,7 @@ var RULES=[
  ['Never letter-space Arabic','Latin labels take <code>letter-spacing: .14em</code>. Applying it to Arabic breaks the joins between letters and turns a word into debris. The Arabic equivalent of an uppercase spaced label is a weight change, not spacing.'],
  ['Never synthesise bold','Arabic faces that lack a bold get one faked by the browser, and it smears the joins. Use a real weight that ships with the family, or stay at 400.'],
  ['Arabic needs more leading','Ascenders, descenders and diacritics stack further than Latin. Body copy runs <code>1.85</code> where the English runs <code>1.62</code>; headings <code>1.5</code> where English runs <code>1.06</code>.'],
- ['Apply the size multiplier','Set Arabic display at the measured multiplier in section 02, not at the Latin size. It is a different number per face, so it lives in the token, not in a designer\'s eye.'],
+ ['Apply the size multiplier','Set Arabic at <code>--ar-scale</code> (display) and <code>--ar-body-scale</code> (running text), not at the Latin size. Sections 02 and 04 measure the range each one must fall in. It is a different number per face, so it lives in the token, not in a designer\'s habit.'],
  ['Western digits, both languages','<code>0123</code> rather than <code>٠١٢٣</code>. Gulf business context uses Western digits, and it keeps every figure in the system on one set of numerals — which matters more for a data practice than for most brands. If a piece is for a market that expects Eastern Arabic-Indic, that is a per-piece override, not a system change.'],
  ['Mirror the spine, not just the text','The measuring edge moves to the right margin, ticks point inward from the right, the mark moves with it, and any arc or pointer flips its handedness. Setting <code>direction: rtl</code> alone leaves the graphics facing the wrong way.'],
  ['One language per piece','Your brief already says it: posts are single-language. A split canvas with both makes each half look like a caption for the other.']

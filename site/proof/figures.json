@@ -1,0 +1,154 @@
+{
+  "currency": "GBP",
+  "period": [
+    "2010-12-01",
+    "2011-12-09"
+  ],
+  "cleaning": {
+    "raw": 542014,
+    "duplicates": 5270,
+    "no_description": 1454,
+    "price_le_zero": 1058,
+    "clean": 534232,
+    "sales_rows": 524980,
+    "return_rows": 9252
+  },
+  "gross_sales": 10662950.03,
+  "returns_value": -894014.23,
+  "net_revenue": 9768935.8,
+  "orders": 19960,
+  "aov_gross": 534.22,
+  "countries": 38,
+  "sep_nov_share_of_gross": 0.3481,
+  "sep_nov_share_of_net": 0.3627,
+  "identified_customers": 4371,
+  "top_1pct_customers": 43,
+  "top_1pct_share_of_identified_net": 0.2973,
+  "top_20pct_share_of_identified_net": 0.7393,
+  "rows_missing_customer_id_kept": 132565,
+  "non_product_lines_in_sales": 395289.93,
+  "monthly": [
+    {
+      "month": "2010-12",
+      "sales": 842291.96,
+      "returns": -74763.62,
+      "net": 767528.34
+    },
+    {
+      "month": "2011-01",
+      "sales": 689811.61,
+      "returns": -131363.05,
+      "net": 558448.56
+    },
+    {
+      "month": "2011-02",
+      "sales": 522545.56,
+      "returns": -25519.15,
+      "net": 497026.41
+    },
+    {
+      "month": "2011-03",
+      "sales": 716215.26,
+      "returns": -34201.28,
+      "net": 682013.98
+    },
+    {
+      "month": "2011-04",
+      "sales": 536968.49,
+      "returns": -44600.65,
+      "net": 492367.84
+    },
+    {
+      "month": "2011-05",
+      "sales": 769296.61,
+      "returns": -47202.51,
+      "net": 722094.1
+    },
+    {
+      "month": "2011-06",
+      "sales": 760547.01,
+      "returns": -70569.78,
+      "net": 689977.23
+    },
+    {
+      "month": "2011-07",
+      "sales": 718076.12,
+      "returns": -37919.13,
+      "net": 680156.99
+    },
+    {
+      "month": "2011-08",
+      "sales": 757841.38,
+      "returns": -54330.8,
+      "net": 703510.58
+    },
+    {
+      "month": "2011-09",
+      "sales": 1056435.19,
+      "returns": -38838.51,
+      "net": 1017596.68
+    },
+    {
+      "month": "2011-10",
+      "sales": 1151263.73,
+      "returns": -81895.5,
+      "net": 1069368.23
+    },
+    {
+      "month": "2011-11",
+      "sales": 1503866.78,
+      "returns": -47720.98,
+      "net": 1456145.8
+    },
+    {
+      "month": "2011-12",
+      "sales": 637790.33,
+      "returns": -205089.27,
+      "net": 432701.06
+    }
+  ],
+  "partial_last_month_days": 9,
+  "largest_sale_lines": [
+    {
+      "invoice": "581483",
+      "description": "PAPER CRAFT , LITTLE BIRDIE",
+      "quantity": 80995,
+      "value": 168469.6,
+      "date": "2011-12-09 09:15",
+      "reversed_by": "C581484",
+      "minutes_later": 12
+    },
+    {
+      "invoice": "541431",
+      "description": "MEDIUM CERAMIC TOP STORAGE JAR",
+      "quantity": 74215,
+      "value": 77183.6,
+      "date": "2011-01-18 10:01",
+      "reversed_by": "C541433",
+      "minutes_later": 16
+    },
+    {
+      "invoice": "556444",
+      "description": "PICNIC BASKET WICKER 60 PIECES",
+      "quantity": 60,
+      "value": 38970.0,
+      "date": "2011-06-10 15:28",
+      "reversed_by": "C556445",
+      "minutes_later": 3
+    }
+  ],
+  "top_products_by_units_gross": {
+    "PAPER CRAFT , LITTLE BIRDIE": 80995,
+    "MEDIUM CERAMIC TOP STORAGE JAR": 78033,
+    "WORLD WAR 2 GLIDERS ASSTD DESIGNS": 54951,
+    "JUMBO BAG RED RETROSPOT": 48371,
+    "WHITE HANGING HEART T-LIGHT HOLDER": 37872
+  },
+  "top_products_by_units_net": {
+    "WORLD WAR 2 GLIDERS ASSTD DESIGNS": 53751,
+    "JUMBO BAG RED RETROSPOT": 47256,
+    "POPCORN HOLDER": 36322,
+    "ASSORTED COLOUR BIRD ORNAMENT": 36282,
+    "PACK OF 72 RETROSPOT CAKE CASES": 36263
+  }
+}
