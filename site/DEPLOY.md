@@ -46,8 +46,10 @@ Before changing nameservers, make sure the MX, SPF and DKIM records for
 
 - Sign off the proof section (`site/proof/README.md`).
 - Set a price for service 02, or keep "Priced per project".
-- Confirm `info@describe.team` receives mail: the contact form opens the
-  visitor's email app addressed to it.
+- Submit a test enquiry on the preview URL and check that a row lands in the
+  "Website enquiries" Sheet and an alert reaches `info@describe.team`. The
+  form posts to the Apps Script URL in `FORM_ENDPOINT` in `site/index.html`;
+  if that script is redeployed under a new URL, update it there.
 - The canonical URL, sitemap and social image assume `https://describe.team/`.
   If the domain differs, search and replace it in `site/index.html` and
   `site/public/`.

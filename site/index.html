@@ -18,8 +18,10 @@
      IBM Plex Mono as a stand-in.
   4. English only. The Arabic toggle is hidden until the Arabic page exists.
   5. Typography predates the Role 04 decisions (type/typography.css).
-  6. The intake form opens the visitor's email app addressed to
-     info@describe.team. There is no server-side form handler.
+  6. The intake form posts to the Google Apps Script web app that logs to
+     the "Website enquiries" Sheet and emails info@describe.team (script and
+     setup kept outside this repo). A hidden company_url field is the spam
+     trap. If the request fails, the visitor's email app opens instead.
   ============================================================================
 -->
 <title>describe — From Data to Decision</title>
@@ -745,6 +747,9 @@ footer{padding-block:clamp(50px,6vw,80px) 40px}
       </div>
 
       <form id="intake" novalidate>
+        <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+          <label for="f-company-url">Leave this empty</label>
+          <input id="f-company-url" name="company_url" type="text" tabindex="-1" autocomplete="off"></div>
         <div class="row">
           <div class="fld"><label for="f-name">Full name</label>
             <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Your name"></div>
@@ -1091,22 +1096,40 @@ var FAQ=[
   });
 })();
 
-/* ---------- form: no backend yet, so hand off to the visitor's mail app */
+/* ---------- form: posts to the Apps Script that logs to the enquiries
+   Sheet and emails info@describe.team. If the request can't be sent, fall
+   back to the visitor's mail app so no enquiry is lost. ---------- */
+var FORM_ENDPOINT='https://script.google.com/macros/s/AKfycbzbZRxGW3mD4BwqUNPpStw98wYS4aeOnKGJFreqh6J6PClhkQs-RGCEXxhJCsLRmVkD/exec';
 document.getElementById('intake').addEventListener('submit',function(e){
   e.preventDefault();
   var f=this, v=function(n){return (f.elements[n].value||'').trim()};
   var em=document.getElementById('f-email');
   var msg=document.getElementById('formMsg');
+  var btn=f.querySelector('button[type=submit]');
   if(!v('email') || v('email').indexOf('@')<0){
     msg.textContent='Add an email so we can reply'; em.focus(); return;
   }
-  var body=[v('message'),'',
-    'Name: '+v('name'),'Email: '+v('email'),
-    'Position: '+v('role'),'Organisation: '+v('org')].join('\n');
-  var subject='Enquiry'+(v('org')?' from '+v('org'):'');
-  window.location.href='mailto:info@describe.team?subject='+
-    encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-  msg.textContent='Opening your email app. If nothing opens, write to info@describe.team';
+  // the script stores name, email, website and message; position and
+  // organisation ride along at the top of the message
+  var about=[v('role')&&('Position: '+v('role')),v('org')&&('Organisation: '+v('org'))]
+    .filter(Boolean).join('\n');
+  var message=(about?about+'\n\n':'')+v('message');
+  var data=new URLSearchParams({name:v('name'),email:v('email'),
+    website:v('org'),message:message,company_url:v('company_url')});
+  btn.disabled=true; msg.textContent='Sending…';
+  // no-cors: Apps Script doesn't send CORS headers, so the reply is opaque;
+  // fetch only rejects when the request never left the browser
+  fetch(FORM_ENDPOINT,{method:'POST',mode:'no-cors',body:data})
+    .then(function(){
+      f.reset(); msg.textContent='Thanks. We\u2019ll reply by email.';
+    })
+    .catch(function(){
+      msg.textContent='Couldn\u2019t send. Opening your email app instead';
+      window.location.href='mailto:info@describe.team?subject='+
+        encodeURIComponent('Enquiry'+(v('org')?' from '+v('org'):''))+
+        '&body='+encodeURIComponent(message+'\n\nName: '+v('name')+'\nEmail: '+v('email'));
+    })
+    .then(function(){ btn.disabled=false; });
 });
 
 /* ---------- the measuring edge: live section coordinate ---------- */
