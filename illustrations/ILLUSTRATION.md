@@ -93,11 +93,23 @@ with its source.
 Still to confirm before publishing:
 
 - The astrolabe plate: British Library Or 14270, exact record.
-- The Milky Way chart (hero sky), the comet, the orbit, the moon and the
-  eclipse: British Library Flickr scans; source books to identify.
+- The comet, the orbit, the moon and the eclipse: British Library Flickr
+  scans; source books to identify.
 - Scorpio (`DP1.jpg`): source unknown. Do not publish.
 
-The al-Sufi pages are confirmed: The Met, object 446297, public domain.
+Confirmed:
+
+- The al-Sufi pages: The Met, object 446297, public domain.
+- The Milky Way chart (hero sky, `bitmaps/hero-night/`): British Library
+  Flickr scan 11241855653, https://www.flickr.com/photos/britishlibrary/11241855653.
+  Source book identified by Wafa'a on 2026-09-28: *L'Espace céleste et la
+  nature tropicale, description physique de l'univers*, by Emmanuel Liais
+  (1826–1900), preface by Jacques Babinet (1794–1872), drawings by Yan'
+  Dargent (1824–1899), Paris, 1865. Every contributor died more than 120 years
+  ago, so the work is public domain in every jurisdiction; a faithful scan of
+  a flat public-domain page adds no new copyright. Credit it on the site as:
+  "Sky after Yan' Dargent, in E. Liais, *L'Espace céleste*, 1865. British
+  Library."
 
 ---
 
