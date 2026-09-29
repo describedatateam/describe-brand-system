@@ -1,0 +1,63 @@
+{
+  "rows": 541909,
+  "duplicates": 5268,
+  "cancellation_lines": 9251,
+  "nonproduct_lines": 2327,
+  "zero_or_negative_lines": 2495,
+  "clean_sale_lines": 522568,
+  "window": "2010-12-01 .. 2011-11-30 (December 2011 is a partial month and is left out)",
+  "monthly_net_gbp": {
+    "2010-12": 758167.09,
+    "2011-01": 578914.41,
+    "2011-02": 499531.02,
+    "2011-03": 679337.54,
+    "2011-04": 482153.6,
+    "2011-05": 731088.1,
+    "2011-06": 723970.15,
+    "2011-07": 676845.41,
+    "2011-08": 701381.59,
+    "2011-09": 1011364.74,
+    "2011-10": 1061717.89,
+    "2011-11": 1427124.54
+  },
+  "year_net_gbp": 9331596.08,
+  "sep_nov_share": 0.3751,
+  "missing_customer_lines_clean": 131418,
+  "missing_customer_value_share": 0.1474,
+  "customers_known": 4284,
+  "customers_for_half": 234,
+  "outlier_rule": "robust z > 7 on log10(line value); median line \u00a39.90",
+  "flagged_lines": [
+    {
+      "InvoiceNo": "541431",
+      "Description": "MEDIUM CERAMIC TOP STORAGE JAR",
+      "Quantity": 74215,
+      "UnitPrice": 1.04,
+      "val": 77183.6,
+      "InvoiceDate": "2011-01-18 10:01:00"
+    },
+    {
+      "InvoiceNo": "556444",
+      "Description": "PICNIC BASKET WICKER 60 PIECES",
+      "Quantity": 60,
+      "UnitPrice": 649.5,
+      "val": 38970.0,
+      "InvoiceDate": "2011-06-10 15:28:00"
+    },
+    {
+      "InvoiceNo": "581483",
+      "Description": "PAPER CRAFT , LITTLE BIRDIE",
+      "Quantity": 80995,
+      "UnitPrice": 2.08,
+      "val": 168469.6,
+      "InvoiceDate": "2011-12-09 09:15:00"
+    }
+  ],
+  "window_sale_lines": 497814,
+  "window_cancellation_lines": 8321,
+  "window_missing_customer_lines": 123628,
+  "window_missing_customer_value_share": 0.1462,
+  "window_left_out_sale_lines": 24754,
+  "window_missing_customer_net_share": 0.15049,
+  "window_sale_value_gbp": 9633405.88
+}

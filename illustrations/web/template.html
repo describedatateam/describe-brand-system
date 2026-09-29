@@ -1,0 +1,215 @@
+<title>Fixed Stars Homepage</title>
+<style>
+/*CSS*/
+
+/* ------------------------------------------------------------------ page */
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans);
+  font-weight:300;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  padding-inline:clamp(16px,4vw,56px)}
+.wrap{max-width:1180px;margin-inline:auto}
+a{color:inherit}
+
+/* preview controls — not part of the site */
+.pv{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin-inline:calc(-1*clamp(16px,4vw,56px));
+  padding:8px clamp(16px,4vw,56px);background:var(--ground);border-bottom:1px dashed var(--faint)}
+.pv .in{max-width:1180px;margin-inline:auto;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.pv .lab{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.pv .note{font-size:12px;color:var(--dim);margin-inline-start:auto}
+.seg{display:inline-flex}
+.seg button{appearance:none;cursor:pointer;background:none;color:var(--body);border:1px solid var(--rule);
+  padding:5px 11px;font:500 12.5px/1.2 var(--font-sans)}
+.seg button+button{border-inline-start:0}
+.seg button[aria-pressed="true"]{color:var(--active);border-color:var(--active)}
+.seg button[aria-pressed="true"]+button{border-inline-start:1px solid var(--rule)}
+.seg button:focus-visible,.reveal:focus-visible{outline:2px solid var(--active);outline-offset:2px}
+
+/* nav */
+.nav{display:flex;align-items:center;gap:24px;padding-block:22px;border-bottom:1px solid var(--rule)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--font-mono);
+  font-size:15px;font-weight:500;letter-spacing:-.02em}
+.brand b{color:var(--active);font-weight:500}
+.nav nav{display:flex;gap:22px;margin-inline-start:auto;font-size:14px;font-weight:400;color:var(--body)}
+.nav nav a{text-decoration:none}
+@media (max-width:720px){.nav nav{display:none}}
+
+/* hero — full bleed, on the light dithered sky */
+.herowrap{position:relative;margin-inline:calc(-1*clamp(16px,4vw,56px));padding-inline:clamp(16px,4vw,56px);
+  border-bottom:1px solid var(--rule);overflow:hidden}
+.herosky{position:absolute;inset:0;background:var(--faint);
+  -webkit-mask:var(--m) center/auto no-repeat;mask:var(--m) center/auto no-repeat}
+.hero{position:relative;max-width:1180px;margin-inline:auto;padding-block:clamp(72px,11vw,150px)}
+.hero h1{max-width:13ch}
+.hero h1{font-family:var(--font-serif);font-weight:300;font-variation-settings:'SOFT' 0,'WONK' 0;
+  font-optical-sizing:auto;font-size:clamp(2.5rem,5.6vw,4.6rem);line-height:.98;letter-spacing:-.032em;
+  margin:0;text-wrap:balance}
+.hero h1 em{font-style:italic;color:var(--active)}
+.hero .lede{font-size:clamp(1.02rem,1.5vw,1.18rem);font-weight:200;color:var(--body);max-width:44ch;
+  margin:26px 0 30px;line-height:1.55}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+
+/* illustration: stacked 1-bit masks, each coloured by a token */
+.ill{margin:0}
+.art{position:relative;width:100%;aspect-ratio:var(--ar);max-width:100%}
+.art span{position:absolute;inset:0;background:var(--c,var(--ink));
+  -webkit-mask:var(--m) center/100% 100% no-repeat;mask:var(--m) center/100% 100% no-repeat;
+  transition:opacity .5s var(--ease)}
+.ill figcaption{margin-top:14px;font-size:12.5px;line-height:1.5;color:var(--body);max-width:52ch}
+.ill figcaption .src{display:block;color:var(--dim);margin-top:4px}
+.evid{display:grid;grid-template-columns:1fr;gap:28px 64px;align-items:center}
+@media (min-width:880px){.evid{grid-template-columns:.9fr 1.1fr}}
+.evid .ill{max-width:440px;width:100%;justify-self:center}
+.evid .art .full{opacity:0}
+.evid.drawn .art .full{opacity:1}
+.evid.drawn .art .dot{opacity:0}
+.evid .copy{margin:0;max-width:52ch;color:var(--body);font-size:16px}
+.evid .src{margin:22px 0 0;font-size:12.5px;color:var(--dim);max-width:52ch}
+.reveal{appearance:none;background:none;border:0;padding:0;cursor:pointer;color:var(--active);
+  font:500 12.5px/1.5 var(--font-sans);text-decoration:underline;text-underline-offset:3px}
+@media (prefers-reduced-motion:reduce){.art span{transition:none}}
+
+
+/* sections */
+section.s{padding-block:clamp(48px,7vw,96px);border-top:1px solid var(--rule)}
+.sh{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:baseline;margin-bottom:clamp(28px,4vw,48px)}
+.sh h2{font-family:var(--font-serif);font-weight:300;font-variation-settings:'SOFT' 0,'WONK' 0;
+  font-optical-sizing:auto;font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.04;letter-spacing:-.022em;
+  margin:0;text-wrap:balance;max-width:20ch}
+.sh p{margin:0 0 0 auto;max-width:44ch;font-size:15px;color:var(--body);line-height:1.55}
+
+/* services — plate beside text, alternating */
+.svc{display:grid;grid-template-columns:1fr;gap:24px 56px;align-items:center;padding-block:36px;
+  border-top:1px solid var(--rule)}
+.svc:first-child{border-top:0;padding-top:0}
+@media (min-width:880px){.svc{grid-template-columns:1fr 1fr}.svc:nth-child(even) .ill{order:2}}
+.svc .ill{max-width:440px;width:100%;justify-self:center}
+.svc h3{font-family:var(--font-serif);font-weight:300;font-variation-settings:'SOFT' 0,'WONK' 0;
+  font-size:clamp(1.5rem,2.6vw,2rem);line-height:1.1;letter-spacing:-.016em;margin:8px 0 12px}
+.svc p{margin:0;color:var(--body);max-width:46ch}
+.svc .price{margin-top:18px;font-size:13.5px;color:var(--ink);font-weight:400}
+.svc .price .t-num{font-size:13px}
+
+/* method — two views */
+.views{display:grid;grid-template-columns:1fr;gap:28px}
+@media (min-width:720px){.views{grid-template-columns:1fr 1fr}}
+.views .ill{border:1px solid var(--rule);background:var(--panel);padding:clamp(16px,3vw,32px)}
+.views .ill figcaption{margin-top:18px}
+.views .tag{display:block;font-family:var(--font-ar-sans);font-size:15px;font-weight:500;color:var(--ink)}
+.method-note{margin-top:28px;font-size:15px;color:var(--body);max-width:62ch;line-height:1.6}
+
+footer{padding-block:40px 64px;border-top:1px solid var(--ink);font-size:12.8px;color:var(--body);
+  display:flex;flex-wrap:wrap;gap:8px 24px}
+footer .src{color:var(--dim);flex-basis:100%}
+</style>
+
+<div class="pv" role="region" aria-label="Preview controls">
+  <div class="in">
+    <span class="lab">Preview</span>
+    <span class="seg" aria-label="Ground">
+      <button type="button" id="thLight" aria-pressed="true">Paper</button>
+      <button type="button" id="thDark" aria-pressed="false">Navy</button>
+    </span>
+    <span class="note">Controls for this mock only. Copy from your content brief.</span>
+  </div>
+</div>
+
+<div class="wrap" id="page">
+  <header class="nav">
+    <a class="brand" href="#top" aria-label=".describe( home">.describe<b>(</b></a>
+    <nav aria-label="Main"><a href="#services">Services</a><a href="#method">Method</a><a href="#contact">Contact</a></nav>
+    <a class="d-btn d-btn--sm" href="#contact">Start</a>
+  </header>
+
+  <div class="herowrap">
+    <div class="herosky" aria-hidden="true"><!--BG:herosky--></div>
+    <div class="hero">
+      <h1>You built your business on instinct. Grow it on <em>evidence</em>.</h1>
+      <p class="lede">Small businesses generate real data long before they can justify a data hire.
+        We fill that gap: your sales, customer and campaign numbers, analysed and explained,
+        so you know what's working before you bet on it.</p>
+      <div class="ctas">
+        <a class="d-btn d-btn--primary" href="#contact">Tell us about your data</a>
+        <a class="d-btn d-btn--quiet" href="#services">See the services</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="s" id="services">
+    <div class="sh"><h2>Pick the one that matches your problem.</h2>
+      <p>Three services. Each one ends with something you keep and can check.</p></div>
+    <div class="svcs">
+      <div class="svc">
+        <figure class="ill"><!--ILL:cyg_outside-->
+          <figcaption>Two stars al-Sufi marked <span lang="ar">خارجة عن الصورة</span>, outside the figure. Kept and labelled, not erased.</figcaption></figure>
+        <div><span class="t-label" style="color:var(--dim)">Service 01</span>
+          <h3>Cleaning up messy data</h3>
+          <p>We take the data you already hold, wherever it lives, and make it usable before anyone tries to analyse it. Outliers are flagged, never quietly deleted.</p>
+          <p class="price"><span class="t-num">From $30</span> · 4 days · 2 revisions</p></div>
+      </div>
+      <div class="svc">
+        <figure class="ill"><!--ILL:astrolabe-->
+          <figcaption>An astrolabe plate: one instrument, read the same way every time.
+            <span class="src">Arabic astrolabe treatise, British Library Or 14270. Source record to confirm.</span></figcaption></figure>
+        <div><span class="t-label" style="color:var(--dim)">Service 02</span>
+          <h3>Dashboards and performance tracking</h3>
+          <p>A place to look every week that tells you how the business is doing, without anyone rebuilding it by hand.</p>
+          <p class="price">Price and timeline to set</p></div>
+      </div>
+      <div class="svc">
+        <figure class="ill"><!--ILL:libra-->
+          <figcaption>Libra, the scales.
+            <span class="src">al-Sufi, <i>Book of the Images of the Fixed Stars</i>. The Met, public domain.</span></figcaption></figure>
+        <div><span class="t-label" style="color:var(--dim)">Service 03</span>
+          <h3>Testing whether it's real</h3>
+          <p>Finding out whether a pattern in your numbers is a genuine effect or a coincidence you're about to spend money on.</p>
+          <p class="price"><span class="t-num">1–2</span> weeks · priced per project</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="evidence">
+    <div class="evid" id="evid">
+      <figure class="ill">
+        <!--ILL:cygnus-->
+      </figure>
+      <div>
+        <div class="sh" style="margin-bottom:18px"><h2>The stars are the evidence. The swan is the story.</h2></div>
+        <p class="copy">Al-Sufi measured every star in Cygnus and then drew a swan through them, because a
+          picture is easier to remember than a table. We do the same with your numbers, in that order:
+          the measurements first, and only then the story they support.</p>
+        <p class="copy" style="margin-top:14px"><button type="button" class="reveal" id="reveal" aria-pressed="false">Draw the figure</button></p>
+        <p class="src">Cygnus, from al-Sufi's <i>Book of the Images of the Fixed Stars</i>, Iran, late 15th century. The Met, public domain.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="method">
+    <div class="sh"><h2>The same stars, two views.</h2>
+      <p>Al-Sufi drew every constellation twice. Before we report a number, we check which view it was measured from.</p></div>
+    <div class="views">
+      <figure class="ill"><!--ILL:cancer_globe-->
+        <figcaption><span class="tag" lang="ar">على ما يُرى في الكرة</span>As seen on the globe: the constellation from outside the celestial sphere, mirrored.</figcaption></figure>
+      <figure class="ill"><!--ILL:cancer_sky-->
+        <figcaption><span class="tag" lang="ar">على ما يُرى في السماء</span>As seen in the sky: the same stars, from where you stand.</figcaption></figure>
+    </div>
+    <p class="method-note">Cancer, from the same page of al-Sufi's manuscript. The data didn't change between the two drawings. The point of view did, and so did what it looked like.</p>
+  </section>
+
+  <footer id="contact">
+    <span>.describe( · info@describe.team</span><span>describe.team</span>
+    <span class="src">Illustrations: al-Sufi, <i>Book of the Images of the Fixed Stars</i> (The Met, public domain); astrolabe treatise, British Library Or 14270; hero sky from a 19th-century Milky Way chart, British Library scan. Reduced to one-bit and coloured by the page.</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement, $=function(s){return document.querySelector(s)};
+  function theme(d){root.setAttribute('data-theme',d?'dark':'light');
+    $('#thLight').setAttribute('aria-pressed',String(!d));$('#thDark').setAttribute('aria-pressed',String(d));}
+  theme(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
+  $('#thLight').onclick=function(){theme(false)}; $('#thDark').onclick=function(){theme(true)};
+  var b=$('#reveal');
+  b.onclick=function(){var on=!$('#evid').classList.contains('drawn');$('#evid').classList.toggle('drawn',on);
+    b.setAttribute('aria-pressed',String(on));b.textContent=on?'Show only the stars':'Draw the figure';};
+})();
+</script>

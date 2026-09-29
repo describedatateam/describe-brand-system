@@ -1,0 +1,1644 @@
+<title>Instrument UI Kit</title>
+<style>
+/* ==========================================================================
+   .describe( — typography tokens                          ROLE 04 deliverable
+   ==========================================================================
+
+   Three faces, three jobs:
+     serif  Fraunces      meaning      — statements, concepts, headlines
+     sans   IBM Plex Sans Arabic
+                          explanation  — body, interface, labels
+     mono   IBM Plex Mono measurement  — numbers, units, metadata, axes
+
+   Arabic display is Amiri; Reem Kufi is the label face. Prata is kept as a
+   display-only alternate for covers and posters where nothing sits under 40px.
+
+   Every size in this file is a token. A size that is not here does not exist.
+   ========================================================================== */
+
+/* One @import per family. Google Fonts fails a whole css2 request if any one
+   family in it is unknown, which would take every face down together. */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  /* ---- families ----
+     The interface face is SPLIT by script, deliberately. Latin and Arabic are
+     built differently enough that one designer rarely does both equally well,
+     and a bilingual system is better served by two faces that are matched than
+     by one family that is only good on one side. The matching is done with
+     measured tokens below, not by eye — see specimen.html §04.            */
+  --font-serif:    'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-sans:     'Readex Pro', system-ui, -apple-system, sans-serif;
+  --font-ar-sans:  'Vazirmatn', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --font-mono:     'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display-alt: 'Prata', Georgia, serif;   /* ≥40px only */
+  --font-ar-display: 'Amiri', serif;
+  --font-ar-label:   'Reem Kufi', sans-serif;
+
+  /* ---- the scale · base 16, ratio ≈1.32 ---- */
+  --t-display: 88px;
+  --t-opener:  56px;
+  --t-h2:      40px;
+  --t-h3:      28px;
+  --t-lede:    21px;
+  --t-body:    16px;
+  --t-meta:    11px;
+
+  /* ---- line-heights, Latin ---- */
+  --lh-display: 0.95;
+  --lh-opener:  1.00;
+  --lh-h2:      1.06;
+  --lh-h3:      1.14;
+  --lh-lede:    1.50;
+  --lh-body:    1.62;
+  --lh-meta:    1.40;
+
+  /* ---- tracking ---- */
+  --tr-display: -0.032em;
+  --tr-opener:  -0.028em;
+  --tr-h2:      -0.022em;
+  --tr-h3:      -0.016em;
+  --tr-body:     0;
+  --tr-meta:     0.12em;   /* Latin only — never applied to Arabic */
+
+  /* ---- weights ---- */
+  --w-display: 300;   /* Fraunces is set light; the contrast does the work */
+  --w-body:    300;
+  --w-body-em: 500;
+  --w-meta:    500;
+
+  /* ---- Arabic optical compensation --------------------------------------
+     Arabic sets smaller than Latin at the same font-size. Read the measured
+     multiplier off the specimen page (section 02) on a machine where the
+     fonts have actually loaded, and put it here. 1.30 is a placeholder that
+     is close for Amiri against Fraunces — it is not a measurement.          */
+  --ar-scale: 1.30;
+  --ar-lh-display: 1.50;
+  --ar-lh-body:    1.85;   /* Arabic needs more leading than Latin's 1.62 */
+
+  /* ---- Arabic body size and weight, against the Latin -------------------
+     Two different families are almost never the same optical weight at the
+     same nominal weight. specimen.html §04 measures the stem of Latin `l`
+     against Arabic alef and says which way to correct. Both values below are
+     placeholders until you read the measured ones off that page.           */
+  --ar-body-scale: 1.10;   /* Vazirmatn body text against Readex Pro       */
+  --ar-w-body:     300;    /* step to 200 or 400 if the stems don't match  */
+  --ar-w-em:       500;
+}
+
+/* ==========================================================================
+   Roles
+   ========================================================================== */
+
+/* Fraunces: SOFT and WONK at 0 give the severe cut, not the friendly-retro
+   one everyone else ships. Do NOT name 'opsz' in font-variation-settings —
+   naming it pins the axis and kills automatic optical sizing, which is the
+   whole reason this face was chosen. */
+.t-serif,
+h1, h2, h3, .t-display, .t-opener, .t-h2, .t-h3{
+  font-family: var(--font-serif);
+  font-weight: var(--w-display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 0, 'WONK' 0;
+  text-wrap: balance;
+  margin: 0;
+}
+.t-display{ font-size:var(--t-display); line-height:var(--lh-display);
+            letter-spacing:var(--tr-display) }
+.t-opener { font-size:var(--t-opener);  line-height:var(--lh-opener);
+            letter-spacing:var(--tr-opener) }
+.t-h2     { font-size:var(--t-h2);      line-height:var(--lh-h2);
+            letter-spacing:var(--tr-h2) }
+.t-h3     { font-size:var(--t-h3);      line-height:var(--lh-h3);
+            letter-spacing:var(--tr-h3) }
+
+.t-lede{ font-family:var(--font-sans); font-weight:200;
+         font-size:var(--t-lede); line-height:var(--lh-lede) }
+.t-body{ font-family:var(--font-sans); font-weight:var(--w-body);
+         font-size:var(--t-body); line-height:var(--lh-body) }
+.t-body strong{ font-weight:var(--w-body-em) }
+
+/* ---- THE MONO BUDGET -----------------------------------------------------
+   Mono is ornament, not text. Three limits, and they are hard:
+
+     1. NUMERALS — mono at any size. Tables, prices, chart values, n = counts.
+        Always tabular. This is what mono is for.
+     2. LABELS — mono only at ≤11px, uppercase, four words or fewer. Axis
+        labels, source lines, figure numbers, units. One per region of a
+        composition, not one per element.
+     3. EVERYTHING ELSE — never. Nav, buttons, eyebrows above headings,
+        section kickers, form labels, captions, body. All interface sans.
+
+   The test: if a run of mono reads as a phrase, it is the wrong face.
+   Benchmark: Hermes, inspected directly, never sets mono above 11px and never
+   inside a sentence.                                                        */
+
+/* Rule 01 — numerals, any size. */
+.t-num{ font-family:var(--font-mono); font-variant-numeric:tabular-nums }
+
+/* Rule 02 — the ONLY mono text. The min() is the limit made structural: the
+   class cannot be used at a larger size by accident. */
+.t-label{ font-family:var(--font-mono); font-weight:var(--w-meta);
+          font-size:min(11px, var(--t-meta)); line-height:var(--lh-meta);
+          letter-spacing:var(--tr-meta); text-transform:uppercase;
+          font-variant-numeric:tabular-nums }
+
+/* Metadata that runs longer than four words is a sentence — it takes the
+   sans, at small size, in the muted ink. Not mono. */
+.t-meta{ font-family:var(--font-sans); font-weight:400;
+         font-size:12.5px; line-height:1.45; letter-spacing:normal;
+         font-variant-numeric:tabular-nums }
+
+/* Display-only alternate. Guarded: never below 40px. */
+.t-alt{ font-family:var(--font-display-alt); font-weight:400;
+        font-size:max(40px, 1em); letter-spacing:-0.02em }
+
+/* ==========================================================================
+   Arabic and RTL
+   ========================================================================== */
+
+:lang(ar) .t-display, [dir="rtl"] .t-display,
+:lang(ar) .t-opener,  [dir="rtl"] .t-opener,
+:lang(ar) .t-h2,      [dir="rtl"] .t-h2,
+:lang(ar) .t-h3,      [dir="rtl"] .t-h3{
+  font-family: var(--font-ar-display);
+  font-weight: 400;
+  font-variation-settings: normal;
+  font-size: calc(var(--_base, 1em) * var(--ar-scale));
+  line-height: var(--ar-lh-display);
+  letter-spacing: normal;            /* rule 01 — never track Arabic */
+}
+:lang(ar) .t-display,[dir="rtl"] .t-display{ --_base: var(--t-display) }
+:lang(ar) .t-opener, [dir="rtl"] .t-opener { --_base: var(--t-opener) }
+:lang(ar) .t-h2,     [dir="rtl"] .t-h2     { --_base: var(--t-h2) }
+:lang(ar) .t-h3,     [dir="rtl"] .t-h3     { --_base: var(--t-h3) }
+
+/* Arabic running text: its own family, its own size, its own weight. */
+:lang(ar) .t-body, [dir="rtl"] .t-body,
+:lang(ar) .t-lede, [dir="rtl"] .t-lede{
+  font-family: var(--font-ar-sans);
+  font-weight: var(--ar-w-body);
+  font-size: calc(var(--_b, 1em) * var(--ar-body-scale));
+  line-height: var(--ar-lh-body);
+  letter-spacing: normal;
+}
+:lang(ar) .t-body, [dir="rtl"] .t-body{ --_b: var(--t-body) }
+:lang(ar) .t-lede, [dir="rtl"] .t-lede{ --_b: var(--t-lede) }
+:lang(ar) .t-body strong, [dir="rtl"] .t-body strong{ font-weight: var(--ar-w-em) }
+
+/* In Arabic contexts the interface sans IS Vazirmatn. Redefining the token —
+   not just the family on the root — matters: every component that asks for
+   var(--font-sans) inherits the switch. Without it, a button in an RTL layout
+   would render its Arabic in Readex Pro's own Arabic glyphs (Readex ships
+   them), quietly overriding the decision to use Vazirmatn for Arabic. */
+:lang(ar), [dir="rtl"]{
+  --font-sans: var(--font-ar-sans);
+  font-family: var(--font-ar-sans);
+}
+
+/* Reem Kufi for short Arabic labels — compass-built, like the mark. */
+.t-ar-label{
+  font-family: var(--font-ar-label);
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;              /* Arabic has no case */
+}
+
+/* IBM Plex Mono has NO Arabic. Arabic labels therefore use the sans at 500
+   with tabular figures, no tracking and no case transform — never a Latin
+   mono with Arabic glyphs substituted into it, which is the browser's default
+   and looks broken. Western digits throughout, both languages.
+   Note this also means the mono budget is automatically tighter in Arabic:
+   only numerals ever reach it. */
+:lang(ar) .t-label, [dir="rtl"] .t-label{
+  font-family: var(--font-ar-sans);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: normal;
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Never let the browser synthesise a weight Arabic does not ship. */
+:lang(ar), [dir="rtl"]{ font-synthesis: none }
+
+/* ==========================================================================
+   Fluid sizes — for the web, where 88px is too big on a phone
+   ========================================================================== */
+@media (max-width: 860px){
+  :root{
+    --t-display: clamp(2.6rem, 9vw, 4.2rem);
+    --t-opener:  clamp(2.1rem, 7vw, 3rem);
+    --t-h2:      clamp(1.7rem, 5.4vw, 2.3rem);
+    --t-h3:      clamp(1.25rem, 3.6vw, 1.6rem);
+    --t-lede:    1.12rem;
+  }
+}
+
+/* ==========================================================================
+   .describe( — UI language                                  ROLE 07 deliverable
+   ==========================================================================
+
+   The interface should feel like the instrument being used, not like
+   marketing collateral. Off-white plates, navy ink, blue for what is live,
+   thin rules, precise spacing, restrained radius, almost no shadow.
+
+   Built on type/typography.css. Every class is prefixed `d-`. Every spacing
+   and position uses logical properties, so `dir="rtl"` mirrors the whole kit
+   with no per-component overrides — only the directional icons need flipping,
+   and that is one rule at the bottom.
+
+   Colour law, restated because UI is where it is most tempting to break it:
+     · blue   is what is active, selected, in progress
+     · coral  is a DATA OUTLIER and nothing else — never an error, never a
+              warning, never an accent
+     · red    (#8C1D1D) is a negative value or a failed action
+     · green  (#0F7B3D) is a positive delta or a completed action
+   ========================================================================== */
+
+:root{
+  /* ---- surface & ink (light: technical drawing on paper) ---- */
+  --ink:    #092052;
+  --body:   #5A6B85;
+  --dim:    #63738D;   /* was #8A99B0 (2.89:1, failed AA); now 4.52:1 on ground, 4.81:1 on panel */
+  --faint:  #CBD5E1;
+  --rule:   #D8E1EF;
+  --ground: #F6F8FC;
+  --panel:  #FFFFFF;
+  --field:  #FFFFFF;
+  --active: #0F58E5;
+  --active-ink: #FFFFFF;
+  --mark:   #E5484D;   /* data outliers ONLY */
+  --neg:    #8C1D1D;
+  --pos:    #0F7B3D;
+
+  /* ---- space: multiples of 4, which is 2u of the geometry's stroke unit ---- */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px;
+
+  /* ---- form ---- */
+  --r: 2px;             /* restrained: machined, not rounded */
+  --hair: 1px;
+  --ctl: 40px;          /* control height */
+  --ctl-sm: 32px;
+
+  /* ---- motion: orientation → measurement → resolution ----
+     One curve for everything that settles. No overshoot, no spring. */
+  --ease: cubic-bezier(.2,.7,.2,1);
+  --t1: 120ms;  --t2: 220ms;  --t3: 420ms;
+
+  --elev: 0 1px 0 rgba(9,32,82,.04), 0 8px 24px -12px rgba(9,32,82,.22);
+}
+
+/* Dark is a separate environment, not an inversion. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#F6F8FC; --body:#9FB0CC; --dim:#7285A6; --faint:#1C3566; --rule:#16346E;
+    --ground:#050F2E; --panel:#081A40; --field:#0A1F4C;
+    --active:#5B8DF0; --active-ink:#050F2E;
+    --mark:#F0696D; --neg:#E0736F; --pos:#3FBE77;
+    --elev: 0 1px 0 rgba(0,0,0,.2), 0 10px 30px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#F6F8FC; --body:#9FB0CC; --dim:#7285A6; --faint:#1C3566; --rule:#16346E;
+  --ground:#050F2E; --panel:#081A40; --field:#0A1F4C;
+  --active:#5B8DF0; --active-ink:#050F2E;
+  --mark:#F0696D; --neg:#E0736F; --pos:#3FBE77;
+  --elev: 0 1px 0 rgba(0,0,0,.2), 0 10px 30px -12px rgba(0,0,0,.6);
+}
+
+/* ==========================================================================
+   Icons
+   ========================================================================== */
+.d-icon{ width:20px; height:20px; flex:0 0 auto; display:inline-block;
+         vertical-align:middle; stroke:currentColor; fill:none;
+         stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round }
+.d-icon--sm{ width:16px; height:16px }
+.d-icon--lg{ width:32px; height:32px }
+
+/* ==========================================================================
+   Focus — a sighting frame, not a glow.
+   Four corner brackets around the target, like a viewfinder. A transparent
+   outline stays underneath so Windows High Contrast still draws a ring.
+   ========================================================================== */
+.d-focus-frame:focus-visible,
+.d-btn:focus-visible,
+.d-tab:focus-visible,
+.d-nav__link:focus-visible{
+  outline: 2px solid transparent;
+  outline-offset: 4px;
+}
+.d-btn:focus-visible::after,
+.d-tab:focus-visible::after,
+.d-nav__link:focus-visible::after{
+  content:""; position:absolute; inset:-6px; pointer-events:none;
+  --c: var(--active); --l: 7px; --w: 2px;
+  background:
+    linear-gradient(var(--c),var(--c)) left  top    / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) left  top    / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) right top    / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) right top    / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) left  bottom / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) left  bottom / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) right bottom / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) right bottom / var(--w) var(--l);
+  background-repeat:no-repeat;
+}
+
+/* ==========================================================================
+   Buttons
+   Not pills. A label, a direction, and — on the one action that matters —
+   calibration ticks either side. The technical feel comes from the ticks and
+   the mark, NOT from a mono face: button labels are interface sans (mono
+   budget, rule 03).
+   ========================================================================== */
+.d-btn{
+  position:relative;
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:var(--s3);
+  min-block-size:var(--ctl);
+  padding-inline:var(--s4);
+  font-family:var(--font-sans); font-weight:500; font-size:13px;
+  line-height:1; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink); background:transparent;
+  border:var(--hair) solid var(--ink); border-radius:var(--r);
+  cursor:pointer; text-decoration:none; white-space:nowrap;
+  transition: background-color var(--t1) linear, color var(--t1) linear,
+              border-color var(--t1) linear;
+}
+.d-btn .d-icon{ color:var(--active); transition: transform var(--t2) var(--ease) }
+.d-btn:hover{ background:var(--ink); color:var(--ground) }
+.d-btn:hover .d-icon{ color:currentColor; transform:translateX(3px) }
+.d-btn:active{ transform:translateY(1px) }
+
+/* Primary — the one important action per view. Calibration ticks flank it. */
+.d-btn--primary{
+  background:var(--active); border-color:var(--active); color:var(--active-ink);
+  margin-inline:12px;              /* room for the ticks */
+}
+.d-btn--primary .d-icon{ color:currentColor }
+.d-btn--primary:hover{ background:var(--ink); border-color:var(--ink); color:var(--ground) }
+.d-btn--primary::before{
+  content:""; position:absolute; pointer-events:none;
+  inset-block:0; inset-inline:-12px;
+  --c: var(--faint);
+  background:
+    linear-gradient(var(--c),var(--c)) left  0    top 0            / 8px 1px,
+    linear-gradient(var(--c),var(--c)) left  0    top 50%          / 5px 1px,
+    linear-gradient(var(--c),var(--c)) left  0    bottom 0         / 8px 1px,
+    linear-gradient(var(--c),var(--c)) right 0    top 0            / 8px 1px,
+    linear-gradient(var(--c),var(--c)) right 0    top 50%          / 5px 1px,
+    linear-gradient(var(--c),var(--c)) right 0    bottom 0         / 8px 1px;
+  background-repeat:no-repeat;
+}
+
+/* Quiet — text and a direction, for secondary routes. */
+.d-btn--quiet{ border-color:transparent; padding-inline:var(--s1); letter-spacing:.06em }
+.d-btn--quiet:hover{ background:transparent; color:var(--active) }
+.d-btn--quiet:hover .d-icon{ color:var(--active) }
+
+/* Destructive — a negative outcome, so the negative red. Never coral. */
+.d-btn--danger{ color:var(--neg); border-color:var(--neg) }
+.d-btn--danger .d-icon{ color:var(--neg) }
+.d-btn--danger:hover{ background:var(--neg); border-color:var(--neg); color:#fff }
+
+.d-btn--sm{ min-block-size:var(--ctl-sm); padding-inline:var(--s3); font-size:12px }
+
+.d-btn[disabled], .d-btn[aria-disabled="true"]{
+  opacity:.4; cursor:not-allowed; pointer-events:none;
+}
+
+/* Busy — the arrow becomes a tally that counts while the work runs. */
+.d-btn.is-busy{ pointer-events:none }
+.d-btn.is-busy .d-icon{ display:none }
+.d-btn .d-tally-mini{ display:none }
+.d-btn.is-busy .d-tally-mini{ display:inline-flex }
+
+/* ==========================================================================
+   Fields
+   ========================================================================== */
+.d-field{ display:flex; flex-direction:column; gap:var(--s2); min-inline-size:0 }
+.d-label{ font-family:var(--font-sans); font-weight:500; font-size:13px;
+          color:var(--ink); line-height:1.3 }
+.d-label .d-opt{ font-weight:400; color:var(--dim); margin-inline-start:var(--s1) }
+.d-hint{ font-family:var(--font-sans); font-weight:400; font-size:12.5px;
+         line-height:1.45; color:var(--body) }
+.d-msg{ display:flex; gap:var(--s2); align-items:flex-start; font-size:12.5px;
+        line-height:1.45; color:var(--neg); font-family:var(--font-sans) }
+.d-msg .d-icon{ inline-size:16px; block-size:16px; margin-block-start:1px }
+
+.d-input, .d-textarea, .d-select select{
+  font-family:var(--font-sans); font-weight:300; font-size:15px; color:var(--ink);
+  background:var(--field);
+  border:var(--hair) solid var(--rule); border-radius:var(--r);
+  min-block-size:var(--ctl); padding-inline:var(--s3);
+  inline-size:100%; line-height:1.4;
+  transition: border-color var(--t1) linear, box-shadow var(--t1) linear;
+}
+.d-textarea{ padding-block:10px; min-block-size:104px; resize:vertical; line-height:1.55 }
+.d-input::placeholder, .d-textarea::placeholder{ color:var(--dim); opacity:1 }
+.d-input:hover, .d-textarea:hover, .d-select select:hover{ border-color:var(--body) }
+.d-input:focus, .d-textarea:focus, .d-select select:focus{
+  outline:2px solid transparent;
+  border-color:var(--active); box-shadow:0 0 0 1px var(--active);
+}
+.d-field.is-invalid .d-input,
+.d-field.is-invalid .d-textarea,
+.d-field.is-invalid .d-select select{ border-color:var(--neg); box-shadow:0 0 0 1px var(--neg) }
+.d-input:disabled, .d-textarea:disabled, .d-select select:disabled{
+  background:var(--ground); color:var(--dim); cursor:not-allowed; border-style:dashed;
+}
+
+/* A measured input: the unit sits in the field as an instrument readout.
+   Unit labels are ≤4 characters, so mono is within budget (rule 02). */
+.d-affix{ position:relative; display:flex }
+.d-affix .d-input{ padding-inline-end:52px; font-variant-numeric:tabular-nums }
+.d-affix__unit{
+  position:absolute; inset-block:0; inset-inline-end:0;
+  display:flex; align-items:center; padding-inline:var(--s3);
+  border-inline-start:var(--hair) solid var(--rule);
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--dim); pointer-events:none;
+}
+
+/* Select — native control, custom chevron that knows which side is "end". */
+.d-select{ position:relative }
+.d-select select{ appearance:none; -webkit-appearance:none;
+                  padding-inline-end:40px; cursor:pointer }
+.d-select .d-icon{ position:absolute; inset-inline-end:12px; inset-block-start:50%;
+                   translate:0 -50%; color:var(--body); pointer-events:none;
+                   inline-size:16px; block-size:16px }
+
+/* ---- Checkbox & radio ----
+   The checked radio is a ring with a positional dot — the mark's own grammar.
+   The checked checkbox is a square with a tick. */
+.d-check{ display:flex; gap:var(--s3); align-items:flex-start; cursor:pointer;
+          font-family:var(--font-sans); font-size:14.5px; font-weight:300;
+          color:var(--ink); line-height:1.45 }
+.d-check input{
+  appearance:none; -webkit-appearance:none; margin:0; flex:0 0 auto;
+  inline-size:18px; block-size:18px; margin-block-start:1px;
+  border:var(--hair) solid var(--body); background:var(--field);
+  display:grid; place-content:center; cursor:pointer;
+  transition: border-color var(--t1) linear, background-color var(--t1) linear;
+}
+.d-check input[type="checkbox"]{ border-radius:var(--r) }
+.d-check input[type="radio"]{ border-radius:50% }
+.d-check input:hover{ border-color:var(--ink) }
+.d-check input:focus-visible{ outline:2px solid var(--active); outline-offset:3px }
+.d-check input[type="checkbox"]:checked{ background:var(--active); border-color:var(--active) }
+.d-check input[type="checkbox"]::before{
+  content:""; inline-size:10px; block-size:6px;
+  border-left:1.75px solid var(--active-ink);     /* physical on purpose: */
+  border-bottom:1.75px solid var(--active-ink);   /* a tick never mirrors  */
+  transform:rotate(-45deg) translate(1px,-1px) scale(0);
+  transition: transform var(--t1) var(--ease);
+}
+.d-check input[type="checkbox"]:checked::before{ transform:rotate(-45deg) translate(1px,-1px) scale(1) }
+.d-check input[type="radio"]:checked{ border-color:var(--active); border-width:1.5px }
+.d-check input[type="radio"]::before{
+  content:""; inline-size:8px; block-size:8px; border-radius:50%;
+  background:var(--active); transform:scale(0);
+  transition: transform var(--t1) var(--ease);
+}
+.d-check input[type="radio"]:checked::before{ transform:scale(1) }
+.d-check input:disabled{ opacity:.4; cursor:not-allowed }
+.d-check .d-hint{ display:block; margin-block-start:2px }
+
+/* ---- Switch ----
+   Not a round knob on a pill. An index mark that travels a short scale. */
+.d-switch{ display:inline-flex; align-items:center; gap:var(--s3); cursor:pointer;
+           font-family:var(--font-sans); font-size:14.5px; font-weight:300; color:var(--ink) }
+.d-switch input{
+  appearance:none; -webkit-appearance:none; margin:0; cursor:pointer;
+  position:relative; inline-size:40px; block-size:20px; flex:0 0 auto;
+  border:var(--hair) solid var(--body); border-radius:var(--r);
+  background:
+    linear-gradient(var(--faint),var(--faint)) 25% 50% / 1px 6px no-repeat,
+    linear-gradient(var(--faint),var(--faint)) 50% 50% / 1px 6px no-repeat,
+    linear-gradient(var(--faint),var(--faint)) 75% 50% / 1px 6px no-repeat,
+    var(--field);
+  transition: border-color var(--t1) linear, background-color var(--t2) linear;
+}
+.d-switch input::before{
+  content:""; position:absolute; inset-block:2px; inset-inline-start:3px;
+  inline-size:3px; background:var(--body);
+  transition: inset-inline-start var(--t2) var(--ease), background-color var(--t1) linear;
+}
+.d-switch input:checked{ border-color:var(--active);
+  background:
+    linear-gradient(var(--active),var(--active)) 0 0 / 100% 100% no-repeat; }
+.d-switch input:checked::before{ inset-inline-start:calc(100% - 6px); background:var(--active-ink) }
+.d-switch input:focus-visible{ outline:2px solid var(--active); outline-offset:3px }
+
+/* ---- Range ----
+   A graduated scale with a sighting index for a thumb. The value is a
+   measurement, so its readout is mono (rule 01). */
+.d-range{ display:grid; grid-template-columns:1fr auto; gap:var(--s4); align-items:center }
+.d-range input{
+  -webkit-appearance:none; appearance:none; background:transparent;
+  inline-size:100%; block-size:28px; margin:0; cursor:pointer;
+  --ticks: repeating-linear-gradient(to right, var(--faint) 0 1px, transparent 1px 10%);
+}
+.d-range input::-webkit-slider-runnable-track{
+  block-size:14px;
+  background:
+    linear-gradient(var(--body),var(--body)) 0 0 / 100% 1px no-repeat,
+    var(--ticks) 0 1px / 100% 7px no-repeat;
+}
+.d-range input::-moz-range-track{
+  block-size:14px;
+  background:
+    linear-gradient(var(--body),var(--body)) 0 0 / 100% 1px no-repeat,
+    var(--ticks) 0 1px / 100% 7px no-repeat;
+}
+.d-range input::-webkit-slider-thumb{
+  -webkit-appearance:none; inline-size:3px; block-size:20px;
+  background:var(--active); border:0; border-radius:0; margin-block-start:-10px;
+}
+.d-range input::-moz-range-thumb{
+  inline-size:3px; block-size:20px; background:var(--active); border:0; border-radius:0;
+}
+.d-range input:focus-visible{ outline:2px solid var(--active); outline-offset:4px }
+.d-range output{ font-family:var(--font-mono); font-size:13px; color:var(--active);
+                 font-variant-numeric:tabular-nums; min-inline-size:5ch; text-align:end }
+
+/* ==========================================================================
+   Tabs — a scale with a pointer that travels to the selected reading.
+   ========================================================================== */
+.d-tabs{ position:relative; display:flex; gap:var(--s1); flex-wrap:wrap;
+         border-block-end:var(--hair) solid var(--rule);
+         background:
+           repeating-linear-gradient(to right, var(--faint) 0 1px, transparent 1px 16px)
+           0 100% / 100% 5px no-repeat; }
+.d-tab{
+  position:relative; appearance:none; border:0; background:none; cursor:pointer;
+  padding:var(--s3) var(--s4) calc(var(--s3) + 4px);
+  font-family:var(--font-sans); font-weight:500; font-size:14px; color:var(--body);
+  transition: color var(--t1) linear;
+}
+.d-tab:hover{ color:var(--ink) }
+.d-tab[aria-selected="true"]{ color:var(--ink) }
+.d-tab .d-count{ font-family:var(--font-mono); font-size:11px; color:var(--dim);
+                 margin-inline-start:var(--s2); font-variant-numeric:tabular-nums }
+.d-tabs__pointer{
+  position:absolute; inset-block-end:-1px; block-size:2px; background:var(--active);
+  inset-inline-start:0; inline-size:0;
+  transition: inset-inline-start var(--t3) var(--ease), inline-size var(--t3) var(--ease);
+}
+.d-tabs__pointer::after{          /* the index mark at the pointer's centre */
+  content:""; position:absolute; left:50%; inset-block-end:2px;
+  inline-size:1px; block-size:5px; background:var(--active); translate:-50% 0;
+}
+.d-tabpanel{ padding-block:var(--s5) }
+.d-tabpanel[hidden]{ display:none }
+
+/* ==========================================================================
+   Tables — where a data practice lives or dies.
+   Numbers are mono and right-aligned (rule 01). Headers are ≤4-word mono
+   labels (rule 02). Negatives in the negative red with a true minus sign.
+   A data outlier is the only coral in the whole kit.
+   ========================================================================== */
+.d-tablewrap{ overflow-x:auto; border:var(--hair) solid var(--rule); background:var(--panel) }
+.d-table{ border-collapse:collapse; inline-size:100%; min-inline-size:560px;
+          font-family:var(--font-sans); font-size:14px; font-weight:300; color:var(--ink) }
+.d-table th{
+  text-align:start; white-space:nowrap;
+  font-family:var(--font-mono); font-weight:500; font-size:10.5px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--body);
+  padding:var(--s3) var(--s4); border-block-end:var(--hair) solid var(--ink);
+  position:sticky; inset-block-start:0; background:var(--panel);
+}
+.d-table td{ padding:11px var(--s4); border-block-end:var(--hair) solid var(--rule);
+             vertical-align:middle }
+.d-table tbody tr:last-child td{ border-block-end:0 }
+.d-table tbody tr:hover td{ background:color-mix(in srgb, var(--active) 4%, transparent) }
+.d-table .num{ font-family:var(--font-mono); font-size:13px;
+               font-variant-numeric:tabular-nums; white-space:nowrap }
+/* Numbers align on the ones digit — physically RIGHT, in both directions.
+   Place value doesn't change with the language, so this is deliberately not
+   the logical `end`, which would flip to the left in RTL and misalign digits. */
+.d-table .num, .d-table th.num{ text-align:right }
+.d-table .neg{ color:var(--neg) }
+.d-table .pos{ color:var(--pos) }
+.d-table .null{ color:var(--dim) }
+.d-table tr[aria-selected="true"] td{ background:color-mix(in srgb, var(--active) 8%, transparent) }
+.d-table tr[aria-selected="true"] td:first-child{ box-shadow:inset 3px 0 0 var(--active) }
+[dir="rtl"] .d-table tr[aria-selected="true"] td:first-child{ box-shadow:inset -3px 0 0 var(--active) }
+
+/* Sort: an open pointer, not a filled triangle. */
+.d-sort{ appearance:none; border:0; background:none; cursor:pointer; padding:0;
+         font:inherit; letter-spacing:inherit; text-transform:inherit; color:inherit;
+         display:inline-flex; gap:6px; align-items:center }
+.d-sort::after{ content:""; inline-size:6px; block-size:6px;
+                border-right:1.25px solid currentColor;
+                border-bottom:1.25px solid currentColor;
+                transform:rotate(45deg) translateY(-2px); opacity:.35 }
+.d-sort[aria-sort="ascending"]::after{ transform:rotate(-135deg) translateY(-1px); opacity:1; color:var(--active) }
+.d-sort[aria-sort="descending"]::after{ opacity:1; color:var(--active) }
+.d-sort:hover{ color:var(--ink) }
+
+/* The outlier marker: circled, never deleted. */
+/* The marker is coral; the TEXT is ink. Coral text is 3.91:1 on the ground —
+   below AA — and text never wears a data colour (Role 03, CHARTS.md §2). */
+.d-outlier{ display:inline-flex; align-items:center; gap:var(--s2); color:var(--ink) }
+.d-outlier::before{ content:""; inline-size:10px; block-size:10px; border-radius:50%;
+                    border:1.25px solid var(--mark);
+                    background:radial-gradient(var(--mark) 0 2px, transparent 2.5px) }
+
+.d-table caption, .d-tablefoot{
+  caption-side:bottom; text-align:start; padding:var(--s3) var(--s4);
+  border-block-start:var(--hair) solid var(--rule);
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--dim);
+}
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+.d-nav{ display:flex; align-items:center; gap:var(--s5);
+        min-block-size:60px; padding-inline:var(--s5);
+        border-block-end:var(--hair) solid var(--rule); background:var(--ground) }
+.d-nav__brand{ display:flex; align-items:center; gap:10px; text-decoration:none;
+               color:var(--ink); flex:0 0 auto }
+.d-nav__brand svg{ inline-size:26px; block-size:26px }
+.d-nav__links{ display:flex; gap:var(--s1); margin-inline-start:auto; align-items:center }
+.d-nav__link{
+  position:relative; text-decoration:none; color:var(--body);
+  font-family:var(--font-sans); font-weight:400; font-size:14px;
+  padding:var(--s2) var(--s3); transition: color var(--t1) linear;
+}
+.d-nav__link:hover{ color:var(--ink) }
+.d-nav__link[aria-current="page"]{ color:var(--ink); font-weight:500 }
+.d-nav__link[aria-current="page"]::before{   /* an index mark under the current reading */
+  content:""; position:absolute; left:50%; inset-block-end:-2px;
+  inline-size:1.5px; block-size:7px; background:var(--active); translate:-50% 0;
+}
+.d-nav__toggle{ display:none }
+@media (max-width: 760px){
+  .d-nav__links{ display:none; position:absolute; inset-inline:0; inset-block-start:100%;
+                 flex-direction:column; align-items:stretch; gap:0;
+                 background:var(--panel); border-block-end:var(--hair) solid var(--rule);
+                 padding-block:var(--s2); z-index:5 }
+  .d-nav.is-open .d-nav__links{ display:flex }
+  .d-nav__link{ padding:var(--s3) var(--s5) }
+  .d-nav__toggle{ display:inline-flex; margin-inline-start:auto }
+  .d-nav .d-nav__cta{ display:none }
+}
+
+/* ==========================================================================
+   Notifications — banner (inline, persistent) and toast (transient)
+   Tones: info (blue) · success (green) · error (negative red) · warning.
+   Warning has NO colour of its own — the palette has none to give it, and
+   coral is reserved for data. It is told apart by its icon (a pointer at a
+   limit) and a heavier rule. See UI.md: this is an open decision.
+   ========================================================================== */
+.d-banner{
+  display:grid; grid-template-columns:auto 1fr auto; gap:var(--s3) var(--s4);
+  align-items:start; padding:var(--s4) var(--s4) var(--s4) var(--s4);
+  background:var(--panel); border:var(--hair) solid var(--rule);
+  border-inline-start:3px solid var(--tone, var(--active));
+}
+.d-banner .d-icon{ color:var(--tone, var(--active)); margin-block-start:1px }
+.d-banner__title{ font-family:var(--font-sans); font-weight:500; font-size:14.5px;
+                  color:var(--ink); line-height:1.35 }
+.d-banner__body{ font-family:var(--font-sans); font-weight:300; font-size:14px;
+                 color:var(--body); line-height:1.55; margin-block-start:2px }
+.d-banner__action{ align-self:center }
+.d-banner[data-tone="info"]   { --tone: var(--active) }
+.d-banner[data-tone="success"]{ --tone: var(--pos) }
+.d-banner[data-tone="error"]  { --tone: var(--neg) }
+.d-banner[data-tone="warning"]{ --tone: var(--ink); border-inline-start-width:5px }
+@media (max-width:560px){
+  .d-banner{ grid-template-columns:auto 1fr }
+  .d-banner__action{ grid-column:2 }
+}
+
+.d-toasts{ position:fixed; inset-block-end:var(--s5); inset-inline-end:var(--s5);
+           display:flex; flex-direction:column; gap:var(--s2); z-index:50;
+           inline-size:min(380px, calc(100vw - 2*var(--s5))) }
+.d-toast{
+  position:relative; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr auto; gap:var(--s3);
+  align-items:start; padding-block:var(--s3) var(--s4); padding-inline:var(--s4) var(--s3);
+  background:var(--panel); border:var(--hair) solid var(--rule);
+  box-shadow:var(--elev);
+  animation: d-toast-in var(--t3) var(--ease);
+}
+.d-toast .d-icon{ color:var(--tone, var(--active)); margin-block-start:1px }
+.d-toast__title{ font-family:var(--font-sans); font-weight:500; font-size:14px; color:var(--ink) }
+.d-toast__body{ font-family:var(--font-sans); font-weight:300; font-size:13.5px;
+                color:var(--body); line-height:1.5; margin-block-start:2px }
+.d-toast__time{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em;
+                color:var(--dim); margin-block-start:6px; font-variant-numeric:tabular-nums }
+.d-toast__close{ appearance:none; border:0; background:none; cursor:pointer;
+                 color:var(--body); padding:2px; border-radius:var(--r) }
+.d-toast__close:hover{ color:var(--ink) }
+.d-toast__close:focus-visible{ outline:2px solid var(--active); outline-offset:2px }
+/* the countdown is a measurement sweep — a rule that shortens as time passes */
+.d-toast::after{
+  content:""; position:absolute; inset-inline:0; inset-block-end:0; block-size:2px;
+  background:var(--tone, var(--active)); transform-origin:left;
+  animation: d-sweep var(--life, 6s) linear forwards;
+}
+[dir="rtl"] .d-toast::after{ transform-origin:right }
+.d-toast:hover::after{ animation-play-state:paused }
+.d-toast[data-tone="success"]{ --tone: var(--pos) }
+.d-toast[data-tone="error"]  { --tone: var(--neg) }
+.d-toast[data-tone="warning"]{ --tone: var(--ink) }
+@keyframes d-toast-in{ from{ opacity:0; translate:0 8px } to{ opacity:1; translate:0 0 } }
+@keyframes d-sweep{ from{ transform:scaleX(1) } to{ transform:scaleX(0) } }
+
+/* ==========================================================================
+   Panels — instrument plates. Not everything is a card: no shadow, no radius.
+   ========================================================================== */
+.d-panel{ background:var(--panel); border:var(--hair) solid var(--rule) }
+.d-panel__head{ display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap;
+                padding:var(--s3) var(--s4); border-block-end:var(--hair) solid var(--rule) }
+.d-panel__title{ font-family:var(--font-sans); font-weight:500; font-size:14px; color:var(--ink) }
+.d-panel__meta{ margin-inline-start:auto; font-family:var(--font-mono); font-size:10.5px;
+                letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+                font-variant-numeric:tabular-nums }
+.d-panel__body{ padding:var(--s4) }
+/* The measuring-edge variant: a graduated rule down the leading side. */
+.d-panel--edge{ border-inline-start:0; position:relative; padding-inline-start:14px }
+.d-panel--edge::before{
+  content:""; position:absolute; inset-block:0; inset-inline-start:0; inline-size:10px;
+  border-inline-start:var(--hair) solid var(--ink);
+  background: repeating-linear-gradient(to bottom, var(--ink) 0 1px, transparent 1px 12px)
+              0 6px / 6px 100% no-repeat;
+}
+[dir="rtl"] .d-panel--edge::before{ background-position:100% 6px }
+
+/* ---- Stat readout ----
+   A figure read as a statement is SERIF — it is meaning (Fraunces).
+   A figure read as one measurement in a set is MONO — see tables.
+   The delta and the count are measurements, so they are mono. */
+.d-stat{ display:flex; flex-direction:column; gap:var(--s2); padding:var(--s4) }
+.d-stat__label{ font-family:var(--font-sans); font-weight:400; font-size:13px; color:var(--body) }
+.d-stat__value{ font-family:var(--font-serif); font-weight:300;
+                font-variation-settings:'SOFT' 0,'WONK' 0; font-optical-sizing:auto;
+                font-size:40px; line-height:1; letter-spacing:-.025em; color:var(--ink);
+                font-variant-numeric:lining-nums proportional-nums }  /* a lone figure: proportional; tabular only in columns */
+.d-stat__value small{ font-size:.5em; letter-spacing:0; color:var(--body); margin-inline-start:4px }
+.d-stat__delta{ font-family:var(--font-mono); font-size:12px; font-variant-numeric:tabular-nums;
+                display:flex; gap:var(--s2); align-items:center }
+.d-stat__delta.pos{ color:var(--pos) } .d-stat__delta.neg{ color:var(--neg) }
+.d-stat__delta span{ color:var(--dim); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase }
+
+/* ---- Chips — status, not decoration. ---- */
+.d-chip{ display:inline-flex; align-items:center; gap:6px; block-size:24px;
+         padding-inline:var(--s2); border:var(--hair) solid var(--rule);
+         border-radius:var(--r); background:var(--panel);
+         font-family:var(--font-sans); font-weight:500; font-size:12px; color:var(--ink);
+         white-space:nowrap }
+.d-chip::before{ content:""; inline-size:6px; block-size:6px; border-radius:50%;
+                 background:var(--c, var(--faint)); box-shadow:0 0 0 1px var(--c, var(--body)) inset }
+.d-chip[data-state="draft"]  { --c: var(--faint) }
+.d-chip[data-state="live"]   { --c: var(--active) }
+.d-chip[data-state="done"]   { --c: var(--pos) }
+.d-chip[data-state="blocked"]{ --c: var(--neg) }
+
+/* ==========================================================================
+   Progress — measured, never a vague bar.
+   ========================================================================== */
+.d-progress{ display:grid; grid-template-columns:1fr auto; gap:var(--s3); align-items:center }
+.d-progress__track{
+  position:relative; block-size:14px;
+  background:
+    linear-gradient(var(--body),var(--body)) 0 3px / 100% 1px no-repeat,
+    repeating-linear-gradient(to right, var(--faint) 0 1px, transparent 1px 10%)
+      0 5px / 100% 6px no-repeat;
+}
+.d-progress__fill{ position:absolute; inset-inline-start:0; inset-block-start:2px;
+                   block-size:3px; background:var(--active);
+                   inline-size:calc(var(--v, 0) * 1%);
+                   transition: inline-size var(--t3) var(--ease) }
+.d-progress__fill::after{ content:""; position:absolute; inset-inline-end:-1px;
+                          inset-block-start:-4px; inline-size:2px; block-size:11px;
+                          background:var(--active) }
+.d-progress output{ font-family:var(--font-mono); font-size:12px; color:var(--ink);
+                    font-variant-numeric:tabular-nums; min-inline-size:4ch; text-align:end }
+.d-progress__label{ grid-column:1 / -1; font-family:var(--font-sans); font-size:13px;
+                    color:var(--body) }
+
+/* ==========================================================================
+   Loading — five proprietary states. Never "Loading…" and a spinner.
+   Each is an instrument doing something recognisable. Each has a static
+   resting frame for reduced motion that still says what is happening.
+   ========================================================================== */
+.d-loader{ display:inline-flex; flex-direction:column; align-items:flex-start; gap:var(--s3) }
+.d-loader svg{ inline-size:56px; block-size:56px; overflow:visible; fill:none;
+               stroke:currentColor; stroke-linecap:round }
+.d-loader__label{ font-family:var(--font-sans); font-size:13px; color:var(--body) }
+.d-loader .faint{ stroke:var(--faint) }
+.d-loader .active{ stroke:var(--active); color:var(--active) }
+.d-loader .fillc{ fill:currentColor; stroke:none }
+
+/* 1 · calibration — the ring turns until its aperture aligns with the sight axis */
+.d-load-cal .ring{ transform-origin:28px 28px; animation: d-cal 2.4s var(--ease) infinite }
+.d-load-cal .idx{ animation: d-cal-idx 2.4s linear infinite }
+@keyframes d-cal{ 0%{rotate:-200deg} 62%{rotate:6deg} 72%{rotate:0deg} 100%{rotate:0deg} }
+@keyframes d-cal-idx{ 0%,66%{opacity:.25} 72%,94%{opacity:1} 100%{opacity:.25} }
+
+/* 2 · measurement sweep — a reading travels the scale; ticks it passes go live */
+.d-load-sweep .cursor{ animation: d-sweep-x 1.8s var(--ease) infinite }
+.d-load-sweep .tk{ animation: d-tick 1.8s linear infinite }
+@keyframes d-sweep-x{ 0%{translate:0 0} 80%{translate:48px 0} 100%{translate:48px 0} }
+@keyframes d-tick{ 0%{stroke:var(--faint)} 8%,70%{stroke:var(--active)} 85%,100%{stroke:var(--faint)} }
+
+/* 3 · tallies — a count that increments while work is done, then resets */
+.d-load-tally .t{ opacity:.15; animation: 2.6s linear infinite }
+.d-load-tally .t1{ animation-name:d-t1 } .d-load-tally .t2{ animation-name:d-t2 }
+.d-load-tally .t3{ animation-name:d-t3 } .d-load-tally .t4{ animation-name:d-t4 }
+.d-load-tally .t5{ animation-name:d-t5 }
+@keyframes d-t1{ 0%{opacity:.15} 6%,86%{opacity:1} 92%,100%{opacity:.15} }
+@keyframes d-t2{ 0%,16%{opacity:.15} 22%,86%{opacity:1} 92%,100%{opacity:.15} }
+@keyframes d-t3{ 0%,32%{opacity:.15} 38%,86%{opacity:1} 92%,100%{opacity:.15} }
+@keyframes d-t4{ 0%,48%{opacity:.15} 54%,86%{opacity:1} 92%,100%{opacity:.15} }
+@keyframes d-t5{ 0%,64%{opacity:.15} 70%,86%{opacity:1} 92%,100%{opacity:.15} }
+
+/* 4 · coordinate lock — a crosshair searches, then settles on the point */
+.d-load-lock .xh{ animation: d-lock 2.6s var(--ease) infinite }
+.d-load-lock .pt{ animation: d-pt 2.6s linear infinite; transform-origin:34px 22px }
+@keyframes d-lock{
+  0%{translate:-10px 8px} 22%{translate:9px -6px} 42%{translate:-4px -9px}
+  62%{translate:0 0} 100%{translate:0 0} }
+@keyframes d-pt{ 0%,62%{opacity:0; scale:.4} 70%,94%{opacity:1; scale:1} 100%{opacity:0} }
+
+/* 5 · data field — cells resolve from grey to measured */
+.d-load-field rect{ fill:var(--faint); stroke:none; animation: d-cell 2.2s linear infinite }
+@keyframes d-cell{ 0%,15%{fill:var(--faint)} 45%,80%{fill:var(--active)} 100%{fill:var(--faint)} }
+
+/* mini tally inside a busy button */
+.d-tally-mini{ gap:3px; align-items:center; block-size:12px }
+.d-tally-mini i{ inline-size:1.5px; block-size:12px; background:currentColor; opacity:.25;
+                 animation: d-mini 1.2s steps(1) infinite }
+.d-tally-mini i:nth-child(2){ animation-delay:.2s } .d-tally-mini i:nth-child(3){ animation-delay:.4s }
+.d-tally-mini i:nth-child(4){ animation-delay:.6s }
+@keyframes d-mini{ 0%{opacity:.25} 20%,80%{opacity:1} 100%{opacity:.25} }
+
+@media (prefers-reduced-motion: reduce){
+  .d-loader *, .d-tally-mini i, .d-toast, .d-toast::after,
+  .d-tabs__pointer, .d-btn .d-icon{ animation:none !important; transition:none !important }
+  /* resting frames: aligned, swept, counted, locked, resolved */
+  .d-load-cal .idx, .d-load-lock .pt{ opacity:1 }
+  .d-load-sweep .tk{ stroke:var(--active) }
+  .d-load-sweep .cursor{ translate:48px 0 }
+  .d-load-tally .t{ opacity:1 }
+  .d-load-field rect{ fill:var(--active) }
+  .d-tally-mini i{ opacity:1 }
+  .d-toast::after{ display:none }
+}
+
+/* ==========================================================================
+   Empty & error states
+   Honest sentences. No sad robots, no illustrations of absence.
+   ========================================================================== */
+.d-state{ display:grid; grid-template-columns:auto 1fr; gap:var(--s4) var(--s5);
+          align-items:start; padding:var(--s6) var(--s5);
+          border:var(--hair) dashed var(--faint) }
+.d-state__figure svg{ inline-size:88px; block-size:88px; fill:none; stroke-linecap:round }
+.d-state__title{ font-family:var(--font-sans); font-weight:500; font-size:16px;
+                 color:var(--ink); line-height:1.35 }
+.d-state__body{ font-family:var(--font-sans); font-weight:300; font-size:14.5px;
+                color:var(--body); line-height:1.6; margin-block:var(--s2) var(--s4);
+                max-inline-size:52ch }
+.d-state--error{ border-style:solid; border-color:var(--rule);
+                 border-inline-start:3px solid var(--neg) }
+.d-state--error .d-state__figure{ color:var(--neg) }
+@media (max-width:560px){ .d-state{ grid-template-columns:1fr } }
+
+/* ==========================================================================
+   Direction — the one thing logical properties can't do on their own.
+   Icons that describe a direction flip in right-to-left layouts.
+   ========================================================================== */
+[dir="rtl"] .d-icon--dir{ transform:scaleX(-1) }
+[dir="rtl"] .d-btn:hover .d-icon--dir{ transform:scaleX(-1) translateX(3px) }
+[dir="rtl"] .d-btn,
+[dir="rtl"] .d-tab,
+[dir="rtl"] .d-chip,
+[dir="rtl"] .d-banner__title,
+[dir="rtl"] .d-toast__title{ letter-spacing:normal; text-transform:none }
+
+/* Mono has no Arabic. In right-to-left layouts every mono LABEL becomes the
+   Arabic interface sans — no tracking, no case transform. Mono NUMERALS
+   (.num, counts, outputs, timestamps) stay mono: Western digits throughout. */
+[dir="rtl"] .d-table th,
+[dir="rtl"] .d-table caption,
+[dir="rtl"] .d-tablefoot,
+[dir="rtl"] .d-panel__meta,
+[dir="rtl"] .d-affix__unit,
+[dir="rtl"] .d-stat__delta span{
+  font-family:var(--font-ar-sans); font-weight:500;
+  letter-spacing:normal; text-transform:none; font-size:12px;
+}
+
+/* ==========================================================================
+   Numbers are left-to-right strings, in every language.
+   Without isolation, the Unicode bidi algorithm treats a leading + or − as a
+   neutral and, inside an RTL paragraph, moves it to the far side: "+6.2%"
+   renders as "6.2%+" and "−4.8%" as "4.8%−". Isolating every numeric run as
+   LTR keeps the sign, digits and unit in reading order. Wrap any signed or
+   unit-bearing figure that isn't already one of these in .d-num.
+   ========================================================================== */
+.d-num,
+.d-table .num,
+.d-stat__value,
+.d-progress output,
+.d-range output,
+.d-toast__time{ direction:ltr; unicode-bidi:isolate }
+
+/* Notification text can come from anywhere — a file name, an API error, a
+   message in the other language. Let each paragraph take its direction from
+   its own content, so an English sentence in an Arabic layout keeps its full
+   stop at the end. */
+.d-banner__title, .d-banner__body,
+.d-toast__title, .d-toast__body{ unicode-bidi:plaintext }
+
+
+/* ---- specimen page chrome (not part of the kit) ---- */
+*{box-sizing:border-box}
+body{margin:0;padding-block:0;background:var(--ground);color:var(--ink);
+  font-family:var(--font-sans);font-weight:300;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+::selection{background:var(--active);color:#fff}
+.wrap{max-width:1120px;margin-inline:auto;padding-inline:20px}
+@media (min-width:1060px){.wrap{padding-inline:104px 44px}}
+.spine{position:fixed;inset-block:0;inset-inline-start:0;width:64px;z-index:1;
+  pointer-events:none;display:none;color:var(--faint)}
+@media (min-width:1060px){.spine{display:block}}
+.spine svg{width:100%;height:100%;stroke:currentColor;fill:none}
+.pg-head{padding-block:clamp(40px,6vw,76px) 26px}
+.pg-kick{display:flex;gap:12px;align-items:center;margin-bottom:20px}
+.pg-kick .bar{height:1px;width:40px;background:currentColor;opacity:.45}
+.pg-h1{font-family:var(--font-serif);font-weight:300;font-optical-sizing:auto;
+  font-variation-settings:'SOFT' 0,'WONK' 0;font-size:clamp(2.3rem,5.2vw,4rem);
+  line-height:.98;letter-spacing:-.03em;margin:0;text-wrap:balance}
+.pg-lede{font-size:clamp(1rem,1.5vw,1.16rem);color:var(--body);max-width:60ch;
+  margin:22px 0 0;line-height:1.55}
+.pg-bar{position:sticky;top:0;z-index:30;background:var(--ground);
+  border-block:1px solid var(--rule)}
+.pg-bar .in{max-width:1120px;margin-inline:auto;padding:10px 20px;display:flex;
+  gap:10px 20px;align-items:center;flex-wrap:wrap}
+@media (min-width:1060px){.pg-bar .in{padding-inline:104px 44px}}
+.pg-bar .lab{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--body)}
+.seg{display:inline-flex}
+.seg button{appearance:none;cursor:pointer;background:none;color:var(--body);
+  border:1px solid var(--rule);padding:6px 12px;font-family:var(--font-sans);
+  font-size:13px;font-weight:500}
+.seg button+button{border-inline-start:0}
+.seg button[aria-pressed="true"]{color:var(--active);border-color:var(--active);
+  background:color-mix(in srgb,var(--active) 7%,transparent)}
+.seg button[aria-pressed="true"]+button{border-inline-start:1px solid var(--rule)}
+.seg button:focus-visible{outline:2px solid var(--active);outline-offset:2px}
+.pg-note{font-size:12.5px;color:var(--dim);margin-inline-start:auto}
+section.pg{padding-block:clamp(44px,5.5vw,76px);border-top:1px solid var(--rule)}
+.pg-sh{display:flex;gap:14px 18px;align-items:baseline;flex-wrap:wrap;
+  padding-bottom:11px;margin-bottom:24px;border-bottom:1px solid var(--ink)}
+.pg-sh .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;color:var(--active)}
+.pg-sh h2{font-family:var(--font-serif);font-weight:300;font-optical-sizing:auto;
+  font-variation-settings:'SOFT' 0,'WONK' 0;font-size:clamp(1.6rem,3vw,2.3rem);
+  line-height:1.06;letter-spacing:-.022em;margin:0}
+.pg-sh p{margin:0 0 0 auto;max-width:44ch;font-size:13.6px;color:var(--body);line-height:1.5}
+.pg-row{display:flex;gap:18px 22px;flex-wrap:wrap;align-items:center}
+.pg-grid2{display:grid;gap:24px;grid-template-columns:1fr}
+@media (min-width:820px){.pg-grid2{grid-template-columns:1fr 1fr}}
+.pg-grid3{display:grid;gap:0;grid-template-columns:1fr}
+@media (min-width:760px){.pg-grid3{grid-template-columns:repeat(3,1fr)}}
+.pg-cap{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+.pg-rule{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);
+  font-size:13.4px;color:var(--body);line-height:1.55;max-width:70ch}
+.pg-rule b{font-weight:500;color:var(--ink)}
+.demo{min-width:0}
+.law{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+  grid-template-columns:1fr}
+@media (min-width:760px){.law{grid-template-columns:repeat(4,1fr)}}
+.law div{background:var(--panel);padding:16px 16px 18px;display:flex;flex-direction:column;gap:8px}
+.law i{display:block;width:26px;height:4px}
+.law b{font-weight:500;font-size:14px}
+.law span{font-size:13px;color:var(--body);line-height:1.45}
+.iconset{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+  grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
+.iconset figure{margin:0;background:var(--panel);padding:18px 8px 12px;display:flex;
+  flex-direction:column;align-items:center;gap:10px}
+.iconset figcaption{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;
+  color:var(--dim);text-transform:uppercase}
+.iconset .inst figcaption{color:var(--active)}
+.stack{display:flex;flex-direction:column;gap:14px}
+footer.pg-foot{padding-block:36px 60px;border-top:1px solid var(--ink);
+  font-size:12.8px;color:var(--body)}
+.draftnote{font-size:12px;color:var(--dim);margin-top:8px}
+</style>
+
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"><defs><symbol id="i-search" viewBox="0 0 24 24"><path d="M16.31 7.59A6.5 6.5 0 1 1 14.27 5.2"/><circle cx="10.5" cy="10.5" r="1.4" fill="currentColor" stroke="none"/><path d="M12.32 8.94L19.99 2.37"/></symbol><symbol id="i-data" viewBox="0 0 24 24"><rect x="7" y="4" width="13" height="13"/><path d="M7 8.33L20 8.33"/><path d="M7 12.67L20 12.67"/><path d="M11.33 4L11.33 17"/><path d="M15.67 4L15.67 17"/><path d="M3.5 4L5 4"/><path d="M3.5 8.33L5 8.33"/><path d="M3.5 12.67L5 12.67"/><path d="M3.5 17L5 17"/><path d="M7 19L7 20.5"/><path d="M11.33 19L11.33 20.5"/><path d="M15.67 19L15.67 20.5"/><path d="M20 19L20 20.5"/></symbol><symbol id="i-report" viewBox="0 0 24 24"><rect x="7" y="3" width="13" height="18"/><path d="M3 5L5.2 5"/><path d="M4.2 8L5.2 8"/><path d="M4.2 11L5.2 11"/><path d="M3 14L5.2 14"/><path d="M4.2 17L5.2 17"/><path d="M4.2 20L5.2 20"/><path d="M10 8L17 8"/><path d="M10 12L17 12"/><path d="M10 16L14.5 16"/></symbol><symbol id="i-automation" viewBox="0 0 24 24"><path d="M3.5 7L3.5 17"/><path d="M6.5 7L6.5 17"/><path d="M9.5 7L9.5 17"/><path d="M12.5 12L20.5 12"/><path d="M17 8.5L20.5 12L17 15.5"/></symbol><symbol id="i-decision" viewBox="0 0 24 24"><path d="M3 5L16 12"/><path d="M3 19L16 12"/><path d="M16 12L19 12"/><circle cx="20" cy="12" r="2.1" fill="currentColor" stroke="none"/></symbol><symbol id="i-research" viewBox="0 0 24 24"><circle cx="9" cy="15" r="5"/><path d="M12.8 11.75L20.39 5.24"/><circle cx="20.39" cy="5.24" r="1.7" fill="currentColor" stroke="none"/></symbol><symbol id="i-dataset" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/><path d="M12 4L12 20"/><path d="M4 12L20 12"/><path d="M16 4L16 12"/><path d="M12 8L20 8"/></symbol><symbol id="i-error" viewBox="0 0 24 24"><path d="M2.5 9L10 9"/><path d="M14 15L21.5 15"/><path d="M2.5 9L2.5 12.5"/><path d="M6.25 9L6.25 11"/><path d="M10 9L10 12.5"/><path d="M14 15L14 18.5"/><path d="M17.75 15L17.75 17"/><path d="M21.5 15L21.5 18.5"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12L19.5 12"/><path d="M14.5 7L19.5 12L14.5 17"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5L10 17.5L19.5 6.5"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6L18 18"/><path d="M18 6L6 18"/></symbol><symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6.5 9.5L12 15L17.5 9.5"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5L12 19"/><path d="M5 12L19 12"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><path d="M19.6 8.19A8.5 8.5 0 1 1 16.92 5.07"/><path d="M12 11L12 16.5"/><circle cx="12" cy="7.8" r="1.2" fill="currentColor" stroke="none"/></symbol><symbol id="i-warning" viewBox="0 0 24 24"><path d="M18 4.5L18 19.5"/><path d="M3.5 12L14 12"/><path d="M10.5 8.5L14 12L10.5 15.5"/></symbol><symbol id="i-orbit" viewBox="0 0 24 24"><path d="M19.6 8.19A8.5 8.5 0 1 1 16.92 5.07"/><circle cx="5.55" cy="17.53" r="2" fill="currentColor" stroke="none"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7L20 7"/><path d="M4 12L20 12"/><path d="M4 17L14 17"/></symbol></defs></svg>
+
+<div class="spine" aria-hidden="true">
+  <svg viewBox="0 0 64 900" preserveAspectRatio="none">
+    <path d="M40 0V900" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    <g id="spineTicks"></g>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header class="pg-head">
+    <div class="pg-kick"><span class="bar"></span>
+      <span class="t-label" style="color:var(--body)">.describe( · role 07</span></div>
+    <h1 class="pg-h1">The instrument,<br>in use.</h1>
+    <p class="pg-lede">Every component the interface needs, in every state, built
+      on the settled type tokens. Switch the direction to right-to-left and the
+      whole kit mirrors from logical properties alone — only arrows flip — and
+      its Arabic renders in Vazirmatn. Switch the ground and dark mode is its own
+      environment, not an inversion.</p>
+  </header>
+</div>
+
+<div class="pg-bar">
+  <div class="in">
+    <span class="lab">Ground</span>
+    <span class="seg">
+      <button type="button" id="thLight" aria-pressed="true">Paper</button>
+      <button type="button" id="thDark" aria-pressed="false">Navy</button>
+    </span>
+    <span class="lab">Direction</span>
+    <span class="seg">
+      <button type="button" id="dirLtr" aria-pressed="true">English · LTR</button>
+      <button type="button" id="dirRtl" aria-pressed="false">العربية · RTL</button>
+    </span>
+    <span class="pg-note" id="dirNote">All data on this page is example data.</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ================= 00 · COLOUR LAW ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">00</span><h2>The colour law</h2>
+    <p>UI is where it is most tempting to break it — a coral error message
+      looks right and means the wrong thing.</p></div>
+  <div class="law">
+    <div><i style="background:var(--active)"></i><b>Blue is live</b>
+      <span>Active, selected, in progress, the one primary action.</span></div>
+    <div><i style="background:var(--mark)"></i><b>Coral is an outlier</b>
+      <span>In data, and nowhere else. Never an error, a warning or an accent.</span></div>
+    <div><i style="background:var(--neg)"></i><b>Red is negative</b>
+      <span>A value that went down in a bad way, or an action that failed.</span></div>
+    <div><i style="background:var(--pos)"></i><b>Green is positive</b>
+      <span>A value that moved in a good way, or an action that completed.</span></div>
+  </div>
+</section>
+
+<!-- ================= 01 · BUTTONS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">01</span><h2>Buttons</h2>
+    <p>Not pills. A label and a direction. The one action that matters gets
+      calibration ticks either side — and there is only ever one per view.</p></div>
+  <div class="demo stack">
+    <p class="pg-cap">Primary · default · secondary · quiet · danger</p>
+    <div class="pg-row">
+      <button class="d-btn d-btn--primary" type="button" id="runBtn">
+        <span data-ar="تشغيل التحليل">Run analysis</span>
+        <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg>
+        <span class="d-tally-mini" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </button>
+      <button class="d-btn" type="button"><span data-ar="عرض البيانات">View data</span>
+        <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+      <button class="d-btn d-btn--quiet" type="button"><span data-ar="تنزيل">Download</span>
+        <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+      <button class="d-btn d-btn--danger" type="button"><span data-ar="حذف مجموعة البيانات">Delete dataset</span></button>
+    </div>
+    <p class="pg-cap" style="margin-top:14px">Small · disabled · busy</p>
+    <div class="pg-row">
+      <button class="d-btn d-btn--sm" type="button"><span data-ar="حفظ">Save</span></button>
+      <button class="d-btn d-btn--sm d-btn--quiet" type="button"><span data-ar="إلغاء">Cancel</span></button>
+      <button class="d-btn" type="button" disabled><span data-ar="تصدير">Export</span>
+        <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+      <button class="d-btn is-busy" type="button" aria-busy="true">
+        <span data-ar="جارٍ التحليل">Analysing</span>
+        <span class="d-tally-mini" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+    </div>
+  </div>
+  <p class="pg-rule"><b>The technical feel comes from the ticks and the mark, not
+    the typeface.</b> Your brief shows buttons as <span class="t-num">[ RUN ANALYSIS → ]</span>,
+    which reads as mono — but you've since ruled mono out of anything that isn't
+    numerals or tiny labels, and your later direction wins. Labels are Readex Pro,
+    uppercase and tracked in English; in Arabic there is no case and no tracking, so
+    weight carries it. Tab to any button to see focus: a sighting frame, not a glow.
+    Busy replaces the arrow with a tally that counts while the work runs.</p>
+</section>
+
+<!-- ================= 02 · FIELDS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">02</span><h2>Fields</h2>
+    <p>Your real intake form. Submit it empty to see an error written the way the
+      rest of the system talks.</p></div>
+  <div class="pg-grid2">
+    <form class="demo stack" id="intake" novalidate>
+      <div class="pg-grid2" style="gap:16px">
+        <div class="d-field"><label class="d-label" for="f-name" data-ar="الاسم الكامل">Full name</label>
+          <input class="d-input" id="f-name" autocomplete="name"></div>
+        <div class="d-field" id="fld-email"><label class="d-label" for="f-email" data-ar="البريد الإلكتروني">Email</label>
+          <input class="d-input" id="f-email" type="email" autocomplete="email"
+            placeholder="you@company.com" aria-describedby="f-email-msg">
+          <div class="d-msg" id="f-email-msg" hidden><svg class="d-icon"><use href="#i-error"/></svg>
+            <span data-ar="أضف بريدًا إلكترونيًا لنتمكن من الرد.">Add an email so we can reply.</span></div></div>
+      </div>
+      <div class="pg-grid2" style="gap:16px">
+        <div class="d-field"><label class="d-label" for="f-role"><span data-ar="المنصب">Your position</span>
+          <span class="d-opt" data-ar="اختياري">optional</span></label>
+          <input class="d-input" id="f-role"></div>
+        <div class="d-field"><label class="d-label" for="f-org" data-ar="المؤسسة">Organisation</label>
+          <input class="d-input" id="f-org" autocomplete="organization"></div>
+      </div>
+      <div class="d-field"><label class="d-label" for="f-msg" data-ar="كيف يمكننا مساعدتك؟">What can we help you with?</label>
+        <textarea class="d-textarea" id="f-msg" data-ar-ph="القرار الذي تتردد فيه، أو الرقم الذي لا تثق به."
+          placeholder="The decision you're stuck on, or the number you don't trust."></textarea>
+        <span class="d-hint" data-ar="لا بأس بصياغة أولية.">Rough is fine.</span></div>
+      <div class="pg-row"><button class="d-btn d-btn--primary" type="submit">
+        <span data-ar="إرسال">Send</span><svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button></div>
+    </form>
+    <div class="demo stack">
+      <div class="d-field"><label class="d-label" for="f-spend" data-ar="الإنفاق الإعلاني الشهري">Monthly ad spend</label>
+        <div class="d-affix"><input class="d-input" id="f-spend" inputmode="decimal" value="4,200">
+          <span class="d-affix__unit" data-ar="دولار">USD</span></div>
+        <span class="d-hint" data-ar="الوحدة جزء من الحقل: قراءة، لا زخرفة.">The unit is part of the field — a readout, not decoration.</span></div>
+      <div class="d-field"><label class="d-label" for="f-src" data-ar="مصدر البيانات">Data source</label>
+        <div class="d-select"><select id="f-src">
+          <option data-ar="تصدير من Shopify">Shopify export</option>
+          <option>Google Sheets</option>
+          <option data-ar="رفع ملف CSV">CSV upload</option></select>
+          <svg class="d-icon"><use href="#i-chevron"/></svg></div></div>
+      <div class="d-field"><label class="d-label" for="f-dis" data-ar="المعرّف">Workspace ID</label>
+        <input class="d-input" id="f-dis" value="dsc-0419" disabled>
+        <span class="d-hint" data-ar="مقفل: يُحدَّد عند الإعداد.">Locked — set at onboarding.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 · SELECTION ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">03</span><h2>Selection</h2>
+    <p>A checked radio is a ring with a positional dot — the mark's own grammar.
+      A switch is an index mark that travels a scale, not a knob on a pill.</p></div>
+  <div class="pg-grid2 demo">
+    <div class="stack">
+      <label class="d-check"><input type="checkbox" checked>
+        <span><span data-ar="احتساب المرتجعات ضمن الإيرادات">Include returns in revenue</span>
+          <span class="d-hint" data-ar="معطّل افتراضيًا — المرتجعات تضخّم الحجم.">Off by default — returns inflate volume.</span></span></label>
+      <label class="d-check"><input type="checkbox">
+        <span data-ar="استبعاد الطلبات التجريبية">Exclude test orders</span></label>
+      <label class="d-check"><input type="checkbox" disabled>
+        <span data-ar="دمج الحسابات (غير متاح)">Merge accounts (unavailable)</span></label>
+      <div style="height:6px"></div>
+      <label class="d-switch"><input type="checkbox" checked role="switch">
+        <span data-ar="تمييز القيم الشاذة">Flag outliers</span></label>
+      <label class="d-switch"><input type="checkbox" role="switch">
+        <span data-ar="المزامنة اليومية">Daily sync</span></label>
+    </div>
+    <div class="stack">
+      <fieldset style="border:0;padding:0;margin:0" class="stack">
+        <legend class="d-label" style="margin-bottom:10px" data-ar="التجميع">Group by</legend>
+        <label class="d-check"><input type="radio" name="grp">
+          <span data-ar="أسبوعي">Weekly</span></label>
+        <label class="d-check"><input type="radio" name="grp" checked>
+          <span data-ar="شهري">Monthly</span></label>
+        <label class="d-check"><input type="radio" name="grp">
+          <span data-ar="ربع سنوي">Quarterly</span></label>
+      </fieldset>
+      <div class="d-field" style="margin-top:8px"><label class="d-label" for="f-conf" data-ar="مستوى الثقة">Confidence level</label>
+        <div class="d-range"><input type="range" id="f-conf" min="80" max="99" step="1" value="95">
+          <output for="f-conf" id="f-conf-o">95%</output></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 · TABS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">04</span><h2>Tabs</h2>
+    <p>A scale with a pointer that travels to the selected reading. Use the arrow
+      keys once a tab has focus.</p></div>
+  <div class="demo">
+    <div class="d-tabs" role="tablist" id="tabs">
+      <button class="d-tab" role="tab" aria-selected="true" id="t1" aria-controls="p1">
+        <span data-ar="نظرة عامة">Overview</span></button>
+      <button class="d-tab" role="tab" aria-selected="false" id="t2" aria-controls="p2" tabindex="-1">
+        <span data-ar="القنوات">Channels</span><span class="d-count">5</span></button>
+      <button class="d-tab" role="tab" aria-selected="false" id="t3" aria-controls="p3" tabindex="-1">
+        <span data-ar="العملاء">Customers</span></button>
+      <button class="d-tab" role="tab" aria-selected="false" id="t4" aria-controls="p4" tabindex="-1">
+        <span data-ar="المرتجعات">Returns</span><span class="d-count">412</span></button>
+      <span class="d-tabs__pointer" id="tabPtr" aria-hidden="true"></span>
+    </div>
+    <div class="d-tabpanel" role="tabpanel" id="p1" aria-labelledby="t1">
+      <p class="t-body" style="color:var(--body);max-width:60ch" data-ar="ملخّص الشهر: الإيرادات والطلبات ونسبة الإرجاع.">September at a glance: revenue, orders and return rate.</p></div>
+    <div class="d-tabpanel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+      <p class="t-body" style="color:var(--body)" data-ar="خمس قنوات، مرتّبة حسب الإيرادات.">Five channels, ranked by revenue.</p></div>
+    <div class="d-tabpanel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+      <p class="t-body" style="color:var(--body)" data-ar="العملاء الجدد مقابل العائدين.">New against returning customers.</p></div>
+    <div class="d-tabpanel" role="tabpanel" id="p4" aria-labelledby="t4" hidden>
+      <p class="t-body" style="color:var(--body)" data-ar="412 مرتجعًا، مستبعدة من الإيرادات.">412 returns, isolated from revenue.</p></div>
+  </div>
+</section>
+
+<!-- ================= 05 · TABLES ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">05</span><h2>Tables</h2>
+    <p>Where a data practice lives or dies. Click a column heading to sort. One
+      cell is coral — it is the only coral in the entire kit.</p></div>
+  <div class="demo">
+    <div class="d-tablewrap">
+      <table class="d-table" id="tbl">
+        <thead><tr>
+          <th scope="col"><button class="d-sort" data-k="0" data-ar="القناة">Channel</button></th>
+          <th scope="col" class="num"><button class="d-sort" data-k="1" data-ar="الطلبات">Orders</button></th>
+          <th scope="col" class="num"><button class="d-sort" data-k="2" aria-sort="descending" data-ar="الإيرادات">Revenue</button></th>
+          <th scope="col" class="num"><button class="d-sort" data-k="3" data-ar="مقابل آب">vs Aug</button></th>
+          <th scope="col" class="num"><button class="d-sort" data-k="4" data-ar="نسبة الإرجاع">Return rate</button></th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-ar="البحث العضوي">Organic search</td><td class="num">1,284</td><td class="num">48,210</td><td class="num pos">+6.2%</td><td class="num">3.1%</td></tr>
+          <tr><td data-ar="الإحالات">Referral</td><td class="num">188</td><td class="num"><span class="d-outlier">41,300</span></td><td class="num pos">+212.0%</td><td class="num">1.1%</td></tr>
+          <tr aria-selected="true"><td data-ar="التواصل المدفوع">Paid social</td><td class="num">902</td><td class="num">31,480</td><td class="num neg">−4.8%</td><td class="num">7.9%</td></tr>
+          <tr><td data-ar="البريد الإلكتروني">Email</td><td class="num">611</td><td class="num">22,905</td><td class="num pos">+11.4%</td><td class="num">2.4%</td></tr>
+          <tr><td data-ar="مباشر">Direct</td><td class="num">423</td><td class="num">15,090</td><td class="num null" title="No August baseline — tracking began in September">—</td><td class="num">4.0%</td></tr>
+        </tbody>
+        <caption data-ar="n = 3,408 طلبًا · بيانات توضيحية · أيلول 2026">n = 3,408 orders · Example data · Sep 2026</caption>
+      </table>
+    </div>
+  </div>
+  <p class="pg-rule"><b>Referral's revenue is circled, not removed</b> — the marker sits on the value, because the value is what's anomalous, not the channel. One order of about
+    34,000 USD carries most of that channel — so the +212% is real and misleading at
+    once. The marker says <em>look here</em>; deleting the row would hide exactly the
+    thing worth a conversation. Direct has <b>no August baseline</b>, so its change
+    is shown as a null, not as zero — "we don't know" and "nothing happened" are
+    different findings. Negatives use a true minus sign (−), not a hyphen.</p>
+</section>
+
+<!-- ================= 06 · NAVIGATION ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">06</span><h2>Navigation</h2>
+    <p>The current page is marked with an index tick, like a reading on a scale.
+      Narrow the window and the links collapse behind a menu.</p></div>
+  <div class="demo" style="position:relative;border:1px solid var(--rule)">
+    <nav class="d-nav" id="demoNav" aria-label="Example">
+      <a class="d-nav__brand" href="#" onclick="return false">
+        <svg viewBox="-20 -20 240 240" aria-hidden="true" class="dsc-mark"><g id="navMark"></g></svg>
+        <span class="t-num" style="font-size:15px;font-weight:500;letter-spacing:-.02em">.describe<span style="color:var(--active)">(</span></span>
+      </a>
+      <div class="d-nav__links" id="navLinks">
+        <a class="d-nav__link" href="#" onclick="return false" data-ar="الخدمات">Services</a>
+        <a class="d-nav__link" href="#" onclick="return false" aria-current="page" data-ar="المنهجية">Method</a>
+        <a class="d-nav__link" href="#" onclick="return false" data-ar="الأعمال">Work</a>
+        <a class="d-nav__link" href="#" onclick="return false" data-ar="من نحن">About</a>
+      </div>
+      <button class="d-btn d-btn--sm d-nav__cta" type="button"><span data-ar="ابدأ">Start</span>
+        <svg class="d-icon d-icon--dir d-icon--sm"><use href="#i-arrow"/></svg></button>
+      <button class="d-btn d-btn--sm d-btn--quiet d-nav__toggle" type="button" id="navToggle"
+        aria-expanded="false" aria-controls="navLinks">
+        <svg class="d-icon"><use href="#i-menu"/></svg><span data-ar="القائمة">Menu</span></button>
+    </nav>
+  </div>
+  <p class="pg-rule"><b>The wordmark here is a stand-in</b> — <span class="t-num">.describe(</span>
+    set in IBM Plex Mono. It is the one place the kit knowingly breaks the mono budget,
+    because the real wordmark hasn't been drawn yet.</p>
+</section>
+
+<!-- ================= 07 · NOTIFICATIONS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">07</span><h2>Notifications</h2>
+    <p>Banners stay until they're resolved. Toasts leave on their own — the
+      countdown is a measurement sweep along the bottom edge, and it pauses
+      while you hover.</p></div>
+  <div class="demo stack">
+    <div class="d-banner" data-tone="info" role="status">
+      <svg class="d-icon"><use href="#i-info"/></svg>
+      <div><div class="d-banner__title" data-ar="الأرقام أولية.">Figures are provisional.</div>
+        <div class="d-banner__body" data-ar="مصدران ما زالا قيد المزامنة. قد تتغير الإجماليات بما يصل إلى 2% حتى تكتمل.">Two sources are still syncing. Totals may move by up to 2% until they finish.</div></div>
+    </div>
+    <div class="d-banner" data-tone="success" role="status">
+      <svg class="d-icon"><use href="#i-check"/></svg>
+      <div><div class="d-banner__title" data-ar="تم تسليم التحليل.">Analysis delivered.</div>
+        <div class="d-banner__body" data-ar="ملاحظة النتائج ومجموعة البيانات المنظّفة في المجلد المشترك.">The findings note and the cleaned dataset are in the shared folder.</div></div>
+      <button class="d-btn d-btn--sm d-btn--quiet d-banner__action" type="button"><span data-ar="فتح">Open</span>
+        <svg class="d-icon d-icon--dir d-icon--sm"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="d-banner" data-tone="warning" role="status">
+      <svg class="d-icon d-icon--dir"><use href="#i-warning"/></svg>
+      <div><div class="d-banner__title" data-ar="اقتربت من الحد الشهري للصفوف.">You're near your monthly row limit.</div>
+        <div class="d-banner__body" data-ar="استُخدم 9,400 من أصل 10,000 صف. الملفات التي تتجاوز الحد تُوضع في قائمة الانتظار ولا تضيع.">9,400 of 10,000 rows used. Uploads over the limit are queued, not lost.</div></div>
+    </div>
+    <div class="d-banner" data-tone="error" role="alert">
+      <svg class="d-icon"><use href="#i-error"/></svg>
+      <div><div class="d-banner__title" data-ar="فشل الاتصال بـ Shopify.">The Shopify connection failed.</div>
+        <div class="d-banner__body" data-ar="انتهت صلاحية رمز الوصول في 24 أيلول. أعد الاتصال لاستئناف المزامنة اليومية.">The access token expired on 24 Sep. Reconnect to resume the daily sync.</div></div>
+      <button class="d-btn d-btn--sm d-banner__action" type="button"><span data-ar="إعادة الاتصال">Reconnect</span>
+        <svg class="d-icon d-icon--dir d-icon--sm"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="pg-row" style="margin-top:8px">
+      <span class="pg-cap" style="margin:0">Toasts →</span>
+      <button class="d-btn d-btn--sm" type="button" data-toast="info" data-ar="معلومة">Info</button>
+      <button class="d-btn d-btn--sm" type="button" data-toast="success" data-ar="نجاح">Success</button>
+      <button class="d-btn d-btn--sm" type="button" data-toast="warning" data-ar="تنبيه">Warning</button>
+      <button class="d-btn d-btn--sm" type="button" data-toast="error" data-ar="خطأ">Error</button>
+    </div>
+  </div>
+  <p class="pg-rule"><b>Warning has no colour of its own, on purpose.</b> Your palette
+    has none to give it — and coral would be the obvious grab and exactly the wrong
+    one, since coral means a data outlier. So a warning is told apart by <b>form</b>:
+    its icon is a pointer arriving at a limit, and its edge rule is heavier. If you'd
+    rather it had a colour, that is a decision to add one to the palette deliberately
+    — see the open questions.</p>
+</section>
+
+<!-- ================= 08 · PANELS, STATS, CHIPS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">08</span><h2>Panels, readouts, status</h2>
+    <p>Panels are instrument plates: no shadow, no radius. Not everything is a
+      card.</p></div>
+  <div class="demo stack">
+    <div class="d-panel">
+      <div class="d-panel__head"><span class="d-panel__title" data-ar="أيلول 2026">September 2026</span>
+        <span class="d-panel__meta" data-ar="n = 3,408 طلبًا">n = 3,408 orders</span></div>
+      <div class="pg-grid3">
+        <div class="d-stat">
+          <span class="d-stat__label" data-ar="الإيرادات">Revenue</span>
+          <span class="d-stat__value">158,985<small>USD</small></span>
+          <span class="d-stat__delta pos"><span class="d-num">+8.3%</span> <span data-ar="مقابل آب">vs Aug</span></span></div>
+        <div class="d-stat" style="border-inline-start:1px solid var(--rule)">
+          <span class="d-stat__label" data-ar="نسبة الإرجاع">Return rate</span>
+          <span class="d-stat__value">4.2<small>%</small></span>
+          <span class="d-stat__delta pos"><span class="d-num">−0.6 pts</span> <span data-ar="تحسّن">better</span></span></div>
+        <div class="d-stat" style="border-inline-start:1px solid var(--rule)">
+          <span class="d-stat__label" data-ar="السلة الوسيطة">Median basket</span>
+          <span class="d-stat__value">46.60<small>USD</small></span>
+          <span class="d-stat__delta neg"><span class="d-num">−2.1%</span> <span data-ar="مقابل آب">vs Aug</span></span></div>
+      </div>
+    </div>
+    <div class="d-panel d-panel--edge">
+      <div class="d-panel__head"><span class="d-panel__title" data-ar="حافة القياس">Measuring-edge variant</span>
+        <span class="d-panel__meta" data-ar="تقرير">Report</span></div>
+      <div class="d-panel__body t-body" style="color:var(--body);max-width:62ch" data-ar="للمحتوى الذي يُقرأ كوثيقة: تقرير أو ملاحظة نتائج. الحافة المدرّجة تنتقل إلى اليمين في العربية.">For content that reads as a document — a report, a findings note. The graduated edge moves to the right in Arabic.</div>
+    </div>
+    <div class="pg-row">
+      <span class="d-chip" data-state="draft" data-ar="مسودة">Draft</span>
+      <span class="d-chip" data-state="live" data-ar="قيد التنفيذ">In progress</span>
+      <span class="d-chip" data-state="done" data-ar="تم التسليم">Delivered</span>
+      <span class="d-chip" data-state="blocked" data-ar="متوقف">Blocked</span>
+    </div>
+  </div>
+  <p class="pg-rule"><b>Colour follows meaning, not the sign.</b> Return rate fell by
+    0.6 points — a negative number and a good outcome — so it is green. A kit that
+    colours by sign would have painted it red. <b>A figure read as a statement is
+    serif</b> (the readouts, in Fraunces); <b>a figure read as one measurement in a set
+    is mono</b> (the table). The delta and the count are measurements, so they're mono.</p>
+</section>
+
+<!-- ================= 09 · PROGRESS & LOADING ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">09</span><h2>Progress & loading</h2>
+    <p>Never "Loading…" and a spinner. Five proprietary states, each an
+      instrument doing something recognisable. With reduced motion on, each shows
+      its resolved frame instead.</p></div>
+  <div class="demo stack">
+    <div class="d-progress" style="max-width:560px">
+      <span class="d-progress__label" data-ar="التنظيف — 3 من 5 ملفات">Cleaning — 3 of 5 files</span>
+      <div class="d-progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60">
+        <div class="d-progress__fill" style="--v:60"></div></div>
+      <output>60%</output>
+    </div>
+    <div class="pg-row" style="gap:34px;margin-top:18px;align-items:flex-start">
+      <div class="d-loader d-load-cal" role="status"><svg viewBox="0 0 56 56" aria-hidden="true"><circle class="faint" cx="28" cy="28" r="19" stroke-width="1" stroke-dasharray="1.5 3"/><path class="idx active" d="M45.08 13.36L48.88 10.1" stroke-width="2"/><g class="ring"><path class="active" d="M44.99 19.49A19 19 0 1 1 39.01 12.51" stroke-width="2.4"/></g></svg><span class="d-loader__label" data-ar="معايرة">Calibrating</span></div><div class="d-loader d-load-sweep" role="status"><svg viewBox="0 0 56 56" aria-hidden="true"><path class="faint" d="M4 40H52" stroke-width="1"/><path class="tk faint" d="M4 40V32" stroke-width="1.2" style="animation-delay:0.00s"/><path class="tk faint" d="M8 40V36" stroke-width="1.2" style="animation-delay:0.12s"/><path class="tk faint" d="M12 40V36" stroke-width="1.2" style="animation-delay:0.24s"/><path class="tk faint" d="M16 40V32" stroke-width="1.2" style="animation-delay:0.36s"/><path class="tk faint" d="M20 40V36" stroke-width="1.2" style="animation-delay:0.48s"/><path class="tk faint" d="M24 40V36" stroke-width="1.2" style="animation-delay:0.60s"/><path class="tk faint" d="M28 40V32" stroke-width="1.2" style="animation-delay:0.72s"/><path class="tk faint" d="M32 40V36" stroke-width="1.2" style="animation-delay:0.84s"/><path class="tk faint" d="M36 40V36" stroke-width="1.2" style="animation-delay:0.96s"/><path class="tk faint" d="M40 40V32" stroke-width="1.2" style="animation-delay:1.08s"/><path class="tk faint" d="M44 40V36" stroke-width="1.2" style="animation-delay:1.20s"/><path class="tk faint" d="M48 40V36" stroke-width="1.2" style="animation-delay:1.32s"/><path class="tk faint" d="M52 40V32" stroke-width="1.2" style="animation-delay:1.44s"/><g class="cursor"><path class="active" d="M4 14V46" stroke-width="2"/></g></svg><span class="d-loader__label" data-ar="قياس">Measuring</span></div><div class="d-loader d-load-tally" role="status"><svg viewBox="0 0 56 56" aria-hidden="true"><path class="t t1 active" d="M15 16V40" stroke-width="2.2"/><path class="t t2 active" d="M21 16V40" stroke-width="2.2"/><path class="t t3 active" d="M27 16V40" stroke-width="2.2"/><path class="t t4 active" d="M33 16V40" stroke-width="2.2"/><path class="t t5 active" d="M10 37L38 19" stroke-width="2.2"/></svg><span class="d-loader__label" data-ar="عدّ السجلات">Counting records</span></div><div class="d-loader d-load-lock" role="status"><svg viewBox="0 0 56 56" aria-hidden="true"><path class="faint" d="M6 48H52M8 6V50" stroke-width="1"/><circle cx="16" cy="36" r="1.8" fill="var(--faint)" stroke="none"/><circle cx="24" cy="42" r="1.8" fill="var(--faint)" stroke="none"/><circle cx="44" cy="38" r="1.8" fill="var(--faint)" stroke="none"/><circle cx="20" cy="27" r="1.8" fill="var(--faint)" stroke="none"/><circle cx="46" cy="14" r="1.8" fill="var(--faint)" stroke="none"/><g class="xh active"><path d="M23 22H30M38 22H45M34 11V18M34 26V33" stroke-width="1.8"/></g><circle class="pt active fillc" cx="34" cy="22" r="2.6"/></svg><span class="d-loader__label" data-ar="تحديد الموقع">Locating</span></div><div class="d-loader d-load-field" role="status"><svg viewBox="0 0 56 56" aria-hidden="true"><rect x="2" y="2" width="8" height="8" style="animation-delay:0.00s"/><rect x="13" y="2" width="8" height="8" style="animation-delay:0.11s"/><rect x="24" y="2" width="8" height="8" style="animation-delay:0.22s"/><rect x="35" y="2" width="8" height="8" style="animation-delay:0.33s"/><rect x="46" y="2" width="8" height="8" style="animation-delay:0.44s"/><rect x="2" y="13" width="8" height="8" style="animation-delay:0.11s"/><rect x="13" y="13" width="8" height="8" style="animation-delay:0.22s"/><rect x="24" y="13" width="8" height="8" style="animation-delay:0.33s"/><rect x="35" y="13" width="8" height="8" style="animation-delay:0.44s"/><rect x="46" y="13" width="8" height="8" style="animation-delay:0.55s"/><rect x="2" y="24" width="8" height="8" style="animation-delay:0.22s"/><rect x="13" y="24" width="8" height="8" style="animation-delay:0.33s"/><rect x="24" y="24" width="8" height="8" style="animation-delay:0.44s"/><rect x="35" y="24" width="8" height="8" style="animation-delay:0.55s"/><rect x="46" y="24" width="8" height="8" style="animation-delay:0.66s"/><rect x="2" y="35" width="8" height="8" style="animation-delay:0.33s"/><rect x="13" y="35" width="8" height="8" style="animation-delay:0.44s"/><rect x="24" y="35" width="8" height="8" style="animation-delay:0.55s"/><rect x="35" y="35" width="8" height="8" style="animation-delay:0.66s"/><rect x="46" y="35" width="8" height="8" style="animation-delay:0.77s"/><rect x="2" y="46" width="8" height="8" style="animation-delay:0.44s"/><rect x="13" y="46" width="8" height="8" style="animation-delay:0.55s"/><rect x="24" y="46" width="8" height="8" style="animation-delay:0.66s"/><rect x="35" y="46" width="8" height="8" style="animation-delay:0.77s"/><rect x="46" y="46" width="8" height="8" style="animation-delay:0.88s"/></svg><span class="d-loader__label" data-ar="استخلاص">Resolving</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 · EMPTY & ERROR ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">10</span><h2>Empty & error states</h2>
+    <p>Honest sentences. No sad robots, no illustrations of absence. An error
+      says what went wrong and exactly how to fix it.</p></div>
+  <div class="demo stack">
+    <div class="d-state">
+      <div class="d-state__figure"><svg viewBox="0 0 88 88" aria-hidden="true"><circle cx="44" cy="44" r="32" stroke="var(--faint)" stroke-width="1" stroke-dasharray="3 4"/><path d="M6 44H82M44 6V82" stroke="var(--faint)" stroke-width="1" stroke-dasharray="8 3 1.5 3"/><path d="M44.34 76L44.28 71M41.54 75.91L41.74 73.41M38.77 75.57L39.18 73.1M36.04 74.99L36.66 72.57M33.37 74.18L34.2 71.83M30.78 73.14L32.85 68.59M28.29 71.88L29.52 69.7M25.92 70.4L27.33 68.34M23.69 68.73L25.28 66.8M21.61 66.86L23.36 65.08M19.7 64.82L23.5 61.57M17.98 62.63L20.01 61.17M16.46 60.29L18.61 59.02M15.14 57.83L17.4 56.75M14.05 55.26L16.39 54.38M13.18 52.61L17.99 51.26M12.55 49.89L15 49.43M12.15 47.12L14.64 46.88M12 44.34L14.5 44.31M12.09 41.54L14.59 41.74M12.43 38.77L17.36 39.59" stroke="var(--body)" stroke-width="1"/><circle cx="44" cy="44" r="3.4" stroke="var(--body)" stroke-width="1.2" fill="var(--panel)"/></svg></div>
+      <div>
+        <div class="d-state__title" data-ar="لم تُربط أي بيانات بعد.">No data connected yet.</div>
+        <p class="d-state__body" data-ar="اربط مصدرًا أو ارفع ملفًا، وستظهر أولى القراءات هنا. لا يُحلَّل شيء حتى تطلب ذلك.">Connect a source or upload a file and the first readings appear here. Nothing is analysed until you say so.</p>
+        <button class="d-btn" type="button"><span data-ar="ربط مصدر">Connect a source</span>
+          <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+    <div class="d-state d-state--error" role="alert">
+      <div class="d-state__figure"><svg class="d-icon" style="width:56px;height:56px" viewBox="0 0 24 24"><use href="#i-error"/></svg></div>
+      <div>
+        <div class="d-state__title" data-ar="هذا الملف لا يطابق آخر ملف مرفوع.">This file doesn't match the last upload.</div>
+        <p class="d-state__body" data-ar="فيه عمودان غير متوقعين — refund_reason و channel_v2 — وينقصه عمود order_date. اربط الأعمدة الجديدة أو أعد تسميتها، ثم ارفع الملف مجددًا.">It has two columns we didn't expect — <span class="t-num">refund_reason</span> and <span class="t-num">channel_v2</span> — and is missing <span class="t-num">order_date</span>. Map the new columns or rename them, then upload again.</p>
+        <div class="pg-row">
+          <button class="d-btn" type="button"><span data-ar="ربط الأعمدة">Map columns</span>
+            <svg class="d-icon d-icon--dir"><use href="#i-arrow"/></svg></button>
+          <button class="d-btn d-btn--quiet" type="button"><span data-ar="رفع ملف آخر">Upload a different file</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11 · ICONS ================= -->
+<section class="pg">
+  <div class="pg-sh"><span class="k">11</span><h2>Icons</h2>
+    <p>Miniature instruments on a 24-grid, one stroke weight, drawn from the same
+      θ as the mark. Blue captions are the eight your brief specified. The ⇄ ones
+      mirror in right-to-left.</p></div>
+  <div class="iconset demo"><figure class="inst"><svg class="d-icon d-icon--lg d-icon--dir"><use href="#i-search"/></svg><figcaption>search ⇄</figcaption></figure><figure class="inst"><svg class="d-icon d-icon--lg"><use href="#i-data"/></svg><figcaption>data</figcaption></figure><figure class="inst"><svg class="d-icon d-icon--lg"><use href="#i-report"/></svg><figcaption>report</figcaption></figure><figure class="inst"><svg class="d-icon d-icon--lg d-icon--dir"><use href="#i-automation"/></svg><figcaption>automation ⇄</figcaption></figure><figure class="inst"><svg class="d-icon d-icon--lg d-icon--dir"><use href="#i-decision"/></svg><figcaption>decision ⇄</figcaption></figure><figure class="inst"><svg class="d-icon d-icon--lg d-icon--dir"><use href="#i-research"/></svg><figcaption>research ⇄</figcaption></figure><figure class="inst"><svg class="d-icon d-icon--lg"><use href="#i-dataset"/></svg><figcaption>dataset</figcaption></figure><figure class="inst"><svg class="d-icon d-icon--lg"><use href="#i-error"/></svg><figcaption>error</figcaption></figure><figure><svg class="d-icon d-icon--lg d-icon--dir"><use href="#i-arrow"/></svg><figcaption>arrow ⇄</figcaption></figure><figure><svg class="d-icon d-icon--lg"><use href="#i-check"/></svg><figcaption>check</figcaption></figure><figure><svg class="d-icon d-icon--lg"><use href="#i-close"/></svg><figcaption>close</figcaption></figure><figure><svg class="d-icon d-icon--lg"><use href="#i-chevron"/></svg><figcaption>chevron</figcaption></figure><figure><svg class="d-icon d-icon--lg"><use href="#i-plus"/></svg><figcaption>plus</figcaption></figure><figure><svg class="d-icon d-icon--lg"><use href="#i-info"/></svg><figcaption>info</figcaption></figure><figure><svg class="d-icon d-icon--lg d-icon--dir"><use href="#i-warning"/></svg><figcaption>warning ⇄</figcaption></figure><figure><svg class="d-icon d-icon--lg"><use href="#i-orbit"/></svg><figcaption>orbit</figcaption></figure><figure><svg class="d-icon d-icon--lg"><use href="#i-menu"/></svg><figcaption>menu</figcaption></figure></div>
+</section>
+
+<footer class="pg-foot">
+  <b style="font-weight:500;color:var(--ink)">Role 07 · UI language</b> — built on
+  <span class="t-num">type/typography.css</span>. Arabic strings on this page are
+  drafts for review, not approved copy.
+</footer>
+</div>
+
+<div class="d-toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+var NS='http://www.w3.org/2000/svg';
+
+/* ---------- 5a mark for the nav ---------- */
+(function(){
+  var C=100,R=86,T=-40.6,r=42,GAP=28,STEM=64.77;
+  function P(cx,cy,rr,d){var a=d*Math.PI/180;return[cx+rr*Math.cos(a),cy+rr*Math.sin(a)]}
+  function n(v){return Math.round(v*100)/100}
+  var g=$('#navMark'); if(!g) return;
+  function add(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);g.appendChild(e);return e}
+  var b=P(C,C,R-r,T+180),s=P(C,C,R,T),d=P(C,C,R,T+180),p0=P(C,C,R,T+GAP/2),p1=P(C,C,R,T-GAP/2);
+  var ink='var(--ink)',blue='var(--active)';
+  add('path',{d:'M'+n(p0[0])+' '+n(p0[1])+'A86 86 0 1 1 '+n(p1[0])+' '+n(p1[1]),fill:'none',stroke:ink,'stroke-width':6,'stroke-linecap':'round'});
+  add('circle',{cx:n(b[0]),cy:n(b[1]),r:r,fill:'none',stroke:ink,'stroke-width':6});
+  add('path',{d:'M'+n(b[0]-r)+' '+n(b[1])+'H'+n(b[0]+r),stroke:ink,'stroke-width':6,'stroke-linecap':'round'});
+  add('path',{d:'M'+n(b[0]+r)+' '+n(b[1]-r-STEM)+'V'+n(b[1]+r),stroke:blue,'stroke-width':10,'stroke-linecap':'round'});
+  for(var k=0;k<8;k++){var L=k===0?30:(k%2===0?10:6),q=P(s[0],s[1],L,T+45*k);
+    add('path',{d:'M'+n(s[0])+' '+n(s[1])+'L'+n(q[0])+' '+n(q[1]),stroke:ink,'stroke-width':4.5,'stroke-linecap':'round'});}
+  add('circle',{cx:n(d[0]),cy:n(d[1]),r:8,fill:ink});
+})();
+
+/* ---------- spine ---------- */
+(function(){var g=$('#spineTicks');for(var i=0;i<=45;i++){var p=document.createElementNS(NS,'path');
+  p.setAttribute('d','M40 '+(i*20)+'H'+(40+(i%5===0?9:4)));p.setAttribute('stroke-width','1');
+  p.setAttribute('vector-effect','non-scaling-stroke');g.appendChild(p);}})();
+
+/* ---------- ground ---------- */
+function setTheme(dark){
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  $('#thLight').setAttribute('aria-pressed',String(!dark));
+  $('#thDark').setAttribute('aria-pressed',String(dark));
+}
+$('#thLight').addEventListener('click',function(){setTheme(false)});
+$('#thDark').addEventListener('click',function(){setTheme(true)});
+if(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) setTheme(true);
+
+/* ---------- direction: flip every demo, swap its copy ---------- */
+var rtl=false;
+function swapCopy(toAr){
+  $$('[data-ar]').forEach(function(el){
+    if(el.dataset.en===undefined) el.dataset.en=el.innerHTML;
+    el.innerHTML = toAr ? el.dataset.ar : el.dataset.en;
+  });
+  $$('[data-ar-ph]').forEach(function(el){
+    if(el.dataset.enPh===undefined) el.dataset.enPh=el.getAttribute('placeholder')||'';
+    el.setAttribute('placeholder', toAr ? el.dataset.arPh : el.dataset.enPh);
+  });
+}
+function setDir(isRtl){
+  rtl=isRtl;
+  $$('.demo').concat([$('#toasts')]).forEach(function(d){
+    d.setAttribute('dir',isRtl?'rtl':'ltr'); d.setAttribute('lang',isRtl?'ar':'en');
+  });
+  swapCopy(isRtl);
+  $('#dirLtr').setAttribute('aria-pressed',String(!isRtl));
+  $('#dirRtl').setAttribute('aria-pressed',String(isRtl));
+  $('#dirNote').textContent = isRtl
+    ? 'Arabic strings are drafts for your review. All data is example data.'
+    : 'All data on this page is example data.';
+  placePointer();
+}
+$('#dirLtr').addEventListener('click',function(){setDir(false)});
+$('#dirRtl').addEventListener('click',function(){setDir(true)});
+
+/* ---------- busy button ---------- */
+$('#runBtn').addEventListener('click',function(){
+  var b=this; if(b.classList.contains('is-busy')) return;
+  b.classList.add('is-busy'); b.setAttribute('aria-busy','true');
+  setTimeout(function(){ b.classList.remove('is-busy'); b.removeAttribute('aria-busy');
+    toast('success', rtl?'اكتمل التحليل.':'Analysis complete.',
+                     rtl?'ثلاث نتائج، واحدة منها قيمة شاذة.':'Three findings, one of them an outlier.'); }, 2600);
+});
+
+/* ---------- form ---------- */
+$('#intake').addEventListener('submit',function(e){
+  e.preventDefault();
+  var em=$('#f-email'), f=$('#fld-email'), m=$('#f-email-msg');
+  var ok = /.+@.+\..+/.test(em.value.trim());
+  f.classList.toggle('is-invalid', !ok); m.hidden = ok;
+  em.setAttribute('aria-invalid', String(!ok));
+  if(!ok){ em.focus(); return; }
+  toast('info', rtl?'معاينة فقط.':'Preview only.', rtl?'لم يُرسَل شيء — هذا النموذج غير موصول.':'Nothing was sent — this form isn’t wired to anything.');
+});
+
+/* ---------- range ---------- */
+$('#f-conf').addEventListener('input',function(){ $('#f-conf-o').textContent=this.value+'%' });
+
+/* ---------- tabs ---------- */
+var tabs=$$('#tabs .d-tab');
+function placePointer(){
+  var sel=tabs.filter(function(t){return t.getAttribute('aria-selected')==='true'})[0];
+  var ptr=$('#tabPtr'), box=$('#tabs'); if(!sel||!ptr) return;
+  var start = rtl ? box.clientWidth-(sel.offsetLeft+sel.offsetWidth) : sel.offsetLeft;
+  ptr.style.insetInlineStart=start+'px'; ptr.style.inlineSize=sel.offsetWidth+'px';
+}
+function selectTab(t,focus){
+  tabs.forEach(function(x){ var on=x===t;
+    x.setAttribute('aria-selected',String(on)); x.tabIndex=on?0:-1;
+    $('#'+x.getAttribute('aria-controls')).hidden=!on; });
+  if(focus) t.focus(); placePointer();
+}
+tabs.forEach(function(t,i){
+  t.addEventListener('click',function(){selectTab(t)});
+  t.addEventListener('keydown',function(e){
+    var fwd = rtl ? 'ArrowLeft' : 'ArrowRight', back = rtl ? 'ArrowRight' : 'ArrowLeft';
+    if(e.key===fwd){ e.preventDefault(); selectTab(tabs[(i+1)%tabs.length],true) }
+    if(e.key===back){ e.preventDefault(); selectTab(tabs[(i-1+tabs.length)%tabs.length],true) }
+  });
+});
+window.addEventListener('resize',placePointer);
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(placePointer);
+setTimeout(placePointer,60);
+
+/* ---------- table sort ---------- */
+function val(td){
+  var t=td.textContent.trim(); if(t==='—') return null;
+  var num=parseFloat(t.replace(/[,%+\s]/g,'').replace('−','-'));
+  return isNaN(num)?t.toLowerCase():num;
+}
+$$('#tbl .d-sort').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var k=+btn.dataset.k, cur=btn.getAttribute('aria-sort');
+    var dir = cur==='descending' ? 'ascending' : 'descending';
+    $$('#tbl .d-sort').forEach(function(b){ b.removeAttribute('aria-sort') });
+    btn.setAttribute('aria-sort',dir);
+    var body=$('#tbl tbody'), rows=$$('tr',body);
+    rows.sort(function(a,b){
+      var x=val(a.children[k]), y=val(b.children[k]);
+      if(x===null) return 1; if(y===null) return -1;       // nulls last, always
+      if(x<y) return dir==='ascending'?-1:1; if(x>y) return dir==='ascending'?1:-1; return 0;
+    }).forEach(function(r){ body.appendChild(r) });
+  });
+});
+
+/* ---------- nav ---------- */
+$('#navToggle').addEventListener('click',function(){
+  var n=$('#demoNav'), open=!n.classList.contains('is-open');
+  n.classList.toggle('is-open',open); this.setAttribute('aria-expanded',String(open));
+});
+
+/* ---------- toasts ---------- */
+var ICON={info:'info',success:'check',warning:'warning',error:'error'};
+var COPY={
+  info:['Figures updated.','Two sources finished syncing.','تم تحديث الأرقام.','اكتملت مزامنة مصدرين.'],
+  success:['Dataset cleaned.','96 duplicates removed, 412 returns isolated.','تم تنظيف البيانات.','حُذف 96 تكرارًا وعُزل 412 مرتجعًا.'],
+  warning:['Row limit at 94%.','Uploads over the limit will be queued.','بلغ حد الصفوف 94%.','الملفات التي تتجاوز الحد ستُوضع في قائمة الانتظار.'],
+  error:['Upload failed.','The file is larger than 20 MB. Split it and try again.','فشل الرفع.','حجم الملف أكبر من 20 ميغابايت. قسّمه وأعد المحاولة.']
+};
+function toast(tone,title,body){
+  var host=$('#toasts'), el=document.createElement('div');
+  el.className='d-toast'; el.setAttribute('data-tone',tone);
+  el.setAttribute('role', tone==='error'?'alert':'status');
+  var now=new Date(), t=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+  el.innerHTML='<svg class="d-icon'+(tone==='warning'?' d-icon--dir':'')+'"><use href="#i-'+ICON[tone]+'"/></svg>'+
+    '<div><div class="d-toast__title"></div><div class="d-toast__body"></div>'+
+    '<div class="d-toast__time">'+t+'</div></div>'+
+    '<button class="d-toast__close" type="button" aria-label="'+(rtl?'إغلاق':'Dismiss')+'">'+
+    '<svg class="d-icon d-icon--sm"><use href="#i-close"/></svg></button>';
+  $('.d-toast__title',el).textContent=title; $('.d-toast__body',el).textContent=body;
+  function bye(){ if(el.parentNode) el.parentNode.removeChild(el) }
+  $('.d-toast__close',el).addEventListener('click',bye);
+  el.addEventListener('animationend',function(e){ if(e.animationName==='d-sweep') bye() });
+  host.appendChild(el);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(bye,8000);
+}
+$$('[data-toast]').forEach(function(b){
+  b.addEventListener('click',function(){ var c=COPY[b.dataset.toast];
+    toast(b.dataset.toast, rtl?c[2]:c[0], rtl?c[3]:c[1]); });
+});
+})();
+</script>

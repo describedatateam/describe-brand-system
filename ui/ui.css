@@ -1,0 +1,722 @@
+/* ==========================================================================
+   .describe( — UI language                                  ROLE 07 deliverable
+   ==========================================================================
+
+   The interface should feel like the instrument being used, not like
+   marketing collateral. Off-white plates, navy ink, blue for what is live,
+   thin rules, precise spacing, restrained radius, almost no shadow.
+
+   Built on type/typography.css. Every class is prefixed `d-`. Every spacing
+   and position uses logical properties, so `dir="rtl"` mirrors the whole kit
+   with no per-component overrides — only the directional icons need flipping,
+   and that is one rule at the bottom.
+
+   Colour law, restated because UI is where it is most tempting to break it:
+     · blue   is what is active, selected, in progress
+     · coral  is a DATA OUTLIER and nothing else — never an error, never a
+              warning, never an accent
+     · red    (#8C1D1D) is a negative value or a failed action
+     · green  (#0F7B3D) is a positive delta or a completed action
+   ========================================================================== */
+
+@import url('../type/typography.css');
+
+:root{
+  /* ---- surface & ink (light: technical drawing on paper) ---- */
+  --ink:    #092052;
+  --body:   #5A6B85;
+  --dim:    #63738D;   /* was #8A99B0 (2.89:1, failed AA); now 4.52:1 on ground, 4.81:1 on panel */
+  --faint:  #CBD5E1;
+  --rule:   #D8E1EF;
+  --ground: #F6F8FC;
+  --panel:  #FFFFFF;
+  --field:  #FFFFFF;
+  --active: #0F58E5;
+  --active-ink: #FFFFFF;
+  --mark:   #E5484D;   /* data outliers ONLY */
+  --neg:    #8C1D1D;
+  --pos:    #0F7B3D;
+
+  /* ---- space: multiples of 4, which is 2u of the geometry's stroke unit ---- */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px;
+
+  /* ---- form ---- */
+  --r: 2px;             /* restrained: machined, not rounded */
+  --hair: 1px;
+  --ctl: 40px;          /* control height */
+  --ctl-sm: 32px;
+
+  /* ---- motion: orientation → measurement → resolution ----
+     One curve for everything that settles. No overshoot, no spring. */
+  --ease: cubic-bezier(.2,.7,.2,1);
+  --t1: 120ms;  --t2: 220ms;  --t3: 420ms;
+
+  --elev: 0 1px 0 rgba(9,32,82,.04), 0 8px 24px -12px rgba(9,32,82,.22);
+}
+
+/* Dark is a separate environment, not an inversion. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#F6F8FC; --body:#9FB0CC; --dim:#7285A6; --faint:#1C3566; --rule:#16346E;
+    --ground:#050F2E; --panel:#081A40; --field:#0A1F4C;
+    --active:#5B8DF0; --active-ink:#050F2E;
+    --mark:#F0696D; --neg:#E0736F; --pos:#3FBE77;
+    --elev: 0 1px 0 rgba(0,0,0,.2), 0 10px 30px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#F6F8FC; --body:#9FB0CC; --dim:#7285A6; --faint:#1C3566; --rule:#16346E;
+  --ground:#050F2E; --panel:#081A40; --field:#0A1F4C;
+  --active:#5B8DF0; --active-ink:#050F2E;
+  --mark:#F0696D; --neg:#E0736F; --pos:#3FBE77;
+  --elev: 0 1px 0 rgba(0,0,0,.2), 0 10px 30px -12px rgba(0,0,0,.6);
+}
+
+/* ==========================================================================
+   Icons
+   ========================================================================== */
+.d-icon{ width:20px; height:20px; flex:0 0 auto; display:inline-block;
+         vertical-align:middle; stroke:currentColor; fill:none;
+         stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round }
+.d-icon--sm{ width:16px; height:16px }
+.d-icon--lg{ width:32px; height:32px }
+
+/* ==========================================================================
+   Focus — a sighting frame, not a glow.
+   Four corner brackets around the target, like a viewfinder. A transparent
+   outline stays underneath so Windows High Contrast still draws a ring.
+   ========================================================================== */
+.d-focus-frame:focus-visible,
+.d-btn:focus-visible,
+.d-tab:focus-visible,
+.d-nav__link:focus-visible{
+  outline: 2px solid transparent;
+  outline-offset: 4px;
+}
+.d-btn:focus-visible::after,
+.d-tab:focus-visible::after,
+.d-nav__link:focus-visible::after{
+  content:""; position:absolute; inset:-6px; pointer-events:none;
+  --c: var(--active); --l: 7px; --w: 2px;
+  background:
+    linear-gradient(var(--c),var(--c)) left  top    / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) left  top    / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) right top    / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) right top    / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) left  bottom / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) left  bottom / var(--w) var(--l),
+    linear-gradient(var(--c),var(--c)) right bottom / var(--l) var(--w),
+    linear-gradient(var(--c),var(--c)) right bottom / var(--w) var(--l);
+  background-repeat:no-repeat;
+}
+
+/* ==========================================================================
+   Buttons
+   Not pills. A label, a direction, and — on the one action that matters —
+   calibration ticks either side. The technical feel comes from the ticks and
+   the mark, NOT from a mono face: button labels are interface sans (mono
+   budget, rule 03).
+   ========================================================================== */
+.d-btn{
+  position:relative;
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:var(--s3);
+  min-block-size:var(--ctl);
+  padding-inline:var(--s4);
+  font-family:var(--font-sans); font-weight:500; font-size:13px;
+  line-height:1; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink); background:transparent;
+  border:var(--hair) solid var(--ink); border-radius:var(--r);
+  cursor:pointer; text-decoration:none; white-space:nowrap;
+  transition: background-color var(--t1) linear, color var(--t1) linear,
+              border-color var(--t1) linear;
+}
+.d-btn .d-icon{ color:var(--active); transition: transform var(--t2) var(--ease) }
+.d-btn:hover{ background:var(--ink); color:var(--ground) }
+.d-btn:hover .d-icon{ color:currentColor; transform:translateX(3px) }
+.d-btn:active{ transform:translateY(1px) }
+
+/* Primary — the one important action per view. Calibration ticks flank it. */
+.d-btn--primary{
+  background:var(--active); border-color:var(--active); color:var(--active-ink);
+  margin-inline:12px;              /* room for the ticks */
+}
+.d-btn--primary .d-icon{ color:currentColor }
+.d-btn--primary:hover{ background:var(--ink); border-color:var(--ink); color:var(--ground) }
+.d-btn--primary::before{
+  content:""; position:absolute; pointer-events:none;
+  inset-block:0; inset-inline:-12px;
+  --c: var(--faint);
+  background:
+    linear-gradient(var(--c),var(--c)) left  0    top 0            / 8px 1px,
+    linear-gradient(var(--c),var(--c)) left  0    top 50%          / 5px 1px,
+    linear-gradient(var(--c),var(--c)) left  0    bottom 0         / 8px 1px,
+    linear-gradient(var(--c),var(--c)) right 0    top 0            / 8px 1px,
+    linear-gradient(var(--c),var(--c)) right 0    top 50%          / 5px 1px,
+    linear-gradient(var(--c),var(--c)) right 0    bottom 0         / 8px 1px;
+  background-repeat:no-repeat;
+}
+
+/* Quiet — text and a direction, for secondary routes. */
+.d-btn--quiet{ border-color:transparent; padding-inline:var(--s1); letter-spacing:.06em }
+.d-btn--quiet:hover{ background:transparent; color:var(--active) }
+.d-btn--quiet:hover .d-icon{ color:var(--active) }
+
+/* Destructive — a negative outcome, so the negative red. Never coral. */
+.d-btn--danger{ color:var(--neg); border-color:var(--neg) }
+.d-btn--danger .d-icon{ color:var(--neg) }
+.d-btn--danger:hover{ background:var(--neg); border-color:var(--neg); color:#fff }
+
+.d-btn--sm{ min-block-size:var(--ctl-sm); padding-inline:var(--s3); font-size:12px }
+
+.d-btn[disabled], .d-btn[aria-disabled="true"]{
+  opacity:.4; cursor:not-allowed; pointer-events:none;
+}
+
+/* Busy — the arrow becomes a tally that counts while the work runs. */
+.d-btn.is-busy{ pointer-events:none }
+.d-btn.is-busy .d-icon{ display:none }
+.d-btn .d-tally-mini{ display:none }
+.d-btn.is-busy .d-tally-mini{ display:inline-flex }
+
+/* ==========================================================================
+   Fields
+   ========================================================================== */
+.d-field{ display:flex; flex-direction:column; gap:var(--s2); min-inline-size:0 }
+.d-label{ font-family:var(--font-sans); font-weight:500; font-size:13px;
+          color:var(--ink); line-height:1.3 }
+.d-label .d-opt{ font-weight:400; color:var(--dim); margin-inline-start:var(--s1) }
+.d-hint{ font-family:var(--font-sans); font-weight:400; font-size:12.5px;
+         line-height:1.45; color:var(--body) }
+.d-msg{ display:flex; gap:var(--s2); align-items:flex-start; font-size:12.5px;
+        line-height:1.45; color:var(--neg); font-family:var(--font-sans) }
+.d-msg .d-icon{ inline-size:16px; block-size:16px; margin-block-start:1px }
+
+.d-input, .d-textarea, .d-select select{
+  font-family:var(--font-sans); font-weight:300; font-size:15px; color:var(--ink);
+  background:var(--field);
+  border:var(--hair) solid var(--rule); border-radius:var(--r);
+  min-block-size:var(--ctl); padding-inline:var(--s3);
+  inline-size:100%; line-height:1.4;
+  transition: border-color var(--t1) linear, box-shadow var(--t1) linear;
+}
+.d-textarea{ padding-block:10px; min-block-size:104px; resize:vertical; line-height:1.55 }
+.d-input::placeholder, .d-textarea::placeholder{ color:var(--dim); opacity:1 }
+.d-input:hover, .d-textarea:hover, .d-select select:hover{ border-color:var(--body) }
+.d-input:focus, .d-textarea:focus, .d-select select:focus{
+  outline:2px solid transparent;
+  border-color:var(--active); box-shadow:0 0 0 1px var(--active);
+}
+.d-field.is-invalid .d-input,
+.d-field.is-invalid .d-textarea,
+.d-field.is-invalid .d-select select{ border-color:var(--neg); box-shadow:0 0 0 1px var(--neg) }
+.d-input:disabled, .d-textarea:disabled, .d-select select:disabled{
+  background:var(--ground); color:var(--dim); cursor:not-allowed; border-style:dashed;
+}
+
+/* A measured input: the unit sits in the field as an instrument readout.
+   Unit labels are ≤4 characters, so mono is within budget (rule 02). */
+.d-affix{ position:relative; display:flex }
+.d-affix .d-input{ padding-inline-end:52px; font-variant-numeric:tabular-nums }
+.d-affix__unit{
+  position:absolute; inset-block:0; inset-inline-end:0;
+  display:flex; align-items:center; padding-inline:var(--s3);
+  border-inline-start:var(--hair) solid var(--rule);
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--dim); pointer-events:none;
+}
+
+/* Select — native control, custom chevron that knows which side is "end". */
+.d-select{ position:relative }
+.d-select select{ appearance:none; -webkit-appearance:none;
+                  padding-inline-end:40px; cursor:pointer }
+.d-select .d-icon{ position:absolute; inset-inline-end:12px; inset-block-start:50%;
+                   translate:0 -50%; color:var(--body); pointer-events:none;
+                   inline-size:16px; block-size:16px }
+
+/* ---- Checkbox & radio ----
+   The checked radio is a ring with a positional dot — the mark's own grammar.
+   The checked checkbox is a square with a tick. */
+.d-check{ display:flex; gap:var(--s3); align-items:flex-start; cursor:pointer;
+          font-family:var(--font-sans); font-size:14.5px; font-weight:300;
+          color:var(--ink); line-height:1.45 }
+.d-check input{
+  appearance:none; -webkit-appearance:none; margin:0; flex:0 0 auto;
+  inline-size:18px; block-size:18px; margin-block-start:1px;
+  border:var(--hair) solid var(--body); background:var(--field);
+  display:grid; place-content:center; cursor:pointer;
+  transition: border-color var(--t1) linear, background-color var(--t1) linear;
+}
+.d-check input[type="checkbox"]{ border-radius:var(--r) }
+.d-check input[type="radio"]{ border-radius:50% }
+.d-check input:hover{ border-color:var(--ink) }
+.d-check input:focus-visible{ outline:2px solid var(--active); outline-offset:3px }
+.d-check input[type="checkbox"]:checked{ background:var(--active); border-color:var(--active) }
+.d-check input[type="checkbox"]::before{
+  content:""; inline-size:10px; block-size:6px;
+  border-left:1.75px solid var(--active-ink);     /* physical on purpose: */
+  border-bottom:1.75px solid var(--active-ink);   /* a tick never mirrors  */
+  transform:rotate(-45deg) translate(1px,-1px) scale(0);
+  transition: transform var(--t1) var(--ease);
+}
+.d-check input[type="checkbox"]:checked::before{ transform:rotate(-45deg) translate(1px,-1px) scale(1) }
+.d-check input[type="radio"]:checked{ border-color:var(--active); border-width:1.5px }
+.d-check input[type="radio"]::before{
+  content:""; inline-size:8px; block-size:8px; border-radius:50%;
+  background:var(--active); transform:scale(0);
+  transition: transform var(--t1) var(--ease);
+}
+.d-check input[type="radio"]:checked::before{ transform:scale(1) }
+.d-check input:disabled{ opacity:.4; cursor:not-allowed }
+.d-check .d-hint{ display:block; margin-block-start:2px }
+
+/* ---- Switch ----
+   Not a round knob on a pill. An index mark that travels a short scale. */
+.d-switch{ display:inline-flex; align-items:center; gap:var(--s3); cursor:pointer;
+           font-family:var(--font-sans); font-size:14.5px; font-weight:300; color:var(--ink) }
+.d-switch input{
+  appearance:none; -webkit-appearance:none; margin:0; cursor:pointer;
+  position:relative; inline-size:40px; block-size:20px; flex:0 0 auto;
+  border:var(--hair) solid var(--body); border-radius:var(--r);
+  background:
+    linear-gradient(var(--faint),var(--faint)) 25% 50% / 1px 6px no-repeat,
+    linear-gradient(var(--faint),var(--faint)) 50% 50% / 1px 6px no-repeat,
+    linear-gradient(var(--faint),var(--faint)) 75% 50% / 1px 6px no-repeat,
+    var(--field);
+  transition: border-color var(--t1) linear, background-color var(--t2) linear;
+}
+.d-switch input::before{
+  content:""; position:absolute; inset-block:2px; inset-inline-start:3px;
+  inline-size:3px; background:var(--body);
+  transition: inset-inline-start var(--t2) var(--ease), background-color var(--t1) linear;
+}
+.d-switch input:checked{ border-color:var(--active);
+  background:
+    linear-gradient(var(--active),var(--active)) 0 0 / 100% 100% no-repeat; }
+.d-switch input:checked::before{ inset-inline-start:calc(100% - 6px); background:var(--active-ink) }
+.d-switch input:focus-visible{ outline:2px solid var(--active); outline-offset:3px }
+
+/* ---- Range ----
+   A graduated scale with a sighting index for a thumb. The value is a
+   measurement, so its readout is mono (rule 01). */
+.d-range{ display:grid; grid-template-columns:1fr auto; gap:var(--s4); align-items:center }
+.d-range input{
+  -webkit-appearance:none; appearance:none; background:transparent;
+  inline-size:100%; block-size:28px; margin:0; cursor:pointer;
+  --ticks: repeating-linear-gradient(to right, var(--faint) 0 1px, transparent 1px 10%);
+}
+.d-range input::-webkit-slider-runnable-track{
+  block-size:14px;
+  background:
+    linear-gradient(var(--body),var(--body)) 0 0 / 100% 1px no-repeat,
+    var(--ticks) 0 1px / 100% 7px no-repeat;
+}
+.d-range input::-moz-range-track{
+  block-size:14px;
+  background:
+    linear-gradient(var(--body),var(--body)) 0 0 / 100% 1px no-repeat,
+    var(--ticks) 0 1px / 100% 7px no-repeat;
+}
+.d-range input::-webkit-slider-thumb{
+  -webkit-appearance:none; inline-size:3px; block-size:20px;
+  background:var(--active); border:0; border-radius:0; margin-block-start:-10px;
+}
+.d-range input::-moz-range-thumb{
+  inline-size:3px; block-size:20px; background:var(--active); border:0; border-radius:0;
+}
+.d-range input:focus-visible{ outline:2px solid var(--active); outline-offset:4px }
+.d-range output{ font-family:var(--font-mono); font-size:13px; color:var(--active);
+                 font-variant-numeric:tabular-nums; min-inline-size:5ch; text-align:end }
+
+/* ==========================================================================
+   Tabs — a scale with a pointer that travels to the selected reading.
+   ========================================================================== */
+.d-tabs{ position:relative; display:flex; gap:var(--s1); flex-wrap:wrap;
+         border-block-end:var(--hair) solid var(--rule);
+         background:
+           repeating-linear-gradient(to right, var(--faint) 0 1px, transparent 1px 16px)
+           0 100% / 100% 5px no-repeat; }
+.d-tab{
+  position:relative; appearance:none; border:0; background:none; cursor:pointer;
+  padding:var(--s3) var(--s4) calc(var(--s3) + 4px);
+  font-family:var(--font-sans); font-weight:500; font-size:14px; color:var(--body);
+  transition: color var(--t1) linear;
+}
+.d-tab:hover{ color:var(--ink) }
+.d-tab[aria-selected="true"]{ color:var(--ink) }
+.d-tab .d-count{ font-family:var(--font-mono); font-size:11px; color:var(--dim);
+                 margin-inline-start:var(--s2); font-variant-numeric:tabular-nums }
+.d-tabs__pointer{
+  position:absolute; inset-block-end:-1px; block-size:2px; background:var(--active);
+  inset-inline-start:0; inline-size:0;
+  transition: inset-inline-start var(--t3) var(--ease), inline-size var(--t3) var(--ease);
+}
+.d-tabs__pointer::after{          /* the index mark at the pointer's centre */
+  content:""; position:absolute; left:50%; inset-block-end:2px;
+  inline-size:1px; block-size:5px; background:var(--active); translate:-50% 0;
+}
+.d-tabpanel{ padding-block:var(--s5) }
+.d-tabpanel[hidden]{ display:none }
+
+/* ==========================================================================
+   Tables — where a data practice lives or dies.
+   Numbers are mono and right-aligned (rule 01). Headers are ≤4-word mono
+   labels (rule 02). Negatives in the negative red with a true minus sign.
+   A data outlier is the only coral in the whole kit.
+   ========================================================================== */
+.d-tablewrap{ overflow-x:auto; border:var(--hair) solid var(--rule); background:var(--panel) }
+.d-table{ border-collapse:collapse; inline-size:100%; min-inline-size:560px;
+          font-family:var(--font-sans); font-size:14px; font-weight:300; color:var(--ink) }
+.d-table th{
+  text-align:start; white-space:nowrap;
+  font-family:var(--font-mono); font-weight:500; font-size:10.5px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--body);
+  padding:var(--s3) var(--s4); border-block-end:var(--hair) solid var(--ink);
+  position:sticky; inset-block-start:0; background:var(--panel);
+}
+.d-table td{ padding:11px var(--s4); border-block-end:var(--hair) solid var(--rule);
+             vertical-align:middle }
+.d-table tbody tr:last-child td{ border-block-end:0 }
+.d-table tbody tr:hover td{ background:color-mix(in srgb, var(--active) 4%, transparent) }
+.d-table .num{ font-family:var(--font-mono); font-size:13px;
+               font-variant-numeric:tabular-nums; white-space:nowrap }
+/* Numbers align on the ones digit — physically RIGHT, in both directions.
+   Place value doesn't change with the language, so this is deliberately not
+   the logical `end`, which would flip to the left in RTL and misalign digits. */
+.d-table .num, .d-table th.num{ text-align:right }
+.d-table .neg{ color:var(--neg) }
+.d-table .pos{ color:var(--pos) }
+.d-table .null{ color:var(--dim) }
+.d-table tr[aria-selected="true"] td{ background:color-mix(in srgb, var(--active) 8%, transparent) }
+.d-table tr[aria-selected="true"] td:first-child{ box-shadow:inset 3px 0 0 var(--active) }
+[dir="rtl"] .d-table tr[aria-selected="true"] td:first-child{ box-shadow:inset -3px 0 0 var(--active) }
+
+/* Sort: an open pointer, not a filled triangle. */
+.d-sort{ appearance:none; border:0; background:none; cursor:pointer; padding:0;
+         font:inherit; letter-spacing:inherit; text-transform:inherit; color:inherit;
+         display:inline-flex; gap:6px; align-items:center }
+.d-sort::after{ content:""; inline-size:6px; block-size:6px;
+                border-right:1.25px solid currentColor;
+                border-bottom:1.25px solid currentColor;
+                transform:rotate(45deg) translateY(-2px); opacity:.35 }
+.d-sort[aria-sort="ascending"]::after{ transform:rotate(-135deg) translateY(-1px); opacity:1; color:var(--active) }
+.d-sort[aria-sort="descending"]::after{ opacity:1; color:var(--active) }
+.d-sort:hover{ color:var(--ink) }
+
+/* The outlier marker: circled, never deleted. */
+/* The marker is coral; the TEXT is ink. Coral text is 3.91:1 on the ground —
+   below AA — and text never wears a data colour (Role 03, CHARTS.md §2). */
+.d-outlier{ display:inline-flex; align-items:center; gap:var(--s2); color:var(--ink) }
+.d-outlier::before{ content:""; inline-size:10px; block-size:10px; border-radius:50%;
+                    border:1.25px solid var(--mark);
+                    background:radial-gradient(var(--mark) 0 2px, transparent 2.5px) }
+
+.d-table caption, .d-tablefoot{
+  caption-side:bottom; text-align:start; padding:var(--s3) var(--s4);
+  border-block-start:var(--hair) solid var(--rule);
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--dim);
+}
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+.d-nav{ display:flex; align-items:center; gap:var(--s5);
+        min-block-size:60px; padding-inline:var(--s5);
+        border-block-end:var(--hair) solid var(--rule); background:var(--ground) }
+.d-nav__brand{ display:flex; align-items:center; gap:10px; text-decoration:none;
+               color:var(--ink); flex:0 0 auto }
+.d-nav__brand svg{ inline-size:26px; block-size:26px }
+.d-nav__links{ display:flex; gap:var(--s1); margin-inline-start:auto; align-items:center }
+.d-nav__link{
+  position:relative; text-decoration:none; color:var(--body);
+  font-family:var(--font-sans); font-weight:400; font-size:14px;
+  padding:var(--s2) var(--s3); transition: color var(--t1) linear;
+}
+.d-nav__link:hover{ color:var(--ink) }
+.d-nav__link[aria-current="page"]{ color:var(--ink); font-weight:500 }
+.d-nav__link[aria-current="page"]::before{   /* an index mark under the current reading */
+  content:""; position:absolute; left:50%; inset-block-end:-2px;
+  inline-size:1.5px; block-size:7px; background:var(--active); translate:-50% 0;
+}
+.d-nav__toggle{ display:none }
+@media (max-width: 760px){
+  .d-nav__links{ display:none; position:absolute; inset-inline:0; inset-block-start:100%;
+                 flex-direction:column; align-items:stretch; gap:0;
+                 background:var(--panel); border-block-end:var(--hair) solid var(--rule);
+                 padding-block:var(--s2); z-index:5 }
+  .d-nav.is-open .d-nav__links{ display:flex }
+  .d-nav__link{ padding:var(--s3) var(--s5) }
+  .d-nav__toggle{ display:inline-flex; margin-inline-start:auto }
+  .d-nav .d-nav__cta{ display:none }
+}
+
+/* ==========================================================================
+   Notifications — banner (inline, persistent) and toast (transient)
+   Tones: info (blue) · success (green) · error (negative red) · warning.
+   Warning has NO colour of its own — the palette has none to give it, and
+   coral is reserved for data. It is told apart by its icon (a pointer at a
+   limit) and a heavier rule. See UI.md: this is an open decision.
+   ========================================================================== */
+.d-banner{
+  display:grid; grid-template-columns:auto 1fr auto; gap:var(--s3) var(--s4);
+  align-items:start; padding:var(--s4) var(--s4) var(--s4) var(--s4);
+  background:var(--panel); border:var(--hair) solid var(--rule);
+  border-inline-start:3px solid var(--tone, var(--active));
+}
+.d-banner .d-icon{ color:var(--tone, var(--active)); margin-block-start:1px }
+.d-banner__title{ font-family:var(--font-sans); font-weight:500; font-size:14.5px;
+                  color:var(--ink); line-height:1.35 }
+.d-banner__body{ font-family:var(--font-sans); font-weight:300; font-size:14px;
+                 color:var(--body); line-height:1.55; margin-block-start:2px }
+.d-banner__action{ align-self:center }
+.d-banner[data-tone="info"]   { --tone: var(--active) }
+.d-banner[data-tone="success"]{ --tone: var(--pos) }
+.d-banner[data-tone="error"]  { --tone: var(--neg) }
+.d-banner[data-tone="warning"]{ --tone: var(--ink); border-inline-start-width:5px }
+@media (max-width:560px){
+  .d-banner{ grid-template-columns:auto 1fr }
+  .d-banner__action{ grid-column:2 }
+}
+
+.d-toasts{ position:fixed; inset-block-end:var(--s5); inset-inline-end:var(--s5);
+           display:flex; flex-direction:column; gap:var(--s2); z-index:50;
+           inline-size:min(380px, calc(100vw - 2*var(--s5))) }
+.d-toast{
+  position:relative; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr auto; gap:var(--s3);
+  align-items:start; padding-block:var(--s3) var(--s4); padding-inline:var(--s4) var(--s3);
+  background:var(--panel); border:var(--hair) solid var(--rule);
+  box-shadow:var(--elev);
+  animation: d-toast-in var(--t3) var(--ease);
+}
+.d-toast .d-icon{ color:var(--tone, var(--active)); margin-block-start:1px }
+.d-toast__title{ font-family:var(--font-sans); font-weight:500; font-size:14px; color:var(--ink) }
+.d-toast__body{ font-family:var(--font-sans); font-weight:300; font-size:13.5px;
+                color:var(--body); line-height:1.5; margin-block-start:2px }
+.d-toast__time{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em;
+                color:var(--dim); margin-block-start:6px; font-variant-numeric:tabular-nums }
+.d-toast__close{ appearance:none; border:0; background:none; cursor:pointer;
+                 color:var(--body); padding:2px; border-radius:var(--r) }
+.d-toast__close:hover{ color:var(--ink) }
+.d-toast__close:focus-visible{ outline:2px solid var(--active); outline-offset:2px }
+/* the countdown is a measurement sweep — a rule that shortens as time passes */
+.d-toast::after{
+  content:""; position:absolute; inset-inline:0; inset-block-end:0; block-size:2px;
+  background:var(--tone, var(--active)); transform-origin:left;
+  animation: d-sweep var(--life, 6s) linear forwards;
+}
+[dir="rtl"] .d-toast::after{ transform-origin:right }
+.d-toast:hover::after{ animation-play-state:paused }
+.d-toast[data-tone="success"]{ --tone: var(--pos) }
+.d-toast[data-tone="error"]  { --tone: var(--neg) }
+.d-toast[data-tone="warning"]{ --tone: var(--ink) }
+@keyframes d-toast-in{ from{ opacity:0; translate:0 8px } to{ opacity:1; translate:0 0 } }
+@keyframes d-sweep{ from{ transform:scaleX(1) } to{ transform:scaleX(0) } }
+
+/* ==========================================================================
+   Panels — instrument plates. Not everything is a card: no shadow, no radius.
+   ========================================================================== */
+.d-panel{ background:var(--panel); border:var(--hair) solid var(--rule) }
+.d-panel__head{ display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap;
+                padding:var(--s3) var(--s4); border-block-end:var(--hair) solid var(--rule) }
+.d-panel__title{ font-family:var(--font-sans); font-weight:500; font-size:14px; color:var(--ink) }
+.d-panel__meta{ margin-inline-start:auto; font-family:var(--font-mono); font-size:10.5px;
+                letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+                font-variant-numeric:tabular-nums }
+.d-panel__body{ padding:var(--s4) }
+/* The measuring-edge variant: a graduated rule down the leading side. */
+.d-panel--edge{ border-inline-start:0; position:relative; padding-inline-start:14px }
+.d-panel--edge::before{
+  content:""; position:absolute; inset-block:0; inset-inline-start:0; inline-size:10px;
+  border-inline-start:var(--hair) solid var(--ink);
+  background: repeating-linear-gradient(to bottom, var(--ink) 0 1px, transparent 1px 12px)
+              0 6px / 6px 100% no-repeat;
+}
+[dir="rtl"] .d-panel--edge::before{ background-position:100% 6px }
+
+/* ---- Stat readout ----
+   A figure read as a statement is SERIF — it is meaning (Fraunces).
+   A figure read as one measurement in a set is MONO — see tables.
+   The delta and the count are measurements, so they are mono. */
+.d-stat{ display:flex; flex-direction:column; gap:var(--s2); padding:var(--s4) }
+.d-stat__label{ font-family:var(--font-sans); font-weight:400; font-size:13px; color:var(--body) }
+.d-stat__value{ font-family:var(--font-serif); font-weight:300;
+                font-variation-settings:'SOFT' 0,'WONK' 0; font-optical-sizing:auto;
+                font-size:40px; line-height:1; letter-spacing:-.025em; color:var(--ink);
+                font-variant-numeric:lining-nums proportional-nums }  /* a lone figure: proportional; tabular only in columns */
+.d-stat__value small{ font-size:.5em; letter-spacing:0; color:var(--body); margin-inline-start:4px }
+.d-stat__delta{ font-family:var(--font-mono); font-size:12px; font-variant-numeric:tabular-nums;
+                display:flex; gap:var(--s2); align-items:center }
+.d-stat__delta.pos{ color:var(--pos) } .d-stat__delta.neg{ color:var(--neg) }
+.d-stat__delta span{ color:var(--dim); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase }
+
+/* ---- Chips — status, not decoration. ---- */
+.d-chip{ display:inline-flex; align-items:center; gap:6px; block-size:24px;
+         padding-inline:var(--s2); border:var(--hair) solid var(--rule);
+         border-radius:var(--r); background:var(--panel);
+         font-family:var(--font-sans); font-weight:500; font-size:12px; color:var(--ink);
+         white-space:nowrap }
+.d-chip::before{ content:""; inline-size:6px; block-size:6px; border-radius:50%;
+                 background:var(--c, var(--faint)); box-shadow:0 0 0 1px var(--c, var(--body)) inset }
+.d-chip[data-state="draft"]  { --c: var(--faint) }
+.d-chip[data-state="live"]   { --c: var(--active) }
+.d-chip[data-state="done"]   { --c: var(--pos) }
+.d-chip[data-state="blocked"]{ --c: var(--neg) }
+
+/* ==========================================================================
+   Progress — measured, never a vague bar.
+   ========================================================================== */
+.d-progress{ display:grid; grid-template-columns:1fr auto; gap:var(--s3); align-items:center }
+.d-progress__track{
+  position:relative; block-size:14px;
+  background:
+    linear-gradient(var(--body),var(--body)) 0 3px / 100% 1px no-repeat,
+    repeating-linear-gradient(to right, var(--faint) 0 1px, transparent 1px 10%)
+      0 5px / 100% 6px no-repeat;
+}
+.d-progress__fill{ position:absolute; inset-inline-start:0; inset-block-start:2px;
+                   block-size:3px; background:var(--active);
+                   inline-size:calc(var(--v, 0) * 1%);
+                   transition: inline-size var(--t3) var(--ease) }
+.d-progress__fill::after{ content:""; position:absolute; inset-inline-end:-1px;
+                          inset-block-start:-4px; inline-size:2px; block-size:11px;
+                          background:var(--active) }
+.d-progress output{ font-family:var(--font-mono); font-size:12px; color:var(--ink);
+                    font-variant-numeric:tabular-nums; min-inline-size:4ch; text-align:end }
+.d-progress__label{ grid-column:1 / -1; font-family:var(--font-sans); font-size:13px;
+                    color:var(--body) }
+
+/* ==========================================================================
+   Loading — five proprietary states. Never "Loading…" and a spinner.
+   Each is an instrument doing something recognisable. Each has a static
+   resting frame for reduced motion that still says what is happening.
+   ========================================================================== */
+.d-loader{ display:inline-flex; flex-direction:column; align-items:flex-start; gap:var(--s3) }
+.d-loader svg{ inline-size:56px; block-size:56px; overflow:visible; fill:none;
+               stroke:currentColor; stroke-linecap:round }
+.d-loader__label{ font-family:var(--font-sans); font-size:13px; color:var(--body) }
+.d-loader .faint{ stroke:var(--faint) }
+.d-loader .active{ stroke:var(--active); color:var(--active) }
+.d-loader .fillc{ fill:currentColor; stroke:none }
+
+/* 1 · calibration — the ring turns until its aperture aligns with the sight axis */
+.d-load-cal .ring{ transform-origin:28px 28px; animation: d-cal 2.4s var(--ease) infinite }
+.d-load-cal .idx{ animation: d-cal-idx 2.4s linear infinite }
+@keyframes d-cal{ 0%{rotate:-200deg} 62%{rotate:6deg} 72%{rotate:0deg} 100%{rotate:0deg} }
+@keyframes d-cal-idx{ 0%,66%{opacity:.25} 72%,94%{opacity:1} 100%{opacity:.25} }
+
+/* 2 · measurement sweep — a reading travels the scale; ticks it passes go live */
+.d-load-sweep .cursor{ animation: d-sweep-x 1.8s var(--ease) infinite }
+.d-load-sweep .tk{ animation: d-tick 1.8s linear infinite }
+@keyframes d-sweep-x{ 0%{translate:0 0} 80%{translate:48px 0} 100%{translate:48px 0} }
+@keyframes d-tick{ 0%{stroke:var(--faint)} 8%,70%{stroke:var(--active)} 85%,100%{stroke:var(--faint)} }
+
+/* 3 · tallies — a count that increments while work is done, then resets */
+.d-load-tally .t{ opacity:.15; animation: 2.6s linear infinite }
+.d-load-tally .t1{ animation-name:d-t1 } .d-load-tally .t2{ animation-name:d-t2 }
+.d-load-tally .t3{ animation-name:d-t3 } .d-load-tally .t4{ animation-name:d-t4 }
+.d-load-tally .t5{ animation-name:d-t5 }
+@keyframes d-t1{ 0%{opacity:.15} 6%,86%{opacity:1} 92%,100%{opacity:.15} }
+@keyframes d-t2{ 0%,16%{opacity:.15} 22%,86%{opacity:1} 92%,100%{opacity:.15} }
+@keyframes d-t3{ 0%,32%{opacity:.15} 38%,86%{opacity:1} 92%,100%{opacity:.15} }
+@keyframes d-t4{ 0%,48%{opacity:.15} 54%,86%{opacity:1} 92%,100%{opacity:.15} }
+@keyframes d-t5{ 0%,64%{opacity:.15} 70%,86%{opacity:1} 92%,100%{opacity:.15} }
+
+/* 4 · coordinate lock — a crosshair searches, then settles on the point */
+.d-load-lock .xh{ animation: d-lock 2.6s var(--ease) infinite }
+.d-load-lock .pt{ animation: d-pt 2.6s linear infinite; transform-origin:34px 22px }
+@keyframes d-lock{
+  0%{translate:-10px 8px} 22%{translate:9px -6px} 42%{translate:-4px -9px}
+  62%{translate:0 0} 100%{translate:0 0} }
+@keyframes d-pt{ 0%,62%{opacity:0; scale:.4} 70%,94%{opacity:1; scale:1} 100%{opacity:0} }
+
+/* 5 · data field — cells resolve from grey to measured */
+.d-load-field rect{ fill:var(--faint); stroke:none; animation: d-cell 2.2s linear infinite }
+@keyframes d-cell{ 0%,15%{fill:var(--faint)} 45%,80%{fill:var(--active)} 100%{fill:var(--faint)} }
+
+/* mini tally inside a busy button */
+.d-tally-mini{ gap:3px; align-items:center; block-size:12px }
+.d-tally-mini i{ inline-size:1.5px; block-size:12px; background:currentColor; opacity:.25;
+                 animation: d-mini 1.2s steps(1) infinite }
+.d-tally-mini i:nth-child(2){ animation-delay:.2s } .d-tally-mini i:nth-child(3){ animation-delay:.4s }
+.d-tally-mini i:nth-child(4){ animation-delay:.6s }
+@keyframes d-mini{ 0%{opacity:.25} 20%,80%{opacity:1} 100%{opacity:.25} }
+
+@media (prefers-reduced-motion: reduce){
+  .d-loader *, .d-tally-mini i, .d-toast, .d-toast::after,
+  .d-tabs__pointer, .d-btn .d-icon{ animation:none !important; transition:none !important }
+  /* resting frames: aligned, swept, counted, locked, resolved */
+  .d-load-cal .idx, .d-load-lock .pt{ opacity:1 }
+  .d-load-sweep .tk{ stroke:var(--active) }
+  .d-load-sweep .cursor{ translate:48px 0 }
+  .d-load-tally .t{ opacity:1 }
+  .d-load-field rect{ fill:var(--active) }
+  .d-tally-mini i{ opacity:1 }
+  .d-toast::after{ display:none }
+}
+
+/* ==========================================================================
+   Empty & error states
+   Honest sentences. No sad robots, no illustrations of absence.
+   ========================================================================== */
+.d-state{ display:grid; grid-template-columns:auto 1fr; gap:var(--s4) var(--s5);
+          align-items:start; padding:var(--s6) var(--s5);
+          border:var(--hair) dashed var(--faint) }
+.d-state__figure svg{ inline-size:88px; block-size:88px; fill:none; stroke-linecap:round }
+.d-state__title{ font-family:var(--font-sans); font-weight:500; font-size:16px;
+                 color:var(--ink); line-height:1.35 }
+.d-state__body{ font-family:var(--font-sans); font-weight:300; font-size:14.5px;
+                color:var(--body); line-height:1.6; margin-block:var(--s2) var(--s4);
+                max-inline-size:52ch }
+.d-state--error{ border-style:solid; border-color:var(--rule);
+                 border-inline-start:3px solid var(--neg) }
+.d-state--error .d-state__figure{ color:var(--neg) }
+@media (max-width:560px){ .d-state{ grid-template-columns:1fr } }
+
+/* ==========================================================================
+   Direction — the one thing logical properties can't do on their own.
+   Icons that describe a direction flip in right-to-left layouts.
+   ========================================================================== */
+[dir="rtl"] .d-icon--dir{ transform:scaleX(-1) }
+[dir="rtl"] .d-btn:hover .d-icon--dir{ transform:scaleX(-1) translateX(3px) }
+[dir="rtl"] .d-btn,
+[dir="rtl"] .d-tab,
+[dir="rtl"] .d-chip,
+[dir="rtl"] .d-banner__title,
+[dir="rtl"] .d-toast__title{ letter-spacing:normal; text-transform:none }
+
+/* Mono has no Arabic. In right-to-left layouts every mono LABEL becomes the
+   Arabic interface sans — no tracking, no case transform. Mono NUMERALS
+   (.num, counts, outputs, timestamps) stay mono: Western digits throughout. */
+[dir="rtl"] .d-table th,
+[dir="rtl"] .d-table caption,
+[dir="rtl"] .d-tablefoot,
+[dir="rtl"] .d-panel__meta,
+[dir="rtl"] .d-affix__unit,
+[dir="rtl"] .d-stat__delta span{
+  font-family:var(--font-ar-sans); font-weight:500;
+  letter-spacing:normal; text-transform:none; font-size:12px;
+}
+
+/* ==========================================================================
+   Numbers are left-to-right strings, in every language.
+   Without isolation, the Unicode bidi algorithm treats a leading + or − as a
+   neutral and, inside an RTL paragraph, moves it to the far side: "+6.2%"
+   renders as "6.2%+" and "−4.8%" as "4.8%−". Isolating every numeric run as
+   LTR keeps the sign, digits and unit in reading order. Wrap any signed or
+   unit-bearing figure that isn't already one of these in .d-num.
+   ========================================================================== */
+.d-num,
+.d-table .num,
+.d-stat__value,
+.d-progress output,
+.d-range output,
+.d-toast__time{ direction:ltr; unicode-bidi:isolate }
+
+/* Notification text can come from anywhere — a file name, an API error, a
+   message in the other language. Let each paragraph take its direction from
+   its own content, so an English sentence in an Arabic layout keeps its full
+   stop at the end. */
+.d-banner__title, .d-banner__body,
+.d-toast__title, .d-toast__body{ unicode-bidi:plaintext }

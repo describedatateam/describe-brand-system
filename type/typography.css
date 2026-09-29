@@ -199,8 +199,15 @@ h1, h2, h3, .t-display, .t-opener, .t-h2, .t-h3{
 :lang(ar) .t-lede, [dir="rtl"] .t-lede{ --_b: var(--t-lede) }
 :lang(ar) .t-body strong, [dir="rtl"] .t-body strong{ font-weight: var(--ar-w-em) }
 
-/* Anything not explicitly classed still needs the right face in Arabic. */
-:lang(ar), [dir="rtl"]{ font-family: var(--font-ar-sans) }
+/* In Arabic contexts the interface sans IS Vazirmatn. Redefining the token —
+   not just the family on the root — matters: every component that asks for
+   var(--font-sans) inherits the switch. Without it, a button in an RTL layout
+   would render its Arabic in Readex Pro's own Arabic glyphs (Readex ships
+   them), quietly overriding the decision to use Vazirmatn for Arabic. */
+:lang(ar), [dir="rtl"]{
+  --font-sans: var(--font-ar-sans);
+  font-family: var(--font-ar-sans);
+}
 
 /* Reem Kufi for short Arabic labels — compass-built, like the mark. */
 .t-ar-label{

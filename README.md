@@ -33,7 +33,13 @@ marker all read as the same instrument.
 | `type/` | **Role 04** — typography. Tokens, written rules, and a specimen that measures its own decisions |
 | `specs/logo/` | The logo master spec and the open questions against it |
 | `previews/logo/` | Rendered preview sheet |
-| `site/` | Working draft of the homepage. **Not a deliverable** — see the warning below |
+| `wordmark/` | The wordmark study — direction A, awaiting approval (`wordmark/README.md`) |
+| `ui/` | Interface components, icons and their specimen |
+| `charts/` | Chart kit: SVG and matplotlib styles, worked figures |
+| `illustrations/` | The illustration layer (`illustrations/ILLUSTRATION.md`) |
+| `decisions/` | Scripts and evidence behind specific decisions — the UCI audit, Arabic sizing sheets |
+| `website/` | The homepage build: brief, build script, critiques |
+| `site/` | The earlier homepage draft. **Not a deliverable** — see the warning below |
 | `Logo Design With Astrolabe Inspiration (2)/` | The original exploration exports, kept for provenance |
 
 ---
@@ -115,13 +121,12 @@ The test: *if a run of mono reads as a phrase, it is the wrong face.*
   `type/TYPOGRAPHY.md`). The page brackets each multiplier and the value was
   picked by eye at working size — worth a look from someone who reads Arabic
   daily before it is locked.
-- **The wordmark does not exist.** `.describe(|` is currently set in IBM Plex
-  Mono as a stand-in wherever a lockup is needed. Nothing that needs a lockup
-  is finishable until it is drawn.
-- **The proof section in `site/` is recomputed but awaiting sign-off.** Every
-  figure now comes from `site/proof/analysis.py`; `site/proof/README.md` lists
-  where the May report's figures were wrong (currency, the three reversed
-  orders, the growth claim).
+- **The wordmark is a study, not approved.** `wordmark/` holds direction A;
+  until it is signed off, lockups remain provisional.
+- **The proof figures are recomputed from the canonical UCI file** by
+  `decisions/uci_retail.py` (→ `uci_audit.json`), and `site/index.html` uses
+  them. `site/proof/` is the separate audit of the May 2026 deck, which was
+  built on the Kaggle copy — use its correction table when revising the deck.
 - **Service 02 has no price.** The "when to pick this" text was pasted into the
   price field.
 

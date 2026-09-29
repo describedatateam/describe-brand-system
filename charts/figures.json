@@ -1,0 +1,101 @@
+{
+  "computed": "27 Sep 2026",
+  "figures": [
+    {
+      "file": "fig01-indexed.svg",
+      "title": "$100 in Apple in 2010 was $2,343 by mid-2022",
+      "n": "n = 150 months × 9 series",
+      "source": "Yahoo Finance via matplotlib sample data (Stocks.csv), adjusted monthly closes",
+      "check": {
+        "AAPL": 2343.5,
+        "GSPC": 355.9,
+        "XRX": 98.9,
+        "lo": 74.8,
+        "hi": 3019.4
+      }
+    },
+    {
+      "file": "fig02-states.svg",
+      "title": "1,915 blank cells in Stocks.csv, and not one is missing data",
+      "n": "n = 524 rows read, 390 kept (133 empty, 1 duplicate removed)",
+      "source": "Yahoo Finance via matplotlib sample data (Stocks.csv), adjusted monthly closes",
+      "check": {
+        "blank_cells": 1915,
+        "empty_row_cells": 1330,
+        "not_applicable": 585,
+        "missing": 0,
+        "rows_kept": 390
+      }
+    },
+    {
+      "file": "fig03-returns.svg",
+      "title": "Three months in 32 years fell more than three standard deviations",
+      "n": "n = 389 monthly returns",
+      "source": "Yahoo Finance via matplotlib sample data (Stocks.csv), adjusted monthly closes; returns from consecutive month-start rows",
+      "check": {
+        "n": 389,
+        "mean": 0.723,
+        "sd": 4.231,
+        "outliers": {
+          "Aug 1998": -14.58,
+          "Oct 2008": -16.94,
+          "Mar 2020": -12.51
+        },
+        "tukey": 0,
+        "max": [
+          "Apr 2020",
+          12.68
+        ]
+      }
+    },
+    {
+      "file": "fig04-diabetes.svg",
+      "title": "Higher BMI, faster progression: about 10 points per unit",
+      "n": "n = 442 patients",
+      "source": "Efron et al. (2004), Least Angle Regression; via scikit-learn load_diabetes",
+      "check": {
+        "n": 442,
+        "slope": 10.233,
+        "r2": 0.344,
+        "p": 3.5e-42,
+        "max_stud": 2.65
+      }
+    },
+    {
+      "file": "fig05-wine.svg",
+      "title": "Cultivar 1 wines run 1.5 points stronger than cultivar 2",
+      "n": "n = 59 + 71 + 48 wines",
+      "source": "Forina et al., PARVUS; UCI Machine Learning Repository; via scikit-learn load_wine",
+      "check": {
+        "means": [
+          13.74,
+          12.28,
+          13.15
+        ],
+        "diff": 1.47,
+        "ci": [
+          1.29,
+          1.64
+        ],
+        "p": 5.9e-34
+      }
+    },
+    {
+      "file": "fig06-ranked.svg",
+      "title": "Five of seven stocks beat the S&P 500 from 2010 to mid-2022",
+      "n": "n = 8 series ranked; 1 not applicable",
+      "source": "Yahoo Finance via matplotlib sample data (Stocks.csv), adjusted monthly closes",
+      "check": {
+        "IBM": 84.3,
+        "AAPL": 2243.5,
+        "MSFT": 1083.6,
+        "XRX": -1.1,
+        "AMZN": 1612.8,
+        "GOOGL": 744.6,
+        "ADBE": 1032.0,
+        "^IXIC": 420.7,
+        "bench": 255.9
+      }
+    }
+  ]
+}

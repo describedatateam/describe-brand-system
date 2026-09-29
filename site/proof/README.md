@@ -27,9 +27,9 @@ about 280K.
 | 4,223 products | Not reproducible. The raw file has 4,093 stock codes and 4,220 descriptions; after cleaning, 3,962 stock codes. |
 | "0 edge cases" | True after cleaning, but only because the undocumented price ≤ 0 filter removed the 474 negative-quantity rows with no `C` invoice. Separately, £395K of "sales" are postage, manual and fee lines (`DOT`, `POST`, `M`, `AMAZONFEE`) or a bad-debt adjustment (`A563185`) — not product revenue. |
 
-## What the homepage should say (pending sign-off)
+## Not the homepage's source
 
-- Sep–Nov: **36%** of net revenue; every other full month £0.5–0.8M.
-- The three largest "sales" never happened.
-- Top 1% of identified customers (43 of 4,371): **30%** of identified net revenue; top 20%: 74%.
-- Rows without a CustomerID are 15% of net revenue and are kept, flagged.
+The homepage proof uses `decisions/uci_retail.py`, which works from the
+canonical UCI file (541,909 rows) and leaves out the partial December. This
+folder audits the May 2026 deck against the Kaggle file it was built from;
+use the table above to correct the deck.
