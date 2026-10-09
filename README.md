@@ -34,11 +34,11 @@ marker all read as the same instrument.
 | `specs/logo/` | The logo master spec and the open questions against it |
 | `previews/logo/` | Rendered preview sheet |
 | `wordmark/` | The wordmark study — direction A, awaiting approval (`wordmark/README.md`) |
-| `ui/` | Interface components, icons and their specimen |
-| `charts/` | Chart kit: SVG and matplotlib styles, worked figures |
+| `ui/` | **Role 07** — interface components, icons and their specimen. Rules in `ui/UI.md` |
+| `charts/` | **Role 03** — chart kit: SVG and matplotlib styles, worked figures. Rules in `charts/CHARTS.md` |
 | `illustrations/` | The illustration layer (`illustrations/ILLUSTRATION.md`) |
-| `decisions/` | Scripts and evidence behind specific decisions — the UCI audit, Arabic sizing sheets |
-| `website/` | The homepage build: brief, build script, critiques |
+| `decisions/` | Scripts and evidence behind specific decisions — the UCI audit, Arabic sizing sheets, the warning-colour options (`warning.html`), and the brand fonts used by the screenshot checks (`fonts/`) |
+| `website/` | The approved homepage design: content brief (`content-brief.html`), design briefs, build script, checks, critiques, and the handoff prompt. The live site is built from this in its own repo, `describedatateam/website`, and runs at https://describe.team |
 | `site/` | The earlier homepage draft. **Not a deliverable** — see the warning below |
 | `Logo Design With Astrolabe Inspiration (2)/` | The original exploration exports, kept for provenance |
 
@@ -127,6 +127,10 @@ The test: *if a run of mono reads as a phrase, it is the wrong face.*
   `decisions/uci_retail.py` (→ `uci_audit.json`), and `site/index.html` uses
   them. `site/proof/` is the separate audit of the May 2026 deck, which was
   built on the Kaggle copy — use its correction table when revising the deck.
+- **Dark-mode blue is three different values.** `ui/ui.css` uses `#5B8DF0`,
+  the logo generator's dark tier uses `#5B93FF` (`specs/logo/open-questions.md` Q2,
+  still awaiting approval), and `geometry/astrolabe.py` and the wordmark's dark
+  files use `#4F86F7`. Pick one and set it in all three places.
 - **Service 02 has no price.** The "when to pick this" text was pasted into the
   price field.
 

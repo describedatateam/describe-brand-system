@@ -1,0 +1,726 @@
+<title>Website Content Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --ink:#092052; --body:#64748B; --faint:#CBD5E1; --active:#0F58E5;
+  --mark:#E5484D; --ground:#F6F8FC; --panel:#FFFFFF; --rule:#DBE3EF;
+  --dim:#8A99B0; --field:#FFFFFF; --ok:#0F7B3D;
+  --serif:'Fraunces','Iowan Old Style',Georgia,serif;
+  --sans:'IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+:root:not([data-theme="light"]){color-scheme:light}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#F6F8FC; --body:#94A3B8; --faint:#1E3A6B; --active:#4F86F7;
+    --mark:#F0696D; --ground:#071A44; --panel:#092052; --rule:#16346E;
+    --dim:#7E92B4; --field:#0B2A63; --ok:#3FBE77; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#F6F8FC; --body:#94A3B8; --faint:#1E3A6B; --active:#4F86F7;
+  --mark:#F0696D; --ground:#071A44; --panel:#092052; --rule:#16346E;
+  --dim:#7E92B4; --field:#0B2A63; --ok:#3FBE77; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-weight:300;line-height:1.6;font-size:15.5px;margin:0;padding-block:0;
+  -webkit-font-smoothing:antialiased}
+::selection{background:var(--active);color:var(--ground)}
+
+.spine{position:fixed;inset-block:0;inset-inline-start:0;width:64px;
+  pointer-events:none;z-index:1;display:none}
+.spine svg{height:100%;width:100%;display:block}
+@media (min-width:1000px){.spine{display:block}}
+
+.wrap{max-width:900px;margin-inline:auto;padding-inline:20px}
+@media (min-width:1000px){.wrap{padding-inline:104px 40px}}
+
+h1,h2{font-family:var(--serif);font-weight:500;margin:0;text-wrap:balance;
+  font-optical-sizing:auto;letter-spacing:-0.015em}
+h1{font-size:clamp(2.1rem,5.2vw,3.5rem);line-height:1.0;letter-spacing:-0.026em}
+h2{font-size:clamp(1.45rem,2.9vw,2.05rem);line-height:1.1}
+p{margin:0;max-width:64ch}
+a{color:var(--active)}
+.label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--body);font-weight:500}
+.lede{font-size:clamp(1rem,1.5vw,1.14rem);color:var(--body);line-height:1.55;
+  max-width:60ch}
+.note{font-size:13.2px;color:var(--body);line-height:1.5;max-width:64ch}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---- header ---- */
+header.top{padding-block:clamp(38px,5vw,62px) 26px}
+.eyebrow{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+.eyebrow .bar{height:1px;width:40px;background:var(--ink);opacity:.5}
+
+/* ---- sticky status bar ---- */
+.statusbar{position:sticky;top:0;z-index:20;background:var(--ground);
+  border-bottom:1px solid var(--rule);margin-top:26px}
+.statusbar .inner{max-width:900px;margin-inline:auto;padding:10px 20px;
+  display:flex;gap:14px 20px;align-items:center;flex-wrap:wrap}
+@media (min-width:1000px){.statusbar .inner{padding-inline:104px 40px}}
+.progress{display:flex;align-items:center;gap:11px;min-width:0}
+.progress svg{flex:0 0 auto;overflow:visible}
+.progress .pct{font-family:var(--mono);font-size:12px;color:var(--ink);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.saveState{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--body);display:flex;align-items:center;
+  gap:7px;margin-inline-start:auto}
+.saveState .pip{width:6px;height:6px;background:var(--body);flex:0 0 auto}
+.saveState[data-s="saved"]{color:var(--ok)} .saveState[data-s="saved"] .pip{background:var(--ok)}
+.saveState[data-s="saving"]{color:var(--active)} .saveState[data-s="saving"] .pip{background:var(--active)}
+.saveState[data-s="local"]{color:var(--mark)} .saveState[data-s="local"] .pip{background:var(--mark)}
+
+button.sw{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;background:none;color:var(--body);cursor:pointer;
+  border:1px solid var(--rule);padding:7px 12px 6px;display:inline-flex;gap:8px;
+  align-items:center;white-space:nowrap}
+button.sw:hover{color:var(--ink);border-color:var(--body)}
+button.sw:focus-visible{outline:1px solid var(--active);outline-offset:2px}
+button.sw .arrow{color:var(--active)}
+
+/* ---- sections ---- */
+section{padding-block:clamp(40px,5.5vw,68px);border-top:1px solid var(--rule)}
+.shead{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;
+  padding-bottom:10px;margin-bottom:20px;border-bottom:1px solid var(--ink)}
+.shead .k{font-family:var(--mono);font-size:12px;color:var(--active);
+  letter-spacing:.12em;flex:0 0 auto}
+.shead h2{flex:0 1 auto}
+.shead .count{font-family:var(--mono);font-size:10.5px;color:var(--dim);
+  letter-spacing:.1em;text-transform:uppercase;margin-inline-start:auto}
+
+/* ---- guardrail callout ---- */
+.guard{border-inline-start:2px solid var(--mark);padding:12px 0 12px 16px;
+  margin:20px 0;max-width:64ch}
+.guard .label{color:var(--mark)}
+.guard p{font-size:13.4px;color:var(--body);margin-top:5px}
+
+/* ---- fields ---- */
+.fields{display:flex;flex-direction:column;gap:26px;margin-top:24px}
+.f{display:flex;flex-direction:column;gap:7px}
+.f > .q{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.f .qid{font-family:var(--mono);font-size:10px;color:var(--dim);
+  letter-spacing:.1em;flex:0 0 auto;padding-top:2px}
+.f label.t{font-weight:500;font-size:15px;color:var(--ink);line-height:1.35}
+.f .req{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mark)}
+.f .hint{font-size:13px;color:var(--body);line-height:1.48;max-width:64ch}
+.f .hint b{font-weight:500;color:var(--ink)}
+input[type=text],input[type=date],input[type=url],textarea{
+  font-family:var(--sans);font-size:15px;font-weight:300;color:var(--ink);
+  background:var(--field);border:1px solid var(--rule);border-radius:0;
+  padding:10px 12px;width:100%;line-height:1.5;resize:vertical}
+textarea{min-height:88px}
+input:focus,textarea:focus{outline:none;border-color:var(--active);
+  box-shadow:inset 0 -2px 0 var(--active)}
+input::placeholder,textarea::placeholder{color:var(--dim);opacity:1}
+.ar{direction:rtl;text-align:right;font-family:var(--sans)}
+.meter{font-family:var(--mono);font-size:10.5px;color:var(--dim);
+  align-self:flex-end;font-variant-numeric:tabular-nums}
+.meter.over{color:var(--mark)}
+
+/* ---- choices ---- */
+.opts{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--rule)}
+.opt{display:flex;gap:11px;align-items:flex-start;padding:11px 2px;
+  border-bottom:1px solid var(--rule);cursor:pointer}
+.opt:hover{background:var(--panel)}
+.opt input{margin:0;accent-color:var(--active);flex:0 0 auto;margin-top:4px;
+  width:13px;height:13px}
+.opt .ot{display:flex;flex-direction:column;gap:2px;min-width:0}
+.opt .ot b{font-weight:400;font-size:14.4px;color:var(--ink)}
+.opt .ot span{font-size:12.6px;color:var(--body);line-height:1.45}
+.opt:has(input:checked) .ot b{color:var(--active);font-weight:500}
+.opt:has(input:focus-visible){outline:1px solid var(--active);outline-offset:-1px}
+
+/* ---- grouped blocks (services, faq) ---- */
+.block{border:1px solid var(--rule);background:var(--panel);padding:18px 18px 22px;
+  display:flex;flex-direction:column;gap:20px}
+.block > .bh{display:flex;gap:10px;align-items:baseline;
+  border-bottom:1px solid var(--rule);padding-bottom:9px}
+.block > .bh .n{font-family:var(--mono);font-size:11px;color:var(--active);
+  letter-spacing:.1em}
+.block > .bh b{font-weight:500;font-size:14.5px}
+.blocks{display:flex;flex-direction:column;gap:16px;margin-top:24px}
+
+footer{padding-block:38px 60px;border-top:1px solid var(--ink);
+  display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+footer svg{width:46px;height:46px;flex:0 0 auto}
+footer .t{font-size:12.6px;color:var(--body);line-height:1.5}
+footer .rtl{font-size:14px;color:var(--ink);direction:rtl;
+  margin-inline-start:auto}
+
+.dsc{fill:none}
+.dsc .ink{stroke:var(--ink);color:var(--ink)}
+.dsc .body{stroke:var(--body);color:var(--body)}
+.dsc .faint{stroke:var(--faint);color:var(--faint)}
+.dsc .active{stroke:var(--active);color:var(--active)}
+.dsc .fill{stroke:none}
+</style>
+
+<div class="spine" aria-hidden="true">
+  <svg viewBox="0 0 64 1000" preserveAspectRatio="none" class="dsc">
+    <path d="M40 0V1000" class="faint" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    <g id="spineTicks"></g>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">
+      <span class="bar"></span>
+      <span class="label">.describe( · website · content brief</span>
+    </div>
+    <h1>Everything the site<br>needs from you.</h1>
+    <p class="lede" style="margin-top:20px">
+      Two halves. <b style="font-weight:500;color:var(--ink)">Decisions</b> are
+      the calls only you can make — they shape the structure, so they come
+      first. <b style="font-weight:500;color:var(--ink)">Content</b> is the
+      words themselves. Write roughly; I'll edit. A rough true sentence is
+      worth more here than a polished vague one.
+    </p>
+    <p class="note" style="margin-top:14px">
+      Every field saves as you type, so you can leave and come back. When
+      you've done enough, tell me and I'll read it straight from this page —
+      no need to send anything.
+    </p>
+  </header>
+</div>
+
+<div class="statusbar">
+  <div class="inner">
+    <div class="progress">
+      <svg width="120" height="26" viewBox="0 0 120 26" class="dsc" aria-hidden="true">
+        <g id="tally"></g>
+      </svg>
+      <span class="pct" id="pct">0 / 0 answered</span>
+    </div>
+    <button class="sw" id="export">Export <span class="arrow">→</span></button>
+    <button class="sw" id="theme">Invert</button>
+    <div class="saveState" id="saveState" data-s="idle">
+      <i class="pip"></i><span id="saveText">Connecting</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <main id="form"></main>
+
+  <footer>
+    <svg class="dsc" viewBox="-20 -20 240 240" aria-hidden="true"><g id="fmark"></g></svg>
+    <div class="t">
+      <b style="font-weight:500;color:var(--ink)">Website content brief</b> ·
+      fill it in any order<br>
+      <span style="color:var(--dim)">Answers are stored with this page and are
+      private to you until you share it.</span>
+    </div>
+    <div class="rtl">من البيانات إلى القرار</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+/* ------------------------------------------------------------------ *
+ * SCHEMA — the substance of the brief.
+ * kinds: text · long · choice · ar (rtl text) · arlong
+ * ------------------------------------------------------------------ */
+var SECTIONS = [
+{ k:'01', title:'Decisions', kicker:'These block the design. Everything else can wait.',
+  guard:null,
+  fields:[
+  {id:'d_shape', kind:'choice', req:true, t:'What shape is the site?',
+   hint:'Fewer pages ship sooner and are easier to keep honest. You can add pages later; you cannot easily un-launch a thin five-page site.',
+   opts:[
+    ['one','One scrolling page','Hero, who it\'s for, services, how you work, about, contact. Ships fastest, reads as confident when the content is tight.'],
+    ['home_plus','Home plus one deep page','A single page, with Services broken out where the detail earns its own room.'],
+    ['multi','Multi-page','Home · Services · Approach · About · Contact. More surface to fill, and more to keep current.'],
+    ['unsure','Not sure yet','Tell me what you want the site to do and I\'ll recommend one.']]},
+
+  {id:'d_lang', kind:'choice', req:true, t:'Which language does the site launch in?',
+   hint:'Bilingual roughly doubles the copy and needs a fully mirrored RTL layout — the measuring edge, the mark placement and the graphic orientation all flip. Worth it if Gulf clients will read Arabic first; expensive if it\'s only for completeness.',
+   opts:[
+    ['en','English only','Fastest to launch. Add Arabic once the copy has settled.'],
+    ['ar','Arabic only','If the first clients you want will read Arabic.'],
+    ['both_en','Both — English primary','English at the root, Arabic at /ar.'],
+    ['both_ar','Both — Arabic primary','Arabic at the root, English at /en.'],
+    ['unsure','Not sure yet','']]},
+
+  {id:'d_reader', kind:'long', req:true, t:'Name the one person the site is written for.',
+   hint:'Not a list. One reader: their role, their company size, and the moment they\'d be searching. <b>Example shape:</b> "An ops lead at a 20–60 person e-commerce business in the Gulf who knows their numbers are wrong but has nobody whose job it is to fix them." A site that speaks to five audiences speaks to none of them.',
+   ph:'One role, one company type, one moment.', max:60},
+
+  {id:'d_action', kind:'choice', req:true, t:'What is the one thing a visitor should do?',
+   hint:'One primary action, repeated. A page offering three equal actions gets none of them.',
+   opts:[
+    ['call','Book a 30-minute call','Needs a scheduling link. Highest intent, highest friction.'],
+    ['email','Email you directly','Zero setup, no privacy notice needed, harder to measure.'],
+    ['form','Short intake form','Three or four questions. Qualifies the lead and gives you something to prepare with — needs a privacy notice.'],
+    ['asset','Download something, then follow up','A checklist or worked example in exchange for an email. Slowest to build, warms colder traffic.'],
+    ['unsure','Not sure yet','']]},
+
+  {id:'d_proof', kind:'choice', req:true, t:'What stands in for case studies at launch?',
+   hint:'You have one exploratory session and one proposal, and no completed commercial projects. That is a normal place to start and the site has to be honest about it — so something else has to carry the credibility.',
+   opts:[
+    ['method','The method, worked end to end','A real analysis on public data, shown the whole way through: the messy input, the decisions you made, the finding. Demonstrates capability without claiming clients.'],
+    ['discovery','An anonymised discovery finding','What the exploratory session actually surfaced, with permission and no identifying detail. True, specific, and shows you find the real problem.'],
+    ['both','Both','A worked public-data example plus the anonymised finding.'],
+    ['credentials','Background and capability only','Tools, training, how you work. Weakest, but fastest.'],
+    ['unsure','Not sure yet','']]},
+
+  {id:'d_price', kind:'choice', req:true, t:'How do you handle price on the site?',
+   hint:'Showing a number filters out people who were never going to buy, and costs you some who would have negotiated.',
+   opts:[
+    ['none','Not shown','"Let\'s talk" — maximum flexibility, more unqualified enquiries.'],
+    ['from','A from-price per service','"From $X" sets a floor and filters early.'],
+    ['range','Typical engagement ranges','"Most first projects land between X and Y" — honest and useful.'],
+    ['day','A day rate','Clearest for ongoing support work.'],
+    ['unsure','Not sure yet','']]},
+
+  {id:'d_geo', kind:'choice', req:true, t:'How does the site handle where you are?',
+   hint:'A real strategic call, not a cosmetic one. There is no universally right answer and it is entirely yours to make — but the site should make the choice deliberately rather than leave it ambiguous.',
+   opts:[
+    ['forward','Stated plainly, up front','A remote team based in Gaza working with Gulf and international clients. Some clients will respond to it; some will hesitate.'],
+    ['about','In the About section, not the hero','Present and honest, but the work leads.'],
+    ['remote','"Remote team" without the location','Says nothing untrue, answers the practical question, leaves the rest for a conversation.'],
+    ['unsure','Not sure yet','']]},
+
+  {id:'d_domain', kind:'text', t:'Domain', hint:'Owned already, or still to buy? Note both if you have a preference and a fallback.',
+   ph:'e.g. describe.ps — or "not bought yet, thinking about…"'},
+
+  {id:'d_build', kind:'choice', t:'How should it be built?',
+   hint:'This decides who can change the site later without you.',
+   opts:[
+    ['static','Hand-built static site','I build it from the design system; fast, fully on-brand, deploys free. Changes go through code.'],
+    ['framer','Framer','You edit visually afterwards. Some of the identity\'s finer detail gets harder.'],
+    ['webflow','Webflow','Visual editing, a CMS if you want to publish writing.'],
+    ['wp','WordPress','Only if you need it for a specific reason.'],
+    ['unsure','Not sure yet','']]},
+
+  {id:'d_launch', kind:'text', t:'Target launch date',
+   hint:'A real date, even a rough one. It decides how much we build first.', ph:'e.g. mid-November'},
+
+  {id:'d_minimum', kind:'long', t:'What must be true for you to be willing to send someone the link?',
+   hint:'This is the actual launch scope. Everything else is version two.',
+   ph:'List the few things that genuinely have to be there.', max:70}
+]},
+
+{ k:'02', title:'Hero', kicker:'The first eight seconds. What you do, for whom, and what to do next.',
+  guard:null,
+  fields:[
+  {id:'h_headline', kind:'text', req:true, t:'The headline', max:12,
+   hint:'What you do, in the reader\'s words, not the industry\'s. <b>Not</b> the tagline — "from data to decision" is your descriptor and sits elsewhere. Aim at the reader\'s problem, not your category.',
+   ph:'Say what you do for whom.'},
+  {id:'h_sub', kind:'long', req:true, t:'The sub-line', max:32,
+   hint:'One or two sentences. Who it\'s for and what changes for them. This is where the specificity lives.',
+   ph:'For [reader], we [do the thing], so they can [make the decision].'},
+  {id:'h_cta', kind:'text', t:'Button label', max:5,
+   hint:'A verb and its object, saying exactly what happens. Your system prefers technical and plain: <b>Book a call →</b>, <b>See the method →</b>, <b>Start a conversation →</b>.',
+   ph:'e.g. Book a call'},
+  {id:'h_ar', kind:'arlong', t:'Arabic headline and sub-line',
+   hint:'Written for its reader, not translated. Skip if launching in English only.',
+   ph:'العنوان الرئيسي والسطر التوضيحي'}
+]},
+
+{ k:'03', title:'Who this is for', kicker:'The section that does the qualifying.',
+  guard:null,
+  fields:[
+  {id:'w_who', kind:'long', req:true, t:'Describe the reader back to themselves.',
+   hint:'A short paragraph they recognise. Their situation, not your service. If they read it and think "that\'s us", the rest of the page gets read.',
+   ph:'You have [situation]. You know [problem]. You don\'t have [the thing].', max:90},
+  {id:'w_problem', kind:'long', req:true, t:'The problem, in their words.',
+   hint:'Two or three sentences. Use the language a client would actually use — "the numbers in the report don\'t match the dashboard", not "data integrity challenges". Your Apricot session surfaced tracking and source attribution as a real version of this.',
+   ph:'What they say out loud when it goes wrong.', max:80},
+  {id:'w_not', kind:'long', t:'Who this is NOT for.',
+   hint:'Optional but powerful. Naming who you\'re wrong for makes the rest credible, and saves you calls you didn\'t want.',
+   ph:'e.g. teams who already have an internal data function; anyone who needs…', max:50}
+]},
+
+{ k:'04', title:'Services', kicker:'Three services. Analytics · business intelligence · statistical analysis.',
+  guard:{label:'your rule', text:'No invented clients, no inflated experience. Describe what you can do and how you\'d approach it — "we are testing this hypothesis", not "we transformed".'},
+  blocks:[
+   {n:'01', name:'Service one', prefix:'s1'},
+   {n:'02', name:'Service two', prefix:'s2'},
+   {n:'03', name:'Service three', prefix:'s3'}],
+  blockFields:[
+  {id:'name', kind:'text', t:'Name it as a client would ask for it', max:6,
+   ph:'Not the category — the thing they want.'},
+  {id:'line', kind:'text', t:'One line: what it is', max:20, ph:''},
+  {id:'deliver', kind:'long', t:'What they actually receive',
+   hint:'Concrete nouns. A dashboard, a cleaned dataset, a written findings note, a model, a walkthrough call. This is the part clients cannot picture on their own.',
+   ph:'One per line.', max:70},
+  {id:'when', kind:'long', t:'When this is the right one to pick',
+   hint:'The situation that should make them choose this rather than the other two.', max:45},
+  {id:'shape', kind:'text', t:'Typical length and price shape',
+   hint:'Leave blank if you chose not to show price — it still helps me write the rest.', ph:'e.g. 2–3 weeks, fixed fee'}
+]},
+
+{ k:'05', title:'How you work', kicker:'Your five stages, already drafted from your brief. Edit them into your words.',
+  guard:null,
+  fields:[
+  {id:'p_intro', kind:'long', t:'One sentence framing the process',
+   hint:'Why it goes in this order.', max:30},
+  {id:'p_1', kind:'long', t:'Stage 01 — Observe',
+   seed:'We start with what you already have: the systems, the spreadsheets, the reports nobody trusts.', max:35},
+  {id:'p_2', kind:'long', t:'Stage 02 — Measure',
+   seed:'We work out what is actually being counted, and what is being missed or double-counted.', max:35},
+  {id:'p_3', kind:'long', t:'Stage 03 — Understand',
+   seed:'We find the pattern, and we say plainly how confident we are in it.', max:35},
+  {id:'p_4', kind:'long', t:'Stage 04 — Identify',
+   seed:'We mark what matters — the outlier, the exception, the thing worth acting on.', max:35},
+  {id:'p_5', kind:'long', t:'Stage 05 — Decide',
+   seed:'You get a decision you can defend, with the working shown.', max:35},
+  {id:'p_access', kind:'long', t:'What you need from a client to start',
+   hint:'Access, data, a point of contact, time. Saying this early prevents the stalled project that never began.',
+   ph:'Be specific — it reads as experience.', max:50}
+]},
+
+{ k:'06', title:'Proof', kicker:'Whatever you chose in decision 05 gets written here.',
+  guard:{label:'your rule', text:'This is the section most likely to drift into something untrue. Nothing here should imply a client you do not have, or a result you did not produce.'},
+  fields:[
+  {id:'pr_worked', kind:'long', t:'The worked example — what analysis, on what public data?',
+   hint:'Pick something your reader recognises as their own problem. The dataset should be genuinely public and citable. The graphic is the finding, and it states its n.',
+   ph:'What question, what data, what you found.', max:90},
+  {id:'pr_discovery', kind:'long', t:'The anonymised discovery finding',
+   hint:'From the exploratory session — only with permission, and with nothing that identifies them. What was the real problem underneath the one they asked about?',
+   ph:'', max:70},
+  {id:'pr_honest', kind:'long', t:'How do you want the site to handle being early?',
+   hint:'Some of the strongest small-agency sites say it outright. "We are a new practice and we price accordingly" is a position, not a weakness — and it is consistent with everything else you\'ve decided. Your call entirely.',
+   ph:'', max:50}
+]},
+
+{ k:'07', title:'About', kicker:'Who is behind it, and why the name.',
+  guard:null,
+  fields:[
+  {id:'a_name', kind:'long', t:'Why .describe(',
+   hint:'The Python describe() story is genuinely good and nobody else can use it. It also explains the mark. Write it the way you\'d say it out loud.',
+   ph:'', max:60},
+  {id:'a_you', kind:'long', req:true, t:'Who you are',
+   hint:'Third person or first, your choice — tell me which you prefer and I\'ll keep it consistent. Route in matters: business administration, then software development, then analytics is a more interesting path than a straight line.',
+   ph:'', max:80},
+  {id:'a_team', kind:'long', t:'The team',
+   hint:'Named with roles, or described as a team without names? Both are legitimate. Named reads as more substantial; unnamed gives you flexibility as people come and go.',
+   ph:'', max:50},
+  {id:'a_belief', kind:'long', t:'What you believe about this work that others don\'t',
+   hint:'Optional, and the single most memorable thing on most agency sites when it\'s real. Not a value — an opinion you\'d defend.',
+   ph:'', max:45}
+]},
+
+{ k:'08', title:'Questions clients ask', kicker:'Answer the objection before it becomes a reason not to write.',
+  guard:null,
+  blocks:[
+   {n:'01', name:'Question one', prefix:'q1'},
+   {n:'02', name:'Question two', prefix:'q2'},
+   {n:'03', name:'Question three', prefix:'q3'},
+   {n:'04', name:'Question four', prefix:'q4'},
+   {n:'05', name:'Question five', prefix:'q5'}],
+  blockFields:[
+  {id:'q', kind:'text', t:'Question', ph:'In their words.'},
+  {id:'a', kind:'long', t:'Answer', ph:'Short and direct. Don\'t sell in the answer.', max:45}],
+  after:'<p class="note" style="margin-top:18px">Ones worth considering if you\'re stuck: <b>How does this work if we have no data person?</b> · <b>Do you need access to our systems?</b> · <b>How do you handle our data?</b> · <b>What if we don\'t know what we need yet?</b> · <b>What tools do you work in?</b> · <b>What hours do you work / which timezone?</b></p>'},
+
+{ k:'09', title:'Voice', kicker:'How it should sound — and how it should not.',
+  guard:null,
+  fields:[
+  {id:'v_like', kind:'long', t:'Three sites or companies whose tone you\'d want to be compared to',
+   hint:'Any industry. Links or names both fine — what matters is that I can read them.', ph:'', max:40},
+  {id:'v_never', kind:'long', t:'Words and phrases that must never appear',
+   hint:'Your identity brief already rejects the generic register. Name the specific words that make you wince — "leverage", "solutions", "transform", "cutting-edge", "unlock". I\'ll treat this as a hard filter.',
+   ph:'', max:45},
+  {id:'v_person', kind:'choice', t:'We, or I?',
+   hint:'You have a small core team, so both are true. It just has to be consistent.',
+   opts:[['we','"We"','Reads as a practice. Standard for agencies.'],
+         ['i','"I"','Reads as a specialist. Warmer, and unusual enough to be memorable.'],
+         ['unsure','Not sure yet','']]}
+]},
+
+{ k:'10', title:'Contact and practicalities', kicker:'The last mile.',
+  guard:null,
+  fields:[
+  {id:'c_email', kind:'text', t:'Contact email to publish', ph:''},
+  {id:'c_links', kind:'long', t:'Links to include',
+   hint:'LinkedIn, GitHub, scheduling link, anything else. One per line.',
+   ph:'linkedin.com/company/describeteam'},
+  {id:'c_promise', kind:'text', t:'Response time you\'re willing to promise', max:10,
+   hint:'Only promise what you\'ll keep. "Within two working days" beats silence.', ph:''},
+  {id:'c_form', kind:'long', t:'If there\'s an intake form, what does it ask?',
+   hint:'Three or four questions maximum. Every extra field loses people.',
+   ph:'One per line.', max:40},
+  {id:'c_legal', kind:'choice', t:'Privacy notice',
+   hint:'If you collect an email address through a form, you need one. It\'s short and I can draft it.',
+   opts:[['draft','Draft one for me',''],['have','I have wording already',''],
+         ['none','No form, so no notice needed',''],['unsure','Not sure yet','']]},
+  {id:'c_meta', kind:'long', t:'Anything else the site needs to carry',
+   hint:'Registration details, a programme credit, a partner logo, an accreditation — anything that has to appear somewhere.',
+   ph:'', max:40}
+]}
+];
+
+/* ------------------------------------------------------------------ */
+var KEY='describe-website-brief-v1', DOC='brief/website';
+var state={}, db=null, saveTimer=null, saving=false, pending=false;
+var allFields=[];
+
+function el(t,a,kids){var e=document.createElement(t);
+  for(var k in (a||{})){ if(k==='class')e.className=a[k];
+    else if(k==='html')e.innerHTML=a[k]; else if(k==='text')e.textContent=a[k];
+    else e.setAttribute(k,a[k]); }
+  (kids||[]).forEach(function(c){e.appendChild(c)}); return e;}
+
+function words(s){ s=(s||'').trim(); return s?s.split(/\s+/).length:0; }
+
+/* ---- render ---- */
+function field(f, prefix){
+  var id=(prefix?prefix+'_':'')+f.id;
+  allFields.push({id:id, def:f, key:id});
+  var wrap=el('div',{class:'f'});
+  var q=el('div',{class:'q'});
+  q.appendChild(el('span',{class:'qid',text:id.toUpperCase().replace(/_/g,'·')}));
+  var lab=el('label',{class:'t',text:f.t,for:'i-'+id});
+  q.appendChild(lab);
+  if(f.req) q.appendChild(el('span',{class:'req',text:'needed'}));
+  wrap.appendChild(q);
+  if(f.hint) wrap.appendChild(el('div',{class:'hint',html:f.hint}));
+
+  if(f.kind==='choice'){
+    var opts=el('div',{class:'opts'});
+    f.opts.forEach(function(o){
+      var lb=el('label',{class:'opt'});
+      var inp=el('input',{type:'radio',name:id,value:o[0],id:'i-'+id+'-'+o[0]});
+      if(state[id]===o[0]) inp.checked=true;
+      inp.addEventListener('change',function(){ state[id]=o[0]; touch(); });
+      var ot=el('div',{class:'ot'});
+      ot.appendChild(el('b',{text:o[1]}));
+      if(o[2]) ot.appendChild(el('span',{text:o[2]}));
+      lb.appendChild(inp); lb.appendChild(ot); opts.appendChild(lb);
+    });
+    wrap.appendChild(opts);
+    return wrap;
+  }
+
+  var isLong = f.kind==='long'||f.kind==='arlong';
+  var input = el(isLong?'textarea':'input',{id:'i-'+id});
+  if(!isLong) input.type='text';
+  if(f.ph) input.placeholder=f.ph;
+  if(f.kind==='ar'||f.kind==='arlong') input.className='ar';
+  if(f.kind==='arlong') input.setAttribute('dir','rtl');
+  input.value = state[id] != null ? state[id] : (f.seed||'');
+  if(state[id]==null && f.seed) state[id]=f.seed;
+  wrap.appendChild(input);
+
+  if(f.max){
+    var m=el('div',{class:'meter'});
+    var upd=function(){ var n=words(input.value);
+      m.textContent=n+' / ~'+f.max+' words';
+      m.className='meter'+(n>f.max*1.35?' over':''); };
+    upd();
+    input.addEventListener('input',upd);
+    wrap.appendChild(m);
+  }
+  input.addEventListener('input',function(){ state[id]=input.value; touch(); });
+  return wrap;
+}
+
+function render(){
+  var form=document.getElementById('form');
+  form.innerHTML=''; allFields=[];
+  SECTIONS.forEach(function(s){
+    var sec=el('section',{});
+    var h=el('div',{class:'shead'});
+    h.appendChild(el('span',{class:'k',text:s.k}));
+    h.appendChild(el('h2',{text:s.title}));
+    sec.appendChild(h);
+    if(s.kicker) sec.appendChild(el('p',{class:'lede',text:s.kicker}));
+    if(s.guard){
+      var g=el('div',{class:'guard'});
+      g.appendChild(el('div',{class:'label',text:s.guard.label}));
+      g.appendChild(el('p',{text:s.guard.text}));
+      sec.appendChild(g);
+    }
+    if(s.fields){
+      var fs=el('div',{class:'fields'});
+      s.fields.forEach(function(f){ fs.appendChild(field(f)); });
+      sec.appendChild(fs);
+    }
+    if(s.blocks){
+      var bs=el('div',{class:'blocks'});
+      s.blocks.forEach(function(b){
+        var bl=el('div',{class:'block'});
+        var bh=el('div',{class:'bh'});
+        bh.appendChild(el('span',{class:'n',text:b.n}));
+        bh.appendChild(el('b',{text:b.name}));
+        bl.appendChild(bh);
+        var fs2=el('div',{class:'fields'});
+        s.blockFields.forEach(function(f){ fs2.appendChild(field(f,b.prefix)); });
+        bl.appendChild(fs2); bs.appendChild(bl);
+      });
+      sec.appendChild(bs);
+    }
+    if(s.after) sec.appendChild(el('div',{html:s.after}));
+    form.appendChild(sec);
+  });
+  progress();
+}
+
+/* ---- progress, drawn as a tally ---- */
+function progress(){
+  var done=0;
+  allFields.forEach(function(f){
+    var v=state[f.key];
+    if(v!=null && String(v).trim()!=='' && !(f.def.seed && v===f.def.seed)) done++;
+  });
+  var total=allFields.length;
+  document.getElementById('pct').textContent=done+' / '+total+' answered';
+  var g=document.getElementById('tally'); g.innerHTML='';
+  var groups=12, filled=Math.round(done/Math.max(total,1)*groups), x=2;
+  for(var i=0;i<groups;i++){
+    var p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M'+x+' 4V22');
+    p.setAttribute('class', i<filled?'active':'faint');
+    p.setAttribute('stroke-width','2.4');
+    p.setAttribute('stroke-linecap','round');
+    g.appendChild(p);
+    x+=6; if((i+1)%5===0) x+=9;
+  }
+}
+
+/* ---- persistence ---- */
+function setState(s,txt){
+  var n=document.getElementById('saveState');
+  n.setAttribute('data-s',s);
+  document.getElementById('saveText').textContent=txt;
+}
+function localSave(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+function localLoad(){ try{ var r=localStorage.getItem(KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
+
+function touch(){
+  progress(); localSave();
+  if(!db){ setState('local','Saved on this device only'); return; }
+  setState('saving','Saving');
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(flush,700);
+}
+function flush(){
+  if(!db) return;
+  if(saving){ pending=true; return; }
+  saving=true;
+  db.doc(DOC).set({answers:state, updatedAt:new Date().toISOString()})
+    .then(function(){
+      saving=false;
+      var t=new Date().toTimeString().slice(0,5);
+      setState('saved','Saved '+t);
+      if(pending){ pending=false; flush(); }
+    })
+    .catch(function(e){
+      saving=false; pending=false;
+      setState('local', e && e.code==='not_granted'
+        ? 'Saved on this device only' : 'Not saved — copy your work');
+    });
+}
+
+/* ---- export ---- */
+function markdown(){
+  var out=['# .describe( — website content brief','',
+    'Exported '+new Date().toISOString().slice(0,16).replace('T',' '),''];
+  SECTIONS.forEach(function(s){
+    out.push('## '+s.k+' · '+s.title,'');
+    var emit=function(f,prefix,head){
+      var id=(prefix?prefix+'_':'')+f.id, v=state[id];
+      if(v==null||String(v).trim()==='') return;
+      if(f.kind==='choice'){
+        var m=(f.opts.find(function(o){return o[0]===v})||[])[1]||v;
+        out.push('**'+f.t+'**  \n'+m,'');
+      } else { out.push('**'+f.t+'**  \n'+String(v).replace(/\n/g,'  \n'),''); }
+    };
+    (s.fields||[]).forEach(function(f){ emit(f); });
+    (s.blocks||[]).forEach(function(b){
+      var any=s.blockFields.some(function(f){
+        var v=state[b.prefix+'_'+f.id]; return v!=null&&String(v).trim()!==''; });
+      if(!any) return;
+      out.push('### '+b.n+' · '+b.name,'');
+      s.blockFields.forEach(function(f){ emit(f,b.prefix); });
+    });
+  });
+  var miss=allFields.filter(function(f){
+    return f.def.req && (state[f.key]==null||String(state[f.key]).trim()===''); });
+  if(miss.length){
+    out.push('## Still needed','');
+    miss.forEach(function(f){ out.push('- '+f.def.t); });
+  }
+  return out.join('\n');
+}
+
+document.getElementById('export').addEventListener('click',function(){
+  var md=markdown();
+  claude.use('downloads').then(function(d){
+    if(d) return d.save({filename:'describe-website-brief.md', data:md});
+    throw 0;
+  }).catch(function(){
+    navigator.clipboard && navigator.clipboard.writeText(md).then(function(){
+      setState('saved','Copied to clipboard');
+    });
+  });
+});
+
+document.getElementById('theme').addEventListener('click',function(){
+  var r=document.documentElement;
+  var dark=getComputedStyle(r).getPropertyValue('color-scheme').trim()==='dark';
+  r.setAttribute('data-theme',dark?'light':'dark');
+});
+
+/* ---- the mark, from the 5a constants ---- */
+(function(){
+  var C=100,R=86,T=-40.6,r=42,GAP=28;
+  function P(cx,cy,rr,d){var a=d*Math.PI/180;return[cx+rr*Math.cos(a),cy+rr*Math.sin(a)]}
+  function n(v){return Math.round(v*100)/100}
+  var g=document.getElementById('fmark');
+  var b=P(C,C,R-r,T+180), s=P(C,C,R,T), d0=P(C,C,R,T+180);
+  function add(t,a){var e=document.createElementNS('http://www.w3.org/2000/svg',t);
+    for(var k in a)e.setAttribute(k,a[k]); g.appendChild(e); return e}
+  var a0=T+GAP/2,a1=T-GAP/2,p0=P(C,C,R,a0),p1=P(C,C,R,a1);
+  add('path',{d:'M'+n(p0[0])+' '+n(p0[1])+'A86 86 0 1 1 '+n(p1[0])+' '+n(p1[1]),
+    'class':'ink','stroke-width':4,'stroke-linecap':'round'});
+  add('circle',{cx:n(b[0]),cy:n(b[1]),r:r,'class':'ink','stroke-width':4});
+  add('path',{d:'M'+n(b[0]-r)+' '+n(b[1])+'H'+n(b[0]+r),'class':'ink','stroke-width':4,'stroke-linecap':'round'});
+  add('path',{d:'M'+n(b[0]+r)+' '+n(b[1]-r-64.77)+'V'+n(b[1]+r),'class':'active','stroke-width':6.8,'stroke-linecap':'round'});
+  for(var k=0;k<8;k++){ var L=k===0?30:(k%2===0?10:6), q=P(s[0],s[1],L,T+45*k);
+    add('path',{d:'M'+n(s[0])+' '+n(s[1])+'L'+n(q[0])+' '+n(q[1]),'class':'ink','stroke-width':3,'stroke-linecap':'round'}); }
+  add('circle',{cx:n(d0[0]),cy:n(d0[1]),r:5.6,'class':'ink fill',fill:'currentColor'});
+})();
+
+/* ---- spine ticks ---- */
+(function(){
+  var g=document.getElementById('spineTicks');
+  for(var i=0;i<=50;i++){
+    var p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M40 '+(i*20)+'H'+(40+(i%5===0?9:4)));
+    p.setAttribute('class','faint'); p.setAttribute('stroke-width','1');
+    p.setAttribute('vector-effect','non-scaling-stroke');
+    g.appendChild(p);
+  }
+})();
+
+/* ---- boot: render immediately, light up storage when it answers ---- */
+var cached=localLoad(); if(cached) state=cached;
+render();
+setState('idle','Connecting');
+
+claude.use('db').then(function(d){
+  if(!d){ setState('local','Saved on this device only'); return; }
+  db=d;
+  return db.doc(DOC).get().then(function(snap){
+    if(snap.exists){
+      var saved=(snap.data()||{}).answers||{};
+      var merged=Object.assign({}, saved, state);
+      // stored answers win where this device has nothing newer typed
+      Object.keys(saved).forEach(function(k){
+        if(state[k]==null||String(state[k]).trim()==='') merged[k]=saved[k];
+      });
+      state=merged; render(); localSave();
+    }
+    setState('saved','Saved');
+  });
+}).catch(function(){ setState('local','Saved on this device only'); });
+})();
+</script>
