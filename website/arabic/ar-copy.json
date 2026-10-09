@@ -1,0 +1,1027 @@
+{
+ "nav": [
+  [
+   "Skip to content",
+   "انتقل إلى المحتوى"
+  ],
+  [
+   "Menu",
+   "القائمة"
+  ],
+  [
+   "Who we help",
+   "لمن نعمل"
+  ],
+  [
+   "Services",
+   "الخدمات"
+  ],
+  [
+   "Method",
+   "المنهج"
+  ],
+  [
+   "Proof",
+   "مثال عملي"
+  ],
+  [
+   "About",
+   "من نحن"
+  ],
+  [
+   "Contact",
+   "تواصل معنا"
+  ],
+  [
+   "(language switch)",
+   "English",
+   "On the Arabic pages the switch reads \"English\" (lang=\"en\"); on the English pages it reads \"العربية\" (lang=\"ar\")."
+  ]
+ ],
+ "footer": [
+  [
+   "From data to decision",
+   "من البيانات إلى القرار",
+   "On the Arabic page the Arabic line leads and the English sits beside it, as on the English page in reverse."
+  ],
+  [
+   "Ask for a Profit Snapshot",
+   "اطلب لقطة الربح"
+  ],
+  [
+   "© 2026 .describe(",
+   "© 2026 ⁦.describe(⁩"
+  ],
+  [
+   "LinkedIn",
+   "LinkedIn"
+  ],
+  [
+   "GitHub",
+   "GitHub"
+  ],
+  [
+   "The wordmark is still being drawn; until then the name is set in type beside the mark.",
+   "",
+   "Remove this note on both languages: the wordmark is approved."
+  ]
+ ],
+ "home": {
+  "meta": [
+   [
+    "(title)",
+    "⁦.describe(⁩ — اعرف ربحك الحقيقي، لا مبيعاتك فقط"
+   ],
+   [
+    "(description)",
+    "تحليل بيانات لمتاجر سلة وزد وShopify: ما يبقى لك فعلًا بعد التكاليف والمرتجعات وتكلفة الدفع عند الاستلام."
+   ]
+  ],
+  "hero": [
+   [
+    "See your real profit, not just your sales.",
+    "اعرف ربحك الحقيقي، لا مبيعاتك فقط."
+   ],
+   [
+    "For online stores on Salla, Zid and Shopify: what you keep after costs, returns and cash on delivery.",
+    "لمتاجر سلة وزد وShopify: ما يبقى لك فعلًا بعد التكاليف والمرتجعات وتكلفة الدفع عند الاستلام."
+   ],
+   [
+    "Ask for a Profit Snapshot",
+    "اطلب لقطة الربح"
+   ]
+  ],
+  "rulers": [
+   [
+    "The worked example, UCI Online Retail",
+    "المثال العملي: بيانات Online Retail من UCI"
+   ],
+   [
+    "Rows in the file",
+    "صفوف الملف"
+   ],
+   [
+    "Clean sale lines",
+    "أسطر بيع نظيفة"
+   ],
+   [
+    "19,341 set aside",
+    "19,341 صفًا مستبعدًا"
+   ],
+   [
+    "Scale ×28",
+    "تكبير ×28"
+   ],
+   [
+    "Exact duplicates",
+    "تكرار مطابق"
+   ],
+   [
+    "Cancellations netted",
+    "إلغاءات مُقاصّة"
+   ],
+   [
+    "Postage and fees",
+    "شحن ورسوم"
+   ],
+   [
+    "Zero or negative",
+    "صفر أو سالب"
+   ],
+   [
+    "The source file as a ruler: 541,909 rows, of which 522,568 are clean sale lines. The 19,341 rows set aside are magnified: 5,268 exact duplicates, 9,251 cancellations netted, 2,327 postage and fees, 2,495 zero or negative.",
+    "الملف المصدر على هيئة مسطرة: 541,909 صفوف، منها 522,568 سطر بيع نظيفًا. والصفوف المستبعدة، وعددها 19,341، معروضة مكبّرة: 5,268 تكرارًا مطابقًا، و9,251 إلغاءً مُقاصًّا، و2,327 للشحن والرسوم، و2,495 بقيمة صفرية أو سالبة.",
+    "Screen-reader description of the ruler pair."
+   ]
+  ],
+  "01 who": [
+   [
+    "Your store shows sales. Not what you keep.",
+    "متجرك يعرض المبيعات، لا ما يبقى لك منها."
+   ],
+   [
+    "Sales went up last month, and the bank balance didn’t.",
+    "ارتفعت المبيعات الشهر الماضي، ولم يرتفع رصيد البنك."
+   ],
+   [
+    "Returns and refused cash-on-delivery orders never show up in the sales report.",
+    "المرتجعات وطلبات الدفع عند الاستلام المرفوضة لا تظهر في تقرير المبيعات."
+   ],
+   [
+    "Product cost, shipping, fees and ads sit in different places, so nobody adds them up.",
+    "تكلفة المنتج والشحن والرسوم والإعلانات، كلٌّ منها في مكان، فلا يجمعها أحد."
+   ],
+   [
+    "Who we’re not for",
+    "متى لا نناسبك"
+   ],
+   [
+    "You have an analyst in-house.",
+    "لديك محلل بيانات في فريقك."
+   ],
+   [
+    "Give them the time instead.",
+    "امنحه الوقت لذلك بدلًا منّا."
+   ],
+   [
+    "You haven’t launched yet.",
+    "لم تُطلق متجرك بعد."
+   ],
+   [
+    "Come back after a few months of real activity.",
+    "عُد إلينا بعد بضعة أشهر من البيع الفعلي."
+   ],
+   [
+    "You need pipelines built.",
+    "تحتاج إلى بناء أنظمة لنقل البيانات."
+   ],
+   [
+    "That’s engineering, and a different team.",
+    "هذا عمل هندسي، ويحتاج إلى فريق آخر."
+   ],
+   [
+    "You’ve decided, and want numbers to back it.",
+    "اتخذت قرارك، وتريد أرقامًا تؤيده."
+   ],
+   [
+    "Sometimes the data says the plan isn’t working.",
+    "أحيانًا تقول البيانات إن الخطة لا تنجح."
+   ]
+  ],
+  "02 services": [
+   [
+    "Three ways in.",
+    "ثلاث طرق للبدء."
+   ],
+   [
+    "Profit Snapshot for online stores",
+    "لقطة الربح للمتاجر الإلكترونية"
+   ],
+   [
+    "Send your orders export and product costs from Salla, Zid or Shopify. See what each order and product really earns.",
+    "أرسل لنا ملف الطلبات وتكاليف المنتجات من سلة أو زد أو Shopify، لترى ما يكسبه كل طلب وكل منتج فعلًا."
+   ],
+   [
+    "From $50",
+    "من 50 دولارًا"
+   ],
+   [
+    "price",
+    "السعر",
+    "Label under the figure: set in Vazirmatn, not mono (IBM Plex Mono has no Arabic)."
+   ],
+   [
+    "5–7 days",
+    "5–7 أيام"
+   ],
+   [
+    "True profit per order and product, after product cost, shipping, payment fees and ad spend.",
+    "الربح الحقيقي لكل طلب ولكل منتج، بعد تكلفة المنتج والشحن ورسوم الدفع والإنفاق الإعلاني."
+   ],
+   [
+    "What returns and refused cash-on-delivery orders cost you, by product and city.",
+    "كم تكلّفك المرتجعات وطلبات الدفع عند الاستلام المرفوضة، حسب المنتج والمدينة."
+   ],
+   [
+    "Three actions on one page, in Arabic or English. $100 with a second period to compare.",
+    "ثلاث خطوات عملية في صفحة واحدة، بالعربية أو بالإنجليزية. وبـ100 دولار إن أضفت فترة ثانية للمقارنة."
+   ],
+   [
+    "Pick this when your store shows sales, but you can’t say how much of it you keep.",
+    "اختر هذه حين يعرض متجرك المبيعات، ولا تعرف كم يبقى لك منها."
+   ],
+   [
+    "Season review",
+    "مراجعة الموسم"
+   ],
+   [
+    "Before Ramadan, White Friday or 11.11, see how last season really did, and what to stock and spend on next time.",
+    "قبل رمضان أو الجمعة البيضاء أو 11.11، اعرف كيف كان أداء الموسم الماضي فعلًا، وما الذي تجهّز له المخزون والإعلانات في الموسم القادم."
+   ],
+   [
+    "Profit by product and channel for the season, against a normal month.",
+    "الربح حسب المنتج والقناة خلال الموسم، مقارنةً بشهر عادي."
+   ],
+   [
+    "What sold out, what sat on the shelf, and what came back as returns.",
+    "ما نفد، وما بقي على الرف، وما عاد إليك مرتجعًا."
+   ],
+   [
+    "A short plan for the next season, delivered 4 to 8 weeks before it starts.",
+    "خطة قصيرة للموسم القادم، نسلّمها قبل بدايته بـ4 إلى 8 أسابيع."
+   ],
+   [
+    "Pick this when a big season is coming and the plan rests on memories of the last one.",
+    "اختر هذه حين يقترب موسم كبير، وخطتك مبنية على ما تتذكره من الموسم السابق."
+   ],
+   [
+    "Profit Dashboard, after a Snapshot",
+    "لوحة الربح، بعد لقطة الربح"
+   ],
+   [
+    "The numbers your Snapshot found, in one place each week, refreshed without rebuilding.",
+    "الأرقام التي كشفتها اللقطة، في مكان واحد كل أسبوع، تُحدَّث دون أن نعيد بناءها."
+   ],
+   [
+    "From $150",
+    "من 150 دولارًا"
+   ],
+   [
+    "1–2 weeks",
+    "أسبوع إلى أسبوعين"
+   ],
+   [
+    "Built in Looker Studio or Google Sheets, so you pay no licence. $300 adds ad spend by channel.",
+    "نبنيها على Looker Studio أو Google Sheets، فلا تدفع رسوم ترخيص. وبـ300 دولار نضيف الإنفاق الإعلاني حسب القناة."
+   ],
+   [
+    "A written definition of every number on it.",
+    "تعريف مكتوب لكل رقم فيها."
+   ],
+   [
+    "Optional monthly profit report at $40 a month, with fresh numbers and three lines on what changed.",
+    "تقرير ربح اختياري كل شهر بـ40 دولارًا، بأرقام محدّثة وثلاثة أسطر عمّا تغيّر."
+   ],
+   [
+    "Pick this when the Snapshot showed what to watch, and you want to see it every week.",
+    "اختر هذه بعد أن تُظهر لك اللقطة ما يستحق المتابعة، وتريد أن تراه كل أسبوع."
+   ],
+   [
+    "Not sure which one you need? Take the two-minute store profit check .",
+    "لست متأكدًا أيّها تحتاج؟ أجرِ فحص ربح المتجر في دقيقتين.",
+    "Link goes to /ar/check/."
+   ]
+  ],
+  "03 method": [
+   [
+    "Five stages. Each one stops the next being guesswork.",
+    "خمس مراحل، كل مرحلة تحمي التي بعدها من التخمين."
+   ],
+   [
+    "Observe",
+    "نلاحظ"
+   ],
+   [
+    "How the business really runs, and where the data comes from.",
+    "كيف يعمل متجرك فعلًا، ومن أين تأتي البيانات."
+   ],
+   [
+    "Measure",
+    "نقيس"
+   ],
+   [
+    "What’s captured, missing or inconsistent. This sets the ceiling.",
+    "ما الذي يُسجَّل، وما الناقص أو غير المتّسق. وهذا يحدّد سقف ما يمكن معرفته."
+   ],
+   [
+    "Understand",
+    "نفهم"
+   ],
+   [
+    "What the numbers say, checked against how you operate.",
+    "ماذا تقول الأرقام، بعد مطابقتها مع طريقة عملك."
+   ],
+   [
+    "Identify",
+    "نحدّد"
+   ],
+   [
+    "The few things worth acting on now.",
+    "الأمور القليلة التي تستحق أن تعمل عليها الآن."
+   ],
+   [
+    "Decide",
+    "تقرّر",
+    "The last stage switches to \"you decide\" on purpose: the decision stays with the client."
+   ],
+   [
+    "Clear options, with what each would take. The decision stays yours.",
+    "خيارات واضحة، مع ما يتطلبه كلٌّ منها. والقرار يبقى لك."
+   ],
+   [
+    "What we need to start",
+    "ما نحتاجه للبدء"
+   ],
+   [
+    "Your orders export from Salla, Zid or Shopify.",
+    "ملف الطلبات من سلة أو زد أو Shopify."
+   ],
+   [
+    "What each product costs you. We send a simple sheet to fill in.",
+    "تكلفة كل منتج عليك. نرسل لك جدولًا بسيطًا لتعبئته."
+   ],
+   [
+    "Two short calls, one to start and one for the results.",
+    "مكالمتان قصيرتان: واحدة للبدء، وأخرى للنتائج."
+   ]
+  ],
+  "04 proof": [
+   [
+    "What a year of e‑commerce sales shows.",
+    "ما تكشفه سنة من مبيعات متجر إلكتروني."
+   ],
+   [
+    "A UK retailer’s transactions, cleaned as shown at the top. Public data: check us.",
+    "معاملات متجر بريطاني، نظّفناها كما في أعلى الصفحة. البيانات عامة، فراجِع عملنا بنفسك."
+   ],
+   [
+    "September to November: a quarter of the calendar, over a third of the money.",
+    "من سبتمبر إلى نوفمبر: ربع السنة، وأكثر من ثلث الإيرادات."
+   ],
+   [
+    "Of the 522,568 clean sale lines, 24,754 fall in December 2011, a partial month, and are left out: 497,814 are in the chart’s window.",
+    "من أسطر البيع النظيفة، وعددها 522,568، يقع 24,754 في ديسمبر 2011، وهو شهر غير مكتمل، فاستبعدناها، ليبقى 497,814 سطرًا داخل فترة الرسم."
+   ],
+   [
+    "497,814 in the window",
+    "497,814 داخل الفترة"
+   ],
+   [
+    "−24,754 Dec 2011, partial",
+    "−24,754 ديسمبر 2011، غير مكتمل",
+    "Signed figure: wrap it in LRI…PDI (or <bdi dir=\"ltr\">) so the minus stays on the left of the number in RTL."
+   ],
+   [
+    "522,568 clean lines",
+    "522,568 سطرًا نظيفًا"
+   ],
+   [
+    "£ million, net",
+    "الصافي، مليون £"
+   ],
+   [
+    "25% of the calendar",
+    "25% من السنة"
+   ],
+   [
+    "37.5% of the money",
+    "37.5% من الإيرادات"
+   ],
+   [
+    "One line flagged, kept",
+    "سطر واحد مُعلَّم، أبقيناه"
+   ],
+   [
+    "Dec to Aug",
+    "ديسمبر–أغسطس"
+   ],
+   [
+    "Sep to Nov",
+    "سبتمبر–نوفمبر"
+   ],
+   [
+    "Outlier: robust z > 7 on log line value",
+    "قيمة شاذة: درجة z المتينة أكبر من 7 على لوغاريتم قيمة السطر"
+   ],
+   [
+    "n = 497,814 sale lines, Dec 2010 – Nov 2011, 8,321 cancellations netted.",
+    "n = 497,814 سطر بيع، ديسمبر 2010 – نوفمبر 2011، بعد مقاصّة 8,321 إلغاءً."
+   ],
+   [
+    "December 2011 (partial) left out · Online Retail, UCI ML Repository · computed 28 Sep 2026",
+    "استُبعد ديسمبر 2011 (شهر غير مكتمل) · Online Retail، مستودع UCI لتعلّم الآلة · حُسب في 28 سبتمبر 2026"
+   ],
+   [
+    "Every value, as a table",
+    "كل القيم في جدول"
+   ],
+   [
+    "Net revenue by month, December 2010 to November 2011, with each month’s share of the year. The ringed month holds the flagged line.",
+    "صافي الإيرادات شهريًا من ديسمبر 2010 إلى نوفمبر 2011، مع حصة كل شهر من السنة. الشهر المحاط بدائرة يضم السطر المُعلَّم."
+   ],
+   [
+    "Month",
+    "الشهر"
+   ],
+   [
+    "Net, £",
+    "الصافي، £"
+   ],
+   [
+    "Share",
+    "الحصة"
+   ],
+   [
+    "Dec 2010",
+    "ديسمبر 2010"
+   ],
+   [
+    "Jan 2011",
+    "يناير 2011"
+   ],
+   [
+    "Feb 2011",
+    "فبراير 2011"
+   ],
+   [
+    "Mar 2011",
+    "مارس 2011"
+   ],
+   [
+    "Apr 2011",
+    "أبريل 2011"
+   ],
+   [
+    "May 2011",
+    "مايو 2011"
+   ],
+   [
+    "Jun 2011",
+    "يونيو 2011"
+   ],
+   [
+    "Jul 2011",
+    "يوليو 2011"
+   ],
+   [
+    "Aug 2011",
+    "أغسطس 2011"
+   ],
+   [
+    "Sep 2011",
+    "سبتمبر 2011"
+   ],
+   [
+    "Oct 2011",
+    "أكتوبر 2011"
+   ],
+   [
+    "Nov 2011",
+    "نوفمبر 2011"
+   ],
+   [
+    "DEC JAN FEB … (chart axis)",
+    "ديسمبر يناير فبراير مارس أبريل مايو يونيو يوليو أغسطس سبتمبر أكتوبر نوفمبر",
+    "On the phone chart, use the first letter of each Arabic month only if it stays unambiguous; otherwise use the month number 12, 1, 2 … 11."
+   ],
+   [
+    "1 flagged line, £38,970, kept",
+    "سطر واحد مُعلَّم، £38,970، أبقيناه"
+   ],
+   [
+    "Twelve months",
+    "اثنا عشر شهرًا"
+   ],
+   [
+    "The flagged June line: 60 × £649.50, re-ordered as one set five minutes later. Kept: the retailer’s question, not ours to delete.",
+    "سطر يونيو المُعلَّم: 60 × £649.50، وأُعيد طلبه مجموعةً واحدة بعد خمس دقائق. أبقيناه: هذا سؤال يخص المتجر، وليس لنا أن نحذفه."
+   ],
+   [
+    "Two other lines pass the test: one cancelled in January, one outside the window.",
+    "سطران آخران يتجاوزان الحد نفسه: أحدهما أُلغي في يناير، والآخر خارج فترة الرسم."
+   ],
+   [
+    "Same twelve months",
+    "خلال الأشهر الاثني عشر نفسها"
+   ],
+   [
+    "234 customers, about 1 in 18, brought half of identified customers’ revenue.",
+    "234 عميلًا، أي نحو واحد من كل 18، جاء منهم نصف الإيرادات المنسوبة إلى عملاء معروفين."
+   ],
+   [
+    "The largest order: 74,215 storage jars, cancelled 16 minutes later. Left in, January reads 13% high.",
+    "أكبر طلب: 74,215 وعاء تخزين، أُلغي بعد 16 دقيقة. ولو بقي في الحساب لبدا يناير أعلى بـ13%."
+   ],
+   [
+    "of net revenue has no customer ID (123,628 sale lines). Flagged, not deleted.",
+    "من صافي الإيرادات بلا رقم عميل (123,628 سطر بيع). علّمناها ولم نحذفها."
+   ],
+   [
+    "Half the revenue",
+    "نصف الإيرادات"
+   ],
+   [
+    "4,284 customers",
+    "4,284 عميلًا"
+   ],
+   [
+    "January, net",
+    "صافي يناير"
+   ],
+   [
+    "+13% if left in",
+    "+13% لو بقي",
+    "Signed figure: wrap it in LRI…PDI so the plus stays on the left in RTL."
+   ],
+   [
+    "No customer ID",
+    "بلا رقم عميل"
+   ],
+   [
+    "Net revenue",
+    "صافي الإيرادات"
+   ],
+   [
+    "From a real conversation",
+    "من محادثة حقيقية"
+   ],
+   [
+    "Reporting gaps and missing history were the symptom, not the thing to fix.",
+    "فجوات التقارير ونقص البيانات التاريخية كانت العَرَض، لا ما يجب إصلاحه."
+   ],
+   [
+    "We expected dashboard work. The problems sat a level below, in how information was captured. Shared with permission.",
+    "توقعنا عملًا على لوحات المتابعة، لكن المشكلات كانت في مستوى أعمق: في طريقة تسجيل المعلومات. نُشر بإذن صاحبه."
+   ]
+  ],
+  "05 where": [
+   [
+    "We are a new practice.",
+    "ما زلنا في البداية.",
+    "For Wafa’a to decide. Softer than the English. Alternatives: «نحن جهة جديدة.» or «بدأنا للتو.»"
+   ],
+   [
+    "exploratory session",
+    "جلسة استكشافية",
+    "These three labels sit beside a live count and must agree with it: 1 → as written; 2 → جلستان استكشافيتان / عرضان مكتوبان / مشروعان تجاريان مكتملان; 3–10 → جلسات استكشافية / عروض مكتوبة / مشاريع تجارية مكتملة; 0 → use the plural."
+   ],
+   [
+    "proposal written",
+    "عرض مكتوب"
+   ],
+   [
+    "completed commercial projects",
+    "مشروع تجاري مكتمل"
+   ],
+   [
+    "So: a worked example on public data, not a client list. The first three stores get the $100 Snapshot for $50, for an honest review.",
+    "لذلك نعرض مثالًا عمليًا على بيانات عامة، لا قائمة عملاء. ويحصل أول ثلاثة متاجر على لقطة الربح بـ50 دولارًا بدلًا من 100، مقابل تقييم صريح."
+   ]
+  ],
+  "06 about": [
+   [
+    "The name is the method.",
+    "الاسم هو المنهج."
+   ],
+   [
+    "In Python, .describe() is the first thing you run on an unfamiliar dataset: rows, averages, extremes, gaps. You look first. The bracket stays open: what goes inside is your business.",
+    "في لغة Python، الأمر ⁦.describe()⁩ هو أول ما تشغّله على بيانات لا تعرفها: عدد الصفوف، والمتوسطات، والقيم القصوى، والفجوات. تنظر أولًا. والقوس يبقى مفتوحًا: ما بداخله هو عملك."
+   ],
+   [
+    "I’m Wafa’a Al-Hayek , and I run .describe( from Gaza.",
+    "أنا وفاء الحايك، وأدير ⁦.describe(⁩ من غزة."
+   ],
+   [
+    "I studied business administration, joined a software bootcamp in 2022, and moved to data analytics in 2023: analytics, monitoring and evaluation, reporting. Most data work goes wrong on the question, not the technique.",
+    "درستُ إدارة الأعمال، والتحقت ببرنامج مكثف في تطوير البرمجيات عام 2022، ثم انتقلت إلى تحليل البيانات عام 2023: التحليل، والرصد والتقييم، وإعداد التقارير. وأغلب مشاريع البيانات تتعثر عند السؤال، لا عند التقنية."
+   ],
+   [
+    "The team is me, for now; a software engineer and a data analyst join as work grows. You’ll always know who’s on your project.",
+    "الفريق الآن أنا وحدي، وسينضم مهندس برمجيات ومحلل بيانات مع نمو العمل. وستعرف دائمًا من يعمل على مشروعك."
+   ],
+   [
+    "A number doesn’t have to be wrong to mislead you.",
+    "قد يضلّلك الرقم وهو صحيح.",
+    "For Wafa’a to decide. A plainer version: «لا يلزم أن يكون الرقم خاطئًا ليضلّلك.»"
+   ],
+   [
+    "We show our method, name what we excluded, and say when a finding is weaker than you hoped. You should be able to check us.",
+    "نعرض منهجنا، ونذكر ما استبعدناه، ونخبرك حين تكون النتيجة أضعف مما كنت تأمل. ومن حقك أن تراجع عملنا."
+   ]
+  ],
+  "07 faq": [
+   [
+    "Before you write.",
+    "قبل أن تراسلنا."
+   ],
+   [
+    "We don’t have anyone who works with data. Is that a problem?",
+    "ليس لدينا من يعمل على البيانات. هل هذه مشكلة؟"
+   ],
+   [
+    "No, that’s who this is for. We need one person who knows how the business runs. Usually that’s you.",
+    "لا، فأنت تحديدًا من نعمل له. نحتاج إلى شخص واحد يعرف كيف يعمل المتجر، وغالبًا هو أنت."
+   ],
+   [
+    "We’re not sure what we need. Can we still talk?",
+    "لسنا متأكدين مما نحتاجه. هل يمكننا أن نتحدث رغم ذلك؟"
+   ],
+   [
+    "Yes. Bring the decision you’re stuck on, not a specification. Finding the right question is part of the job.",
+    "نعم. اعرض علينا القرار الذي تتردد فيه، لا قائمة مواصفات. فإيجاد السؤال الصحيح جزء من عملنا."
+   ],
+   [
+    "What happens to our data?",
+    "ماذا يحدث لبياناتنا؟"
+   ],
+   [
+    "A read-only connection or a recent export, so we can’t change anything. Used only for your project, never shared or sold, deleted after delivery. We’ll sign an NDA first if you prefer.",
+    "نعمل عبر ربط بصلاحية قراءة فقط أو على ملف تصدير حديث، فلا نستطيع تغيير أي شيء. نستخدمها لمشروعك وحده، ولا نشاركها ولا نبيعها، ونحذفها بعد التسليم. ونوقّع اتفاقية عدم إفصاح قبل البدء إن أردت."
+   ],
+   [
+    "How do we know the work will be any good?",
+    "كيف نعرف أن العمل سيكون جيدًا؟"
+   ],
+   [
+    "You don’t yet. Judge the worked example, then a small scoped first piece, before anything larger. The first conversation costs nothing.",
+    "لا يمكنك أن تعرف ذلك بعد. احكم على المثال العملي، ثم على عمل أول صغير ومحدد النطاق، قبل أي شيء أكبر. والمحادثة الأولى مجانية."
+   ],
+   [
+    "Do you clean the data too?",
+    "هل تنظّفون البيانات أيضًا؟"
+   ],
+   [
+    "Yes, in every job, at no extra cost. Returns, cancellations and duplicate customers are sorted out before anything is counted, and you get a log of what changed.",
+    "نعم، في كل مشروع ودون تكلفة إضافية. نعالج المرتجعات والإلغاءات والعملاء المكرّرين قبل أي حساب، وتحصل على سجل بكل ما تغيّر."
+   ]
+  ],
+  "08 contact": [
+   [
+    "Tell us about your store.",
+    "حدّثنا عن متجرك."
+   ],
+   [
+    "Copy address",
+    "نسخ العنوان"
+   ],
+   [
+    "Copied.",
+    "تم النسخ."
+   ],
+   [
+    "Open mail app",
+    "فتح تطبيق البريد"
+   ],
+   [
+    "First reply",
+    "أول رد"
+   ],
+   [
+    "Within 24 hours",
+    "خلال 24 ساعة"
+   ],
+   [
+    "Languages",
+    "اللغات"
+   ],
+   [
+    "English, Arabic",
+    "العربية، الإنجليزية"
+   ],
+   [
+    "Intake form",
+    "نموذج التواصل"
+   ],
+   [
+    "Name",
+    "الاسم"
+   ],
+   [
+    "optional",
+    "اختياري"
+   ],
+   [
+    "Email",
+    "البريد الإلكتروني"
+   ],
+   [
+    "Add an email so we can reply.",
+    "أضف بريدك الإلكتروني لنرد عليك."
+   ],
+   [
+    "Check the address: it needs an @ and a domain, like [email protected]",
+    "تحقّق من العنوان: يجب أن يحتوي على @ ونطاق، مثل name@company.com",
+    "Mistyped-email message, if the build has one."
+   ],
+   [
+    "What can we help with?",
+    "بماذا نساعدك؟"
+   ],
+   [
+    "Your platform, orders a month, and what you want to know about your profit.",
+    "منصتك، وعدد طلباتك في الشهر، وما تريد أن تعرفه عن ربحك."
+   ],
+   [
+    "Add a line about your store.",
+    "أضف سطرًا عن متجرك."
+   ],
+   [
+    "Leave this empty",
+    "اترك هذا الحقل فارغًا",
+    "Honeypot field label."
+   ],
+   [
+    "Send",
+    "إرسال"
+   ],
+   [
+    "Used only to reply. Deleted on request. Privacy",
+    "نستخدم بياناتك للرد فقط، ونحذفها عند طلبك. الخصوصية",
+    "\"الخصوصية\" links to /ar/privacy/."
+   ],
+   [
+    "This preview doesn’t send yet.",
+    "تعذّر الإرسال.",
+    "Fallback heading when sending fails. The English source line reads like a leftover preview string; check it."
+   ],
+   [
+    "Nothing was sent: email [email protected] instead.",
+    "لم يُرسَل شيء. راسلنا مباشرة على info@describe.team"
+   ],
+   [
+    "(success)",
+    "وصلت رسالتك. سنرد عليك خلال 24 ساعة.",
+    "Shown only after the form service confirms success."
+   ]
+  ]
+ },
+ "check": [
+  [
+   "Store profit health check",
+   "فحص ربح المتجر"
+  ],
+  [
+   "Eight questions, about two minutes. Your answers are scored in your browser and are not sent anywhere unless you choose to send your result.",
+   "ثمانية أسئلة في نحو دقيقتين. تُحسب إجاباتك في متصفحك، ولا تُرسل إلى أي مكان إلا إذا اخترت أن ترسل نتيجتك."
+  ],
+  [
+   "1. Do you know your profit on each order after product cost, shipping and payment fees?",
+   "1. هل تعرف ربحك من كل طلب بعد تكلفة المنتج والشحن ورسوم الدفع؟"
+  ],
+  [
+   "Yes, for every order",
+   "نعم، لكل طلب"
+  ],
+  [
+   "Roughly, as an average",
+   "تقريبًا، في المتوسط"
+  ],
+  [
+   "I know sales, not profit",
+   "أعرف المبيعات، لا الربح"
+  ],
+  [
+   "No",
+   "لا"
+  ],
+  [
+   "2. Do you know which products earn the most after costs, not just which sell the most?",
+   "2. هل تعرف أيّ منتجاتك يربح أكثر بعد التكاليف، لا أيّها يبيع أكثر فقط؟"
+  ],
+  [
+   "Yes, ranked by profit",
+   "نعم، مرتّبة حسب الربح"
+  ],
+  [
+   "I know the best sellers by sales",
+   "أعرف الأكثر مبيعًا"
+  ],
+  [
+   "Not really",
+   "لا أعرف فعلًا"
+  ],
+  [
+   "3. Returns and refused cash-on-delivery orders. Do you know what they cost you each month?",
+   "3. المرتجعات وطلبات الدفع عند الاستلام المرفوضة: هل تعرف كم تكلّفك كل شهر؟"
+  ],
+  [
+   "Yes, in money, by product or city",
+   "نعم، بالمبلغ، حسب المنتج أو المدينة"
+  ],
+  [
+   "I know how many, not what they cost",
+   "أعرف عددها، لا تكلفتها"
+  ],
+  [
+   "4. Can you say what your ad spend brings back in profit, not just in sales?",
+   "4. هل تعرف كم يجلب لك إنفاقك الإعلاني من ربح، لا من مبيعات فقط؟"
+  ],
+  [
+   "Yes, for each channel",
+   "نعم، لكل قناة"
+  ],
+  [
+   "Only the ad platform’s own figures",
+   "أرقام منصة الإعلانات نفسها فقط"
+  ],
+  [
+   "5. Where do your sales numbers come from?",
+   "5. من أين تأتي أرقام مبيعاتك؟"
+  ],
+  [
+   "A sheet or dashboard that updates itself",
+   "جدول أو لوحة تُحدَّث تلقائيًا"
+  ],
+  [
+   "An export I tidy by hand each month",
+   "ملف تصدير أرتّبه يدويًا كل شهر"
+  ],
+  [
+   "The store’s own dashboard only",
+   "لوحة تحكم المتجر فقط"
+  ],
+  [
+   "The bank balance",
+   "رصيد البنك"
+  ],
+  [
+   "6. Do you know what share of your orders come from returning customers?",
+   "6. هل تعرف نسبة طلباتك التي تأتي من عملاء يعودون للشراء؟"
+  ],
+  [
+   "Yes, and I watch it monthly",
+   "نعم، وأتابعها شهريًا"
+  ],
+  [
+   "I could find out",
+   "يمكنني معرفتها"
+  ],
+  [
+   "7. Before a big season like Ramadan, White Friday or 11.11, how do you plan stock and ad spend?",
+   "7. قبل موسم كبير مثل رمضان أو الجمعة البيضاء أو 11.11، كيف تخطط للمخزون والإنفاق الإعلاني؟"
+  ],
+  [
+   "From last season’s numbers, by product",
+   "من أرقام الموسم الماضي، حسب المنتج"
+  ],
+  [
+   "A rough look at last year",
+   "نظرة تقريبية على العام الماضي"
+  ],
+  [
+   "Memory and instinct",
+   "الذاكرة والحدس"
+  ],
+  [
+   "8. How long would it take you to answer “what did we make last month?”",
+   "8. كم تحتاج من الوقت لتجيب عن سؤال: «كم ربحنا الشهر الماضي؟»"
+  ],
+  [
+   "Minutes",
+   "دقائق"
+  ],
+  [
+   "A few hours",
+   "بضع ساعات"
+  ],
+  [
+   "Days, or I couldn’t say for sure",
+   "أيام، أو لا أستطيع الجزم"
+  ],
+  [
+   "See my score",
+   "اعرض نتيجتي"
+  ],
+  [
+   "Your score",
+   "نتيجتك"
+  ],
+  [
+   "0 out of 100",
+   "0 من 100",
+   "The score updates live; keep Western digits."
+  ],
+  [
+   "Where to look first",
+   "من أين تبدأ"
+  ],
+  [
+   "Get these answers from your own data",
+   "احصل على هذه الإجابات من بياناتك أنت"
+  ],
+  [
+   "The Profit Snapshot reads your orders export and product costs from Salla, Zid or Shopify and answers the first four questions for your store, with three actions on one page.",
+   "لقطة الربح تقرأ ملف طلباتك وتكاليف منتجاتك من سلة أو زد أو Shopify، وتجيب عن الأسئلة الأربعة الأولى لمتجرك، مع ثلاث خطوات عملية في صفحة واحدة."
+  ],
+  [
+   "Ask about a Profit Snapshot",
+   "اسأل عن لقطة الربح"
+  ],
+  [
+   "Want us to look at your result?",
+   "هل تريد أن نراجع نتيجتك؟"
+  ],
+  [
+   "Send your score and answers with your email and we’ll reply with what we’d check first. Nothing else is sent.",
+   "أرسل نتيجتك وإجاباتك مع بريدك الإلكتروني، وسنرد عليك بما نبدأ بفحصه. لا يُرسل أي شيء آخر."
+  ],
+  [
+   "Add an email address, for example [email protected] .",
+   "أضف بريدًا إلكترونيًا، مثل name@company.com"
+  ],
+  [
+   "Send my result",
+   "أرسل نتيجتي"
+  ],
+  [
+   "(per-question advice)",
+   "",
+   "The check shows advice per weak answer; that text lives in the page script. Send its strings for Arabic copy in the same style before launch."
+  ]
+ ],
+ "privacy": [
+  [
+   "Privacy",
+   "الخصوصية"
+  ],
+  [
+   "This site has no accounts, no cookies, no analytics and no advertising trackers.",
+   "ليس في هذا الموقع حسابات، ولا ملفات تعريف ارتباط (كوكيز)، ولا أدوات تحليل، ولا أدوات تتبّع إعلانية."
+  ],
+  [
+   "When you use the contact form",
+   "حين تستخدم نموذج التواصل"
+  ],
+  [
+   "What you type (your name if you give it, your email address and your message) is sent to a private Google Sheet that only we can open, and we receive an email alert. It is handled by Google Apps Script, in our Google Workspace account.",
+   "ما تكتبه (اسمك إن ذكرته، وبريدك الإلكتروني، ورسالتك) يُرسل إلى جدول Google خاص لا يفتحه غيرنا، ويصلنا تنبيه بالبريد الإلكتروني. وتتولى ذلك أداة Google Apps Script ضمن حسابنا في Google Workspace."
+  ],
+  [
+   "We use it only to reply to you and, if we work together, to run that project. We don't sell it, share it for marketing, or add you to a mailing list.",
+   "نستخدمه فقط للرد عليك، ولإدارة المشروع إن عملنا معًا. لا نبيعه، ولا نشاركه لأغراض تسويقية، ولا نضيفك إلى قائمة بريدية."
+  ],
+  [
+   "When you book a call",
+   "حين تحجز مكالمة"
+  ],
+  [
+   "Calls are booked through Google Calendar's booking page, in our Google Workspace account. Your name, email address and the time you pick go into our calendar, and Google sends you the invitation. We use them only for that call.",
+   "تُحجز المكالمات عبر صفحة الحجز في Google Calendar ضمن حسابنا في Google Workspace. يدخل اسمك وبريدك الإلكتروني والوقت الذي تختاره إلى تقويمنا، وترسل لك Google الدعوة. ولا نستخدمها إلا لتلك المكالمة."
+  ],
+  [
+   "When you take the store profit check",
+   "حين تُجري فحص ربح المتجر"
+  ],
+  [
+   "Your answers are scored in your browser and are not sent to us or anyone else. If you choose to send your result, we receive your email address, your name if you give it, your score and your answers, the same way as the contact form, and use them only to reply.",
+   "تُحسب نتيجتك في متصفحك، ولا تُرسل إلينا ولا إلى أي جهة أخرى. وإن اخترت أن ترسل نتيجتك، يصلنا بريدك الإلكتروني واسمك إن ذكرته ونتيجتك وإجاباتك، بالطريقة نفسها التي يعمل بها نموذج التواصل، ولا نستخدمها إلا للرد عليك."
+  ],
+  [
+   "Data you share for a project",
+   "البيانات التي تشاركها لمشروع"
+  ],
+  [
+   "We prefer a read-only connection or a recent export, so we can't change anything. It is used only for your project, never shared or sold, and deleted once the work is delivered. If you keep a monthly report with us, we keep only what that report needs, until you stop it. We'll sign an NDA first if you prefer.",
+   "نفضّل ربطًا بصلاحية قراءة فقط أو ملف تصدير حديثًا، فلا نستطيع تغيير أي شيء. نستخدمها لمشروعك وحده، ولا نشاركها ولا نبيعها، ونحذفها بعد تسليم العمل. وإن اشتركت معنا في تقرير شهري، نحتفظ فقط بما يحتاجه ذلك التقرير حتى توقفه. ونوقّع اتفاقية عدم إفصاح قبل البدء إن أردت."
+  ],
+  [
+   "When you message us on WhatsApp",
+   "حين تراسلنا على واتساب"
+  ],
+  [
+   "WhatsApp, run by Meta, carries the messages. We see your number and what you write, and use them only to reply.",
+   "تمرّ الرسائل عبر واتساب، التابع لشركة Meta. نرى رقمك وما تكتبه، ولا نستخدمهما إلا للرد عليك."
+  ],
+  [
+   "Hosting and fonts",
+   "الاستضافة والخطوط"
+  ],
+  [
+   "The site is served by Cloudflare, which processes standard request data such as your IP address and browser to deliver and protect it. The typefaces load from Google Fonts, so your browser also asks Google's servers for them.",
+   "يُقدَّم الموقع عبر Cloudflare، التي تعالج بيانات الطلب المعتادة، مثل عنوان IP ونوع المتصفح، لتوصيل الموقع وحمايته. وتُحمَّل الخطوط من Google Fonts، فيطلبها متصفحك أيضًا من خوادم Google."
+  ],
+  [
+   "Your requests",
+   "طلباتك"
+  ],
+  [
+   "To see, correct or delete anything we hold about you, write to [email protected] . We reply within 24 hours.",
+   "لتطّلع على أي بيانات نحتفظ بها عنك، أو تصحّحها، أو تحذفها، راسلنا على info@describe.team. نرد خلال 24 ساعة."
+  ],
+  [
+   "Last updated 4 October 2026.",
+   "آخر تحديث: 4 أكتوبر 2026.",
+   "Keep the date in step with the English page."
+  ]
+ ]
+}

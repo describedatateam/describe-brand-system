@@ -33,7 +33,7 @@ marker all read as the same instrument.
 | `type/` | **Role 04** — typography. Tokens, written rules, and a specimen that measures its own decisions |
 | `specs/logo/` | The logo master spec and the open questions against it |
 | `previews/logo/` | Rendered preview sheet |
-| `wordmark/` | The wordmark study — direction A, awaiting approval (`wordmark/README.md`) |
+| `wordmark/` | The approved wordmark, direction A: masters, lockups, and web-ready SVGs in `wordmark/web/` (`wordmark/README.md`) |
 | `ui/` | **Role 07** — interface components, icons and their specimen. Rules in `ui/UI.md` |
 | `charts/` | **Role 03** — chart kit: SVG and matplotlib styles, worked figures. Rules in `charts/CHARTS.md` |
 | `illustrations/` | The illustration layer (`illustrations/ILLUSTRATION.md`) |
@@ -121,8 +121,10 @@ The test: *if a run of mono reads as a phrase, it is the wrong face.*
   `type/TYPOGRAPHY.md`). The page brackets each multiplier and the value was
   picked by eye at working size — worth a look from someone who reads Arabic
   daily before it is locked.
-- **The wordmark is a study, not approved.** `wordmark/` holds direction A;
-  until it is signed off, lockups remain provisional.
+- **The Arabic site copy is written and awaiting the founder's read.**
+  `website/arabic/` holds every line of the homepage, store profit check and privacy
+  page in Arabic (`ar-copy.json`, review page `review.html`); the build spec for the
+  coding agent is `website/HANDOFF_AR_LOGO.md`.
 - **The proof figures are recomputed from the canonical UCI file** by
   `decisions/uci_retail.py` (→ `uci_audit.json`), and `site/index.html` uses
   them. `site/proof/` is the separate audit of the May 2026 deck, which was

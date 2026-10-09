@@ -1,0 +1,59 @@
+<title>Arabic Copy Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300&family=Readex+Pro:wght@300;400;500&family=Vazirmatn:wght@300;400;500&family=Amiri&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#F6F8FC; --panel:#FFFFFF; --ink:#092052; --body:#3E4C66; --dim:#63738D; --rule:#CBD5E1; --active:#0F58E5;
+  --serif:'Fraunces',Georgia,serif; --sans:'Readex Pro',system-ui,sans-serif;
+  --ar:'Vazirmatn','Segoe UI','Tahoma',sans-serif; --ar-d:'Amiri','Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --ground:#071A42; --panel:#0B2150; --ink:#F6F8FC; --body:#B8C4D8; --dim:#8FA0BC; --rule:#24406F; --active:#5B8DF0}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --ground:#071A42; --panel:#0B2150; --ink:#F6F8FC; --body:#B8C4D8; --dim:#8FA0BC; --rule:#24406F; --active:#5B8DF0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--body);font:300 15px/1.6 var(--sans)}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,48px);padding-block:clamp(36px,6vw,72px) 96px;display:grid;gap:40px}
+header{display:grid;gap:12px;max-width:72ch}
+.lab{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+h1{font:300 clamp(34px,5vw,56px)/1.05 var(--serif);font-variation-settings:'SOFT' 0,'WONK' 0;color:var(--ink);margin:0;letter-spacing:-.015em}
+h1 .arh{display:block;font:400 clamp(30px,4.2vw,48px)/1.4 var(--ar-d);margin-top:6px}
+header p{margin:0}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:0 28px;margin:0;padding:0;list-style:none}
+.rules li{border-top:1px solid var(--rule);padding-block:12px;font-size:14px}
+.rules b{display:block;font-weight:500;color:var(--ink)}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;border-block:1px solid var(--rule);padding-block:12px}
+nav.toc a{color:var(--active);text-decoration:none}
+nav.toc a:hover{text-decoration:underline}
+section{display:grid}
+section h2{display:flex;justify-content:space-between;align-items:baseline;font:300 26px/1.2 var(--serif);color:var(--ink);margin:0 0 6px;padding-bottom:10px;border-bottom:1px solid var(--ink)}
+section h2 span{font:500 11px var(--mono);color:var(--dim);letter-spacing:.1em}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:6px 36px;padding-block:14px;border-bottom:1px solid var(--rule)}
+.en{margin:0;color:var(--dim);font-size:14.5px}
+.ar{margin:0;font-family:var(--ar);font-weight:400;font-size:18px;line-height:1.85;color:var(--ink);text-align:right}
+.row.h .ar{font-family:var(--ar-d);font-size:24px;line-height:1.6}
+.row.h .en{color:var(--ink);font-family:var(--serif);font-size:18px}
+.note{grid-column:1/-1;margin:0;font-size:12.5px;color:var(--dim);border-inline-start:2px solid var(--rule);padding-inline-start:10px}
+bdi[lang="ar"]{font-family:var(--ar);font-size:1.08em}
+.none{color:var(--dim);font-family:var(--sans);font-size:13px}
+@media (max-width:700px){.row{grid-template-columns:1fr}.ar{font-size:17px}}
+a:focus-visible{outline:2px solid var(--active);outline-offset:3px}
+</style>
+<main class="wrap">
+  <header>
+    <span class="lab">describe.team · Arabic · for review</span>
+    <h1>The Arabic site, line by line.<span class="arh" lang="ar" dir="rtl">الموقع بالعربية، سطرًا سطرًا.</span></h1>
+    <p>Every line of the homepage, the store profit check and the privacy page, with the live English on the left and the Arabic on the right. {{N}} lines in plain Modern Standard Arabic, written for store owners in Saudi Arabia and the Gulf rather than translated word for word. An independent Arabic editor has been through it once.</p>
+    <p><strong style="color:var(--ink);font-weight:500">What I need from you:</strong> read the Arabic column and mark anything that doesn't sound like you. Comments on this page reach me.</p>
+  </header>
+  <ul class="rules">
+    <li><b>Names stay Latin</b><bdi dir="ltr">.describe(</bdi>, Shopify, Looker Studio and Google Sheets stay in Latin letters, isolated left to right so the dot and bracket don't jump.</li>
+    <li><b>Western digits</b>As in the charts and in Salla and Zid. Prices stay in US dollars: <bdi lang="ar" dir="rtl">«من 50 دولارًا»</bdi>.</li>
+    <li><b>Words chosen once</b><bdi lang="ar" dir="rtl">لقطة الربح</bdi> for Profit Snapshot; <bdi lang="ar" dir="rtl">المرتجعات</bdi>, <bdi lang="ar" dir="rtl">الدفع عند الاستلام</bdi>, <bdi lang="ar" dir="rtl">أسطر البيع</bdi> and <bdi lang="ar" dir="rtl">الإنفاق الإعلاني</bdi> used the same way everywhere.</li>
+    <li><b>Lines for you to decide</b><bdi lang="ar" dir="rtl">«ما زلنا في البداية.»</bdi> for "We are a new practice.", and <bdi lang="ar" dir="rtl">«قد يضلّلك الرقم وهو صحيح.»</bdi> Alternatives are in the notes under each.</li>
+  </ul>
+  <nav class="toc" aria-label="Sections">{{TOC}}</nav>
+  {{BODY}}
+</main>
