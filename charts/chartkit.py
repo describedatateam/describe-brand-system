@@ -42,7 +42,7 @@ from datetime import datetime
 LIGHT = {"ink": "#092052", "body": "#5A6B85", "dim": "#63738D", "rule": "#D8E1EF",
          "faint": "#CBD5E1", "panel": "#FFFFFF", "story": "#0F58E5",
          "context": "#64748B", "mark": "#E5484D", "pos": "#0F7B3D", "neg": "#8C1D1D"}
-DARK = {"ink": "#F6F8FC", "body": "#9FB0CC", "dim": "#7285A6", "rule": "#16346E",
+DARK = {"ink": "#F6F8FC", "body": "#9FB0CC", "dim": "#788BAC", "rule": "#16346E",
         "faint": "#1C3566", "panel": "#081A40", "story": "#5B8DF0",
         "context": "#676A70", "mark": "#F0696D", "pos": "#3FBE77", "neg": "#E0736F"}
 

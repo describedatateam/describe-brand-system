@@ -57,7 +57,7 @@
 /* Dark is a separate environment, not an inversion. */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ink:#F6F8FC; --body:#9FB0CC; --dim:#7285A6; --faint:#1C3566; --rule:#16346E;
+    --ink:#F6F8FC; --body:#9FB0CC; --dim:#788BAC; --faint:#1C3566; --rule:#16346E;
     --ground:#050F2E; --panel:#081A40; --field:#0A1F4C;
     --active:#5B8DF0; --active-ink:#050F2E;
     --mark:#F0696D; --neg:#E0736F; --pos:#3FBE77;
@@ -65,7 +65,7 @@
   }
 }
 :root[data-theme="dark"]{
-  --ink:#F6F8FC; --body:#9FB0CC; --dim:#7285A6; --faint:#1C3566; --rule:#16346E;
+  --ink:#F6F8FC; --body:#9FB0CC; --dim:#788BAC; --faint:#1C3566; --rule:#16346E;
   --ground:#050F2E; --panel:#081A40; --field:#0A1F4C;
   --active:#5B8DF0; --active-ink:#050F2E;
   --mark:#F0696D; --neg:#E0736F; --pos:#3FBE77;
