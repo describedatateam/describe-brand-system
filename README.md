@@ -28,6 +28,7 @@ marker all read as the same instrument.
 
 | Path | What it is |
 |---|---|
+| `tokens/` | **The design tokens**: one JSON source, generated CSS and JSON, the checks, and the reference (`tokens/TOKENS.md`). See *Design tokens* below |
 | `brandkit/logo/` | The locked 5a mark: ten production variants, the generator, and a QA script |
 | `geometry/` | **Role 02** — the primitive library. Generator, 46 SVG plates, 92 PNGs, derivation notes |
 | `type/` | **Role 04** — typography. Tokens, written rules, and a specimen that measures its own decisions |
@@ -129,12 +130,97 @@ The test: *if a run of mono reads as a phrase, it is the wrong face.*
   `decisions/uci_retail.py` (→ `uci_audit.json`), and `site/index.html` uses
   them. `site/proof/` is the separate audit of the May 2026 deck, which was
   built on the Kaggle copy — use its correction table when revising the deck.
-- **Dark-mode blue is three different values.** `ui/ui.css` uses `#5B8DF0`,
-  the logo generator's dark tier uses `#5B93FF` (`specs/logo/open-questions.md` Q2,
-  still awaiting approval), and `geometry/astrolabe.py` and the wordmark's dark
-  files use `#4F86F7`. Pick one and set it in all three places.
+- **Dark-mode blue is three different values.** The tokens, `ui/ui.css`, the charts
+  and the live site use `#5B8DF0`; the logo generator's dark tier uses `#5B93FF`
+  (`specs/logo/open-questions.md` Q2, still awaiting approval); `geometry/astrolabe.py`,
+  the wordmark's dark files and the October LinkedIn posts use `#4F86F7`. The token is
+  `#5B8DF0` because it is the one validated against the dark chart context grey.
+  Approve it (or another) and regenerate the logo, wordmark and geometry from it.
+  `python3 tokens/check.py --audit` lists every off-token hex left in the repo.
+- **Warning still has no colour.** The tokens follow `ui/UI.md` §5: warning is form
+  only. `decisions/warning.html` shows the amber option; adding it is one token.
 - **Service 02 has no price.** The "when to pick this" text was pasted into the
   price field.
+
+---
+
+## Design tokens
+
+Every colour, size, space, stroke and timing the system uses lives in **one file**,
+`tokens/tokens.json` (W3C design-token format). Everything else is generated from it
+or checked against it.
+
+```
+python3 tokens/build.py     # writes tokens/dist/tokens.css, tokens/dist/tokens.json, tokens/TOKENS.md
+python3 tokens/check.py     # contrast, palette and drift checks; CI runs both on every push
+```
+
+| Output | For |
+|---|---|
+| `tokens/dist/tokens.css` | Anything in a browser: website, data apps, HTML reports, HTML-rendered social posts |
+| `tokens/dist/tokens.json` | Code that is not CSS: Python (matplotlib, Plotly, Streamlit), JS charting, Figma plugins. Flat: each token has `light`, `dark` and its `css` name |
+| `tokens/TOKENS.md` | People: every value, its job and its measured contrast |
+| `tokens/palette.png` | Picking colours by eye in Canva, Slides or Figma (`python3 tokens/render_palette.py`) |
+
+To change a value: edit `tokens.json`, run both scripts, commit all of it. `check.py`
+fails if a colour breaks contrast or the palette rules, or if `ui/ui.css`,
+`type/typography.css`, `charts/chartkit.py` or `charts/mpl/mpl_describe.py` no longer
+carry the token value.
+
+### What the colour tokens are for
+
+| Job | Tokens | Rule |
+|---|---|---|
+| Ground and plates | `--ground`, `--panel`, `--field` | Off-white page, white plates. Dark mode is its own set, not an inversion |
+| Text | `--ink`, `--body`, `--dim` | Every text token clears 4.5:1 on every surface in both modes |
+| Live / primary action | `--active` | Blue. One primary action per view |
+| Outlier | `--mark` | Coral, under a named test. Never text, never an error |
+| Good / bad movement | `--pos`, `--neg` | By meaning, not by sign |
+| One story in a chart | `--viz-story`, `--viz-context` | **The default chart.** Blue for the finding, grey for everything else |
+| Several named series, none the story | `--viz-cat-1` … `--viz-cat-6` | Blue, verdigris, brass, plum, moss, sky, **in that order**. Lines, bars, stacks: up to six. Scatter, maps, small multiples: first three only. More → fold into Other or facet |
+| Magnitude | `--viz-seq-step-1` … `-7` (blue), `--viz-seq-alt-step-*` (brass) | Step 1 is near zero. The steps flip in dark mode so small values recede |
+| Above / below a meaningful zero | `--viz-div-n5` … `--viz-div-0` … `--viz-div-p5` | Brass below, blue above, neutral grey at zero. Polarity, not good/bad |
+
+The categorical, sequential and diverging palettes are new with the tokens. They extend
+the palette (charts/CHARTS.md §9 left multi-series open) without touching the eight
+brand colours, and exclude coral, red and green so an outlier or a status never
+looks like a series. Their checks: OKLab ΔE ≥ 8 between neighbours under protanopia
+and deuteranopia simulation (worst pair 13.5 light, 14.0 dark), ≥ 15 under normal
+vision, ≥ 3:1 against the chart surface, and every slot ≥ 15 from coral.
+
+### By medium
+
+The type scale is one set of ratios (display 5.5×, opener 3.5×, h2 2.5×, h3 1.75×,
+lede 1.31×, meta 0.69× of body). Each medium sets its own body size; spacing scales
+with it. Set `data-medium` on the root of an HTML page and every `--t-*` re-bases.
+
+| Medium | Base | Display / H2 / Body / Meta | How |
+|---|---|---|---|
+| **Website** | 16px | 88 / 40 / 16 / 11 px | `@import url('tokens/dist/tokens.css')`; `ui/ui.css` uses the same names. Theme follows the OS unless `data-theme` is set |
+| **Data apps** | 16px | as web | HTML/React: the CSS file. Python apps: read `tokens/dist/tokens.json` (below). Light and dark both supported; never invent a series colour |
+| **Slides** (1920×1080) | 28px | 154 / 70 / 28 / 19 px | `data-medium="slides"`. In PowerPoint, Keynote or Google Slides set the theme to: Dark 1 `#092052`, Light 1 `#F6F8FC`, Dark 2 `#5A6B85`, Light 2 `#CBD5E1`, Accents 1–6 = categorical 1–6, hyperlink `#0F58E5`. The six theme accents are the six categorical slots, in order |
+| **Social** (1080×1350, 1080×1080) | 32px | 176 / 80 / 32 / 22 px | `data-medium="social"`. Matches the October 2026 LinkedIn set (headlines 80–110, labels 22). Dark posts use the dark tokens: `--active` `#5B8DF0`, `--dim` `#788BAC` |
+| **Reports** (A4, PDF) | 10pt | 55 / 25 / 10 / 7 pt | `data-medium="report"`, light mode only: ink on white panels. Charts from `charts/mpl/` already carry the token colours |
+
+The mono budget scales with the medium: a mono label is at most the medium's
+`--t-meta` (11px on the web, 22px on social), uppercase, four words or fewer.
+
+For Canva, add the eight brand colours plus the six categorical colours to the brand
+kit, in the order above, and set headings in Fraunces Light, body in Readex Pro.
+
+```python
+import json
+T = json.load(open("tokens/dist/tokens.json"))["tokens"]
+c = lambda key, mode="light": T[key][mode]
+
+story, context = c("color.viz.story"), c("color.viz.context")
+categorical = [c(f"color.viz.cat.{i}") for i in range(1, 7)]
+
+# Plotly: fig.update_layout(colorway=categorical)
+# matplotlib: plt.rcParams["axes.prop_cycle"] = plt.cycler(color=categorical)
+# Streamlit .streamlit/config.toml: primaryColor = c("color.role.active"),
+#   backgroundColor = c("color.surface.ground"), textColor = c("color.text.ink")
+```
 
 ---
 
