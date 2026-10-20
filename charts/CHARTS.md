@@ -20,6 +20,7 @@ python3 charts/mpl/example.py    # the same furniture in matplotlib, for noteboo
 | `svg/fig01…06.svg` | Standalone SVGs with their own light/dark tokens. |
 | `figures.json` | Every figure's title, n, source and check numbers, for review diffs. |
 | `mpl/` | `describe.mplstyle` + `mpl_describe.py`: the rules for matplotlib. |
+| `kit/` | **`describe_charts`**: the installable kit for analysis code. matplotlib + Plotly themes, rule helpers, HTML/PDF report template. One line to adopt: `import describe_charts; describe_charts.use()`. See `kit/README.md`. |
 
 ---
 

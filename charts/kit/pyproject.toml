@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "describe-charts"
+version = "0.1.0"
+description = "The .describe( data-visualization kit: matplotlib style, Plotly template, branded HTML/PDF reports"
+requires-python = ">=3.9"
+dependencies = ["matplotlib>=3.6", "fonttools>=4.40"]
+
+[project.optional-dependencies]
+plotly = ["plotly>=5.23", "kaleido>=0.2"]
+report = ["weasyprint>=60", "pandas>=1.5"]
+all = ["plotly>=5.23", "kaleido>=0.2", "weasyprint>=60", "pandas>=1.5"]
+
+[tool.setuptools]
+packages = ["describe_charts"]
+
+[tool.setuptools.package-data]
+describe_charts = ["tokens.json", "templates/*", "styles/*.mplstyle"]

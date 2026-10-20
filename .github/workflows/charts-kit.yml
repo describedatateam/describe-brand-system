@@ -1,0 +1,19 @@
+name: charts-kit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths: ["charts/kit/**", "tokens/**", "wordmark/web/**", ".github/workflows/charts-kit.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install matplotlib fonttools plotly
+      - name: Kit matches the tokens, rule guards hold
+        run: python3 charts/kit/check.py

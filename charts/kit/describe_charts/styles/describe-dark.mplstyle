@@ -1,0 +1,68 @@
+# describe-dark.mplstyle — GENERATED from describe_charts/tokens.json by
+# describe_charts.mpl.write_styles(). Edit tokens.json, not this file.
+# The sequential colormap needs the kit (import describe_charts) to be registered.
+
+font.family                       : sans-serif
+font.sans-serif                   : Readex Pro, Vazirmatn, DejaVu Sans
+font.serif                        : Fraunces Light, Fraunces, Georgia, DejaVu Serif
+font.monospace                    : IBM Plex Mono, DejaVu Sans Mono
+font.size                         : 9
+text.color                        : F6F8FC
+figure.facecolor                  : 081A40
+figure.edgecolor                  : 081A40
+figure.dpi                        : 110
+figure.figsize                    : 7.2, 4.2
+savefig.dpi                       : 200
+savefig.facecolor                 : 081A40
+savefig.bbox                      : tight
+savefig.pad_inches                : 0.25
+axes.facecolor                    : 081A40
+axes.edgecolor                    : 9FB0CC
+axes.linewidth                    : 0.75
+axes.labelcolor                   : 788BAC
+axes.labelsize                    : 7.5
+axes.titlesize                    : 13
+axes.titleweight                  : normal
+axes.titlelocation                : left
+axes.titlecolor                   : F6F8FC
+axes.titlepad                     : 10
+axes.spines.top                   : False
+axes.spines.right                 : False
+axes.spines.left                  : False
+axes.grid                         : True
+axes.grid.axis                    : y
+axes.axisbelow                    : True
+axes.prop_cycle                   : cycler('color', ['5B8DF0', '20A89B', 'AD7C1D', '974DAD', '76923B', '3A9EC8'])
+grid.color                        : 16346E
+grid.linewidth                    : 0.75
+grid.linestyle                    : -
+xtick.color                       : 9FB0CC
+ytick.color                       : 9FB0CC
+xtick.labelcolor                  : 9FB0CC
+ytick.labelcolor                  : 9FB0CC
+xtick.labelsize                   : 8
+ytick.labelsize                   : 8
+xtick.major.size                  : 4
+xtick.major.width                 : 0.75
+xtick.minor.size                  : 2
+ytick.major.size                  : 0
+ytick.minor.size                  : 0
+lines.linewidth                   : 2.0
+lines.solid_capstyle              : round
+lines.solid_joinstyle             : round
+lines.markersize                  : 5.0
+patch.linewidth                   : 0
+patch.facecolor                   : 5B8DF0
+hist.bins                         : auto
+legend.frameon                    : False
+legend.fontsize                   : 8.5
+legend.handlelength               : 1.4
+legend.labelcolor                 : F6F8FC
+boxplot.boxprops.color            : 9FB0CC
+boxplot.whiskerprops.color        : 9FB0CC
+boxplot.capprops.color            : 9FB0CC
+boxplot.medianprops.color         : 5B8DF0
+boxplot.flierprops.markeredgecolor: 676A70
+scatter.edgecolors                : 081A40
+svg.fonttype                      : path
+pdf.fonttype                      : 42
