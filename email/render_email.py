@@ -114,7 +114,7 @@ def render_blocks(bl, font, rtl):
 def signature(rtl):
     font = FONT_AR if rtl else FONT_EN
     name = "وفاء الحايك" if rtl else "Wafa'a Al-Hayek"
-    role = "مؤسِّسة، <span dir=\"ltr\" style=\"font-weight:bold;color:%s;\">.describe(</span> لتحليل البيانات" % INK if rtl else \
+    role = "مؤسِّسة <span style=\"font-weight:bold;color:%s;\">Describe</span> لتحليل البيانات" % INK if rtl else \
            "Founder, <span style=\"font-weight:bold;color:%s;\">.describe(</span> data analytics" % INK
     line = "اعرف ربحك الحقيقي، لا مبيعاتك فقط." if rtl else "See your real profit, not just your sales."
     call = "احجز مكالمة مجانية لمدة 20 دقيقة" if rtl else "Book a free 20-minute call"
