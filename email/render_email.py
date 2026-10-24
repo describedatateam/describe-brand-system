@@ -29,7 +29,7 @@ import html, re, sys
 
 INK, BLUE, MUTED, LINE, TINT, PAPER = "#092052", "#0F58E5", "#64748B", "#CBD5E1", "#E6EFFF", "#F6F8FC"
 LOGO = "https://raw.githubusercontent.com/describedatateam/describe-brand-system/claude/project-thread-xqhvx3/email/lockup-ink-40.png"
-ICON = "https://describe.team/apple-touch-icon.png"
+ICON = "https://raw.githubusercontent.com/describedatateam/describe-brand-system/claude/project-thread-xqhvx3/email/mark-44.png"
 FONT_EN = "Arial,Helvetica,sans-serif"
 FONT_AR = "Tahoma,Arial,sans-serif"
 
@@ -114,14 +114,14 @@ def render_blocks(bl, font, rtl):
 def signature(rtl):
     font = FONT_AR if rtl else FONT_EN
     name = "وفاء الحايك" if rtl else "Wafa'a Al-Hayek"
-    role = "مؤسِّسة، <span style=\"font-weight:bold;color:%s;\">.describe(</span> لتحليل البيانات" % INK if rtl else \
+    role = "مؤسِّسة، <span dir=\"ltr\" style=\"font-weight:bold;color:%s;\">.describe(</span> لتحليل البيانات" % INK if rtl else \
            "Founder, <span style=\"font-weight:bold;color:%s;\">.describe(</span> data analytics" % INK
     line = "اعرف ربحك الحقيقي، لا مبيعاتك فقط." if rtl else "See your real profit, not just your sales."
     call = "احجز مكالمة مجانية لمدة 20 دقيقة" if rtl else "Book a free 20-minute call"
     side, pad = ("right", "padding:0 12px 0 0;") if rtl else ("left", "padding:0 0 0 12px;")
     icon_pad = "padding:2px 0 0 12px;" if rtl else "padding:2px 12px 0 0;"
     return (f'<table role="presentation" cellpadding="0" cellspacing="0" border="0" dir="{"rtl" if rtl else "ltr"}" style="margin-top:8px;border-collapse:collapse;font-family:{font};">'
-            f'<tr><td valign="top" style="{icon_pad}"><a href="https://describe.team/"><img src="{ICON}" width="44" height="44" alt=".describe(" style="display:block;border:0;border-radius:8px;"></a></td>'
+            f'<tr><td valign="top" style="{icon_pad}"><a href="https://describe.team/"><img src="{ICON}" width="44" height="44" alt=".describe(" style="display:block;border:0;"></a></td>'
             f'<td valign="top" style="border-{side}:2px solid {BLUE};{pad}">'
             f'<div style="font-size:14px;line-height:19px;font-weight:bold;color:{INK};">{name}</div>'
             f'<div style="font-size:12px;line-height:17px;color:{MUTED};">{role}</div>'
