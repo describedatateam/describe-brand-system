@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en" data-medium="social"><head><meta charset="utf-8">
+<title>.describe( social · number-1x1</title>
+<link rel="stylesheet" href="../../../tokens/dist/tokens.css">
+<style>
+@font-face{font-family:Fraunces;src:local('Fraunces'),url('../../../decisions/fonts/Fraunces%255BSOFT,WONK,opsz,wght%255D.ttf');font-weight:100 900}
+@font-face{font-family:'Readex Pro';src:local('Readex Pro'),url('../../../decisions/fonts/ReadexPro%255BHEXP,wght%255D.ttf');font-weight:160 700}
+@font-face{font-family:'IBM Plex Mono';src:local('IBM Plex Mono'),url('../../../decisions/fonts/IBMPlexMono-Regular.ttf');font-weight:400}
+@font-face{font-family:'IBM Plex Mono';src:local('IBM Plex Mono Medium'),url('../../../decisions/fonts/IBMPlexMono-Medium.ttf');font-weight:500}
+
+:root{--page-w:1080px;--page-h:1080px}
+@page{size:1080px 1080px;margin:0}
+/* enrich.css — page shell, type roles and the enrichment layer for the slide
+   and social templates. Reads tokens/dist/tokens.css; never types a colour.
+   Each element is described in templates/ENRICHMENT.md. */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#888}
+body{display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px 0}
+@media print{html,body{background:none}body{display:block;padding:0}}
+
+/* ---- the page ---------------------------------------------------------- */
+.pg{
+  --pg-ground:var(--ground);
+  --accent:var(--active);
+  --pad-x:calc(var(--t-body) * 4.6);
+  --pad-y:calc(var(--t-body) * 3.4);
+  width:var(--page-w);height:var(--page-h);
+  position:relative;overflow:hidden;flex:none;
+  background:var(--pg-ground);color:var(--ink);
+  font-family:var(--font-sans);font-weight:var(--w-body);font-size:var(--t-body);
+  line-height:var(--lh-body);
+  padding:var(--pad-y) var(--pad-x);
+  display:flex;flex-direction:column;
+  break-after:page;
+}
+[data-medium="social"] .pg{--pad-x:calc(var(--t-body) * 2.75);--pad-y:calc(var(--t-body) * 2.75)}
+.pg--brass{--pg-ground:var(--viz-seq-alt-100);--accent:var(--viz-seq-alt-500);--faint:var(--viz-seq-alt-200);--rule:var(--viz-seq-alt-200)}
+.pg > *{position:relative;z-index:1}
+.pg > .layer,.pg > .dither,.pg > .bg{position:absolute;z-index:0}
+
+/* ---- type roles -------------------------------------------------------- */
+.display,.opener,.h2,.h3{font-family:var(--font-serif);font-weight:var(--w-display);
+  font-variation-settings:'SOFT' 0,'WONK' 0;color:var(--ink)}
+.display{font-size:var(--t-display);line-height:var(--lh-display);letter-spacing:var(--tr-display)}
+.opener{font-size:var(--t-opener);line-height:var(--lh-opener);letter-spacing:var(--tr-opener)}
+.h2{font-size:var(--t-h2);line-height:var(--lh-h2);letter-spacing:var(--tr-h2)}
+.h3{font-size:var(--t-h3);line-height:var(--lh-h3);letter-spacing:var(--tr-h3)}
+.lede{font-size:var(--t-lede);line-height:var(--lh-lede);color:var(--body)}
+.body{color:var(--body)}
+.em{color:var(--accent)}
+/* mono budget: a label is at most --t-meta, uppercase, four words or fewer */
+.label{font-family:var(--font-mono);font-weight:var(--w-meta);font-size:var(--t-meta);
+  letter-spacing:var(--tr-meta);text-transform:uppercase;color:var(--dim);line-height:1.4}
+.num{font-family:var(--font-mono);font-weight:500;letter-spacing:-0.02em;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--ink)}
+.num--accent{color:var(--accent)}
+.src{font-size:calc(var(--t-meta) * .95);line-height:1.45;color:var(--dim);max-width:62%}
+/* a figure that never happened: ink figure, struck in the negative colour.
+   Coral stays on the outlier ring; it is never text. */
+.void{text-decoration:line-through;text-decoration-color:var(--neg);text-decoration-thickness:.06em}
+.rule{border-top:var(--hair) solid var(--rule)}
+
+/* ---- footer: source line and lockup ----------------------------------- */
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+.lockup{--wm-ink:var(--ink);--wm-accent:var(--active);height:calc(var(--t-body) * 1.45);width:auto;flex:none}
+
+/* ---- geometry: the semantic classes read the tokens -------------------- */
+.geo .ink{stroke:var(--ink);color:var(--ink)}
+.geo .body{stroke:var(--dim);color:var(--dim)}
+.geo .faint{stroke:var(--faint);color:var(--faint)}
+.geo .active{stroke:var(--accent);color:var(--accent)}
+.geo .mark{stroke:var(--mark);color:var(--mark)}
+.geo .fill{stroke:none}
+.geo text.fill{font-weight:500}
+.layer{inset:0;width:100%;height:100%}
+
+/* 2 · measuring edge: sits in the left margin, content aligns to its ticks */
+.edge-slot{position:absolute;left:calc(var(--pad-x) * .38);top:var(--pad-y);bottom:var(--pad-y);z-index:1}
+.edge-slot--right{left:auto;right:calc(var(--pad-x) * .38)}
+
+/* 9 · dither tone: one-bit, never scaled (resampling turns it to moiré) */
+.dither{inset:0;background:var(--dither-ink,var(--faint));
+  -webkit-mask:var(--m) top left/auto no-repeat;mask:var(--m) top left/auto no-repeat}
+.pg--dark .dither{--dither-ink:var(--rule)}
+
+/* 10 · illustration: one-bit masks, coloured by meaning */
+.art{position:relative;aspect-ratio:var(--ar)}
+.art span{position:absolute;inset:0;background:var(--c);
+  -webkit-mask:var(--m) center/100% 100% no-repeat;mask:var(--m) center/100% 100% no-repeat}
+
+/* 11 · numbered callout */
+.callout{display:flex;gap:calc(var(--t-body) * .7);align-items:baseline}
+.callout__n{font-family:var(--font-mono);font-weight:500;font-size:var(--t-meta);letter-spacing:var(--tr-meta);
+  color:var(--accent);flex:none;border-top:calc(var(--hair) * 2) solid var(--accent);padding-top:.35em}
+.callout__t{color:var(--body);line-height:1.45}
+
+/* panels and grids */
+.grow{flex:1;min-height:0}
+.row{display:flex;gap:calc(var(--t-body) * 2)}
+.col{display:flex;flex-direction:column}
+.stack > * + *{margin-top:calc(var(--t-body) * .9)}
+
+/* a background field that clears out under the text column */
+.fade-left{-webkit-mask:linear-gradient(90deg,transparent 42%,#000 72%);mask:linear-gradient(90deg,transparent 42%,#000 72%)}
+.fade-up{-webkit-mask:linear-gradient(180deg,transparent 35%,#000 80%);mask:linear-gradient(180deg,transparent 35%,#000 80%)}
+
+.pg .foot{gap:32px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.vrow{display:grid;grid-template-columns:48px 1fr;gap:28px;align-items:center;padding:22px 0;border-top:var(--hair) solid var(--rule)}
+.vrow:last-child{border-bottom:var(--hair) solid var(--rule)}
+.step{display:grid;grid-template-columns:28px 1fr auto;gap:28px;align-items:baseline;padding:20px 0}
+.step__dot{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--ink);align-self:center;background:var(--pg-ground)}
+.step--on .step__dot{background:var(--accent);border-color:var(--accent)}
+.steps{position:relative}
+.steps::before{content:"";position:absolute;left:8px;top:40px;bottom:40px;width:1.5px;background:var(--dim)}
+.s-chart svg{width:100%;height:auto;display:block}
+</style></head>
+<body><section class="pg pg--light " data-theme="light" style=""><svg class="geo layer" viewBox="0 0 1080 1080" width="1080" height="1080" fill="none" aria-hidden="true" style=""><path d="M639.16 254.63A280 280 0 1 1 551 151.76" class="faint" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M570.61 307.65A195.67 195.67 0 1 1 488.11 211.4" class="faint" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M519.71 340.48A136.74 136.74 0 1 1 447.89 256.68" class="faint" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M482.31 360.29A95.56 95.56 0 1 1 422.58 290.61" class="faint" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="280.03" cy="473.23" r="136.74" class="faint" stroke-width="1.5" fill="none"/><path d="M675.8 134.01L101.8 625.99" class="faint" stroke-width="1.5" fill="none" stroke-dasharray="6.0 6.0"/><path d="M52.8 380L724.8 380" class="faint" stroke-width="1.5" fill="none"/><path d="M388.8 44L388.8 716" class="faint" stroke-width="1.5" fill="none"/><path d="M440.31 655.22L438.5 645.59" class="faint" stroke-width="1.5" fill="none"/><path d="M430.67 656.85L430 652.42" class="faint" stroke-width="1.5" fill="none"/><path d="M420.98 658.14L420.47 653.69" class="faint" stroke-width="1.5" fill="none"/><path d="M411.26 659.1L410.9 654.63" class="faint" stroke-width="1.5" fill="none"/><path d="M401.5 659.71L401.3 655.24" class="faint" stroke-width="1.5" fill="none"/><path d="M391.73 659.98L391.63 650.19" class="faint" stroke-width="1.5" fill="none"/><path d="M381.96 659.92L382.07 655.44" class="faint" stroke-width="1.5" fill="none"/><path d="M372.19 659.51L372.46 655.04" class="faint" stroke-width="1.5" fill="none"/><path d="M362.45 658.76L362.87 654.3" class="faint" stroke-width="1.5" fill="none"/><path d="M352.74 657.67L353.31 653.23" class="faint" stroke-width="1.5" fill="none"/><path d="M343.07 656.24L344.67 646.57" class="faint" stroke-width="1.5" fill="none"/><path d="M333.46 654.48L334.34 650.08" class="faint" stroke-width="1.5" fill="none"/><path d="M323.91 652.38L324.95 648.02" class="faint" stroke-width="1.5" fill="none"/><path d="M314.44 649.95L315.63 645.63" class="faint" stroke-width="1.5" fill="none"/><path d="M305.07 647.19L306.41 642.91" class="faint" stroke-width="1.5" fill="none"/><path d="M295.79 644.1L299.05 634.86" class="faint" stroke-width="1.5" fill="none"/><path d="M286.63 640.7L288.27 636.52" class="faint" stroke-width="1.5" fill="none"/><path d="M277.6 636.97L279.38 632.86" class="faint" stroke-width="1.5" fill="none"/><path d="M268.7 632.93L270.62 628.89" class="faint" stroke-width="1.5" fill="none"/><path d="M259.94 628.59L262.01 624.61" class="faint" stroke-width="1.5" fill="none"/><path d="M251.35 623.94L256.16 615.4" class="faint" stroke-width="1.5" fill="none"/><path d="M242.92 618.99L245.25 615.17" class="faint" stroke-width="1.5" fill="none"/><path d="M234.67 613.76L237.13 610.02" class="faint" stroke-width="1.5" fill="none"/><path d="M226.6 608.24L229.2 604.58" class="faint" stroke-width="1.5" fill="none"/><path d="M218.73 602.44L221.46 598.88" class="faint" stroke-width="1.5" fill="none"/><path d="M211.08 596.37L217.3 588.79" class="faint" stroke-width="1.5" fill="none"/><path d="M203.63 590.03L206.6 586.67" class="faint" stroke-width="1.5" fill="none"/><path d="M196.42 583.44L199.49 580.19" class="faint" stroke-width="1.5" fill="none"/><path d="M189.43 576.6L192.62 573.46" class="faint" stroke-width="1.5" fill="none"/><path d="M182.69 569.53L185.99 566.49" class="faint" stroke-width="1.5" fill="none"/><path d="M176.2 562.22L183.64 555.84" class="faint" stroke-width="1.5" fill="none"/><path d="M169.97 554.69L173.48 551.89" class="faint" stroke-width="1.5" fill="none"/><path d="M164.01 546.94L167.61 544.27" class="faint" stroke-width="1.5" fill="none"/><path d="M158.32 539L162.01 536.45" class="faint" stroke-width="1.5" fill="none"/><path d="M152.91 530.86L156.69 528.44" class="faint" stroke-width="1.5" fill="none"/><path d="M147.79 522.53L156.23 517.54" class="faint" stroke-width="1.5" fill="none"/><path d="M142.96 514.03L146.9 511.89" class="faint" stroke-width="1.5" fill="none"/><path d="M138.44 505.37L142.44 503.37" class="faint" stroke-width="1.5" fill="none"/><path d="M134.21 496.56L138.29 494.69" class="faint" stroke-width="1.5" fill="none"/><path d="M130.3 487.6L134.44 485.88" class="faint" stroke-width="1.5" fill="none"/><path d="M126.7 478.52L135.88 475.07" class="faint" stroke-width="1.5" fill="none"/><path d="M123.42 469.31L127.67 467.88" class="faint" stroke-width="1.5" fill="none"/><path d="M120.47 459.99L124.76 458.71" class="faint" stroke-width="1.5" fill="none"/><path d="M117.84 450.58L122.18 449.45" class="faint" stroke-width="1.5" fill="none"/><path d="M115.54 441.08L119.92 440.1" class="faint" stroke-width="1.5" fill="none"/><path d="M113.58 431.51L123.21 429.7" class="faint" stroke-width="1.5" fill="none"/><path d="M111.95 421.87L116.38 421.2" class="faint" stroke-width="1.5" fill="none"/><path d="M110.66 412.18L115.11 411.67" class="faint" stroke-width="1.5" fill="none"/><path d="M109.7 402.46L114.17 402.1" class="faint" stroke-width="1.5" fill="none"/><circle cx="176.2" cy="562.22" r="3.6" class="faint fill" fill="currentColor"/></svg><div class="top"><span class="label">Customers</span><svg class="geo tally" viewBox="0 0 80.5 28" width="80.5" height="28" fill="none" aria-hidden="true" style="width:80.5px;height:28px"><path d="M3 2L3 26" class="active" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M14 2L14 26" class="active" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M25 2L25 26" class="faint" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M36 2L36 26" class="faint" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M47 2L47 26" class="faint" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M66.5 2L66.5 26" class="faint" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div><div class="grow col" style="justify-content:center">
+  <div class="num num--accent" style="font-size:300px;margin-left:-12px">234</div>
+  <div class="h2" style="margin-top:36px">customers brought in half of the revenue.</div>
+  <div class="lede" style="margin-top:32px">Out of 4,284 with a customer ID. Could you name your top 10?</div>
+</div><div class="foot"><div class="src">Source: Online Retail dataset (UCI, public), Dec 2010 to Nov 2011. Analysis by .describe(.</div><svg class="lockup" xmlns="http://www.w3.org/2000/svg" viewBox="-1.6 -179.8 1124.5 211.8" role="img" aria-label=".describe(" xmlns:c2pa="http://c2pa.org/manifest"><title>.describe( lockup, horizontal, compact, light</title><g transform="translate(-13.19 -191.35) scale(1.0989)"><g id="RING"><path d="M176.9 61.49A86 86 0 1 1 149.82 29.9" fill="none" stroke="var(--wm-ink,#092052)" stroke-width="7" stroke-linecap="round"/></g><g id="BOWL"><circle cx="66.59" cy="128.63" r="42" fill="none" stroke="var(--wm-ink,#092052)" stroke-width="7"/></g><g id="RULE"><path d="M24.59 128.63H108.59" fill="none" stroke="var(--wm-ink,#092052)" stroke-width="7" stroke-linecap="round"/></g><g id="STEM"><path d="M108.59 21.86V170.63" fill="none" stroke="var(--wm-accent,#0F58E5)" stroke-width="12" stroke-linecap="round"/></g><g id="STAR"><circle cx="165.3" cy="44.03" r="2.8" fill="var(--wm-ink,#092052)"/><path d="M165.3 44.03L174.27 44.72M165.3 44.03L164.61 53.01M165.3 44.03L156.32 43.34M165.3 44.03L165.99 35.06M165.3 44.03L180.48 31.02" fill="none" stroke="var(--wm-ink,#092052)" stroke-width="5" stroke-linecap="round"/></g><g id="DOT"><circle cx="34.7" cy="155.97" r="5.6" fill="var(--wm-ink,#092052)"/></g></g><g transform="translate(247.05 0)"><path d="M37.50 -18.75A18.75 18.75 0 1 0 0.00 -18.75A18.75 18.75 0 1 0 37.50 -18.75Z" fill="var(--wm-ink,#092052)"/><path d="M146.50 -50.00A50.00 50.00 0 1 0 46.50 -50.00A50.00 50.00 0 1 0 146.50 -50.00ZM131.50 -50.00A35.00 35.00 0 1 1 61.50 -50.00A35.00 35.00 0 1 1 131.50 -50.00ZM131.50 -166.10L131.50 -7.50A7.50 7.50 0 0 0 146.50 -7.50L146.50 -166.10A7.50 7.50 0 0 0 131.50 -166.10Z" fill="var(--wm-ink,#092052)"/><path d="M257.50 -50.00A50.00 50.00 0 1 0 245.46 -17.46A7.50 7.50 0 0 0 234.07 -27.22A35.00 35.00 0 1 1 242.50 -50.00ZM165.00 -57.50L165.00 -42.50L250.00 -42.50L250.00 -57.50Z" fill="var(--wm-ink,#092052)"/><path d="M325.75 -90.49A32.54 27.22 0 1 0 288.11 -47.80A7.50 7.50 0 0 0 294.07 -61.57A17.54 12.22 0 1 1 314.37 -80.73A7.50 7.50 0 0 0 325.75 -90.49ZM283.89 -9.51A32.54 27.22 0 1 0 321.54 -52.20A7.50 7.50 0 0 0 315.58 -38.43A17.54 12.22 0 1 1 295.28 -19.27A7.50 7.50 0 0 0 283.89 -9.51ZM293.51 -61.78L288.67 -47.59L316.14 -38.22L320.98 -52.41Z" fill="var(--wm-ink,#092052)"/><path d="M440.11 -82.54A50.00 50.00 0 1 0 440.11 -17.46A7.50 7.50 0 0 0 428.72 -27.22A35.00 35.00 0 1 1 428.72 -72.78A7.50 7.50 0 0 0 440.11 -82.54Z" fill="var(--wm-ink,#092052)"/><path d="M460.15 -92.50L460.15 -7.50A7.50 7.50 0 0 0 475.15 -7.50L475.15 -92.50A7.50 7.50 0 0 0 460.15 -92.50ZM511.73 -98.50A40.65 40.65 0 0 0 460.15 -59.35A7.50 7.50 0 0 0 475.15 -59.35A25.65 25.65 0 0 1 507.69 -84.06A7.50 7.50 0 0 0 511.73 -98.50Z" fill="var(--wm-ink,#092052)"/><path d="M530.21 -92.50L530.21 -7.50A7.50 7.50 0 0 0 545.21 -7.50L545.21 -92.50A7.50 7.50 0 0 0 530.21 -92.50ZM549.71 -131.50A12.00 12.00 0 1 0 525.71 -131.50A12.00 12.00 0 1 0 549.71 -131.50Z" fill="var(--wm-ink,#092052)"/><path d="M671.21 -50.00A50.00 50.00 0 1 0 571.21 -50.00A50.00 50.00 0 1 0 671.21 -50.00ZM656.21 -50.00A35.00 35.00 0 1 1 586.21 -50.00A35.00 35.00 0 1 1 656.21 -50.00ZM571.21 -166.10L571.21 -7.50A7.50 7.50 0 0 0 586.21 -7.50L586.21 -166.10A7.50 7.50 0 0 0 571.21 -166.10Z" fill="var(--wm-ink,#092052)"/><path d="M782.21 -50.00A50.00 50.00 0 1 0 770.17 -17.46A7.50 7.50 0 0 0 758.78 -27.22A35.00 35.00 0 1 1 767.21 -50.00ZM689.71 -57.50L689.71 -42.50L774.71 -42.50L774.71 -57.50Z" fill="var(--wm-ink,#092052)"/><path d="M818.85 -169.86A197.50 197.50 0 0 0 818.85 28.26A7.50 7.50 0 0 0 831.83 20.74A182.50 182.50 0 0 1 831.83 -162.34A7.50 7.50 0 0 0 818.85 -169.86Z" fill="var(--wm-ink,#092052)"/><path d="M854.84 -163.10L854.84 21.50A10.50 10.50 0 0 0 875.84 21.50L875.84 -163.10A10.50 10.50 0 0 0 854.84 -163.10Z" fill="var(--wm-accent,#0F58E5)"/></g></svg></div></section></body></html>

@@ -247,6 +247,76 @@ def ranked_bars(ax, labels, values, highlight=None, fmt="{:+.0f}%", meaning=Fals
     return ax
 
 
+# ---------------------------------------------------------------------------
+# Instrument furniture — the geometry library's devices, on a real chart
+# (geometry/PRIMITIVES.md: B02 measuring edge, B04 index mark, C02 sight
+# line, E05 leader). They make a chart read as .describe( with the logo gone.
+# ---------------------------------------------------------------------------
+SIGHT = 40.6   # the sight axis θ, as an angle up and to the right on screen
+
+
+def measuring_edge(ax, axis="x", minor=4):
+    """The axis as a measuring edge: an ink spine with outward majors and
+    shorter minors between them (`minor` per interval; 0 for none, e.g. on a
+    categorical axis)."""
+    from matplotlib.ticker import AutoMinorLocator, NullLocator
+    p = C()
+    for which in ("x", "y") if axis == "both" else (axis,):
+        spine = ax.spines["bottom" if which == "x" else "left"]
+        spine.set_visible(True)
+        spine.set_color(p["ink"])
+        spine.set_linewidth(STROKE["rule"])
+        a = ax.xaxis if which == "x" else ax.yaxis
+        a.set_minor_locator(AutoMinorLocator(minor + 1) if minor else NullLocator())
+        ax.tick_params(axis=which, which="major", direction="out", length=7,
+                       width=STROKE["rule"], color=p["ink"])
+        ax.tick_params(axis=which, which="minor", direction="out", length=3.5,
+                       width=STROKE["hair"], color=p["body"])
+    return ax
+
+
+def index_mark(ax, x, y, label, length=34, side="right"):
+    """Single out the point the finding is about: an open ring with a seated
+    dot, and a sight line at θ out to the label. Once per axes, like story():
+    a chart has one point to look at. Story blue, never coral."""
+    if getattr(ax, "_dsc_index", False):
+        raise ValueError("One index mark per chart. Use callout() for further notes.")
+    ax._dsc_index = True
+    p = C()
+    import math
+    sgn = 1 if side == "right" else -1
+    dx = sgn * length * math.cos(math.radians(SIGHT))
+    dy = length * math.sin(math.radians(SIGHT))
+    ax.plot([x], [y], "o", ms=12, mfc=p["panel"], mec=p["story"], mew=1.4, zorder=6, clip_on=False)
+    ax.plot([x], [y], "o", ms=4.2, mfc=p["story"], mec="none", zorder=7, clip_on=False)
+    # E05: the label sits on a short horizontal shelf; the leader runs from the
+    # shelf down to the point along the sight axis.
+    ax.annotate(label, (x, y), xytext=(dx, dy), textcoords="offset points",
+                ha="left" if sgn > 0 else "right", va="bottom", fontsize=SIZE["label"],
+                color=p["ink"], family=["Readex Pro Medium"] + FONTS["sans"],
+                annotation_clip=False, zorder=7,
+                arrowprops=dict(arrowstyle="-", color=p["story"], lw=STROKE["rule"],
+                                shrinkA=0, shrinkB=6.5, relpos=(1 if sgn > 0 else 0, 0),
+                                connectionstyle=f"angle,angleA=0,angleB={SIGHT if sgn > 0 else 180 - SIGHT},rad=0"))
+    return ax
+
+
+def callout(ax, x, y, n, dx=18, dy=22):
+    """A numbered note on the data: a small dot, an elbow leader (never a
+    curve) and the number in mono, e.g. 01. Only the number goes on the
+    chart; the sentence it refers to sits beside it (slide, post or report),
+    where it can be set in the sans (mono is for numerals, not phrases)."""
+    p = C()
+    ax.plot([x], [y], "o", ms=3.6, mfc=p["ink"], mec="none", zorder=6, clip_on=False)
+    ax.annotate(f"{n:02d}", (x, y), xytext=(dx, dy), textcoords="offset points",
+                ha="left" if dx >= 0 else "right", va="center", fontsize=SIZE["tick"],
+                family=FONTS["mono"], color=p["story"], annotation_clip=False, zorder=7,
+                bbox=dict(fc=p["panel"], ec="none", pad=1.5),
+                arrowprops=dict(arrowstyle="-", color=p["body"], lw=STROKE["hair"], shrinkA=0, shrinkB=2,
+                                connectionstyle="angle,angleA=0,angleB=90,rad=0"))
+    return ax
+
+
 def units(ax, x=None, y=None):
     """Unit labels: mono, uppercase, ≤ 4 words, at the axis ends (rule 02)."""
     for text, setter, kw in ((x, ax.set_xlabel, dict(loc="right")),

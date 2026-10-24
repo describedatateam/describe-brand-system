@@ -73,6 +73,17 @@ D.finish(fig, ax, "Apple grew 23-fold from 2010", n="n = 150 months",
          source="Yahoo Finance", dek="Adjusted monthly close.", path="chart.png")
 ```
 
+**Instrument furniture** (from `geometry/`, so the chart reads as .describe(
+with the logo removed):
+
+```python
+D.measuring_edge(ax, "x", minor=0)        # the axis as a ruled edge: ink spine, outward ticks
+D.index_mark(ax, x, y, "Nov £1.43M")      # the point the finding is about; once per chart, story blue
+D.callout(ax, x, y, 1)                    # a numbered note: "01" on the data, the sentence beside the chart
+```
+
+![](examples/out/07-mpl-furniture-light.png)
+
 `D.ranked_bars(ax, labels, values, highlight=[...])` draws the ranked bar
 form; `meaning=True` colours by good/bad instead (never both, rule 10).
 
@@ -83,6 +94,7 @@ from describe_charts import plotly_theme as P
 fig = px.line(df, x="year", y="lifeExp", color="country")   # template already applied
 P.emphasise(fig, "Iraq")                    # story blue; every other trace context grey
 P.benchmark(fig, 70, "Target 70")
+P.measuring_edge(fig)                       # and P.index_mark(fig, x, y, label), as in matplotlib
 P.finish(fig, "Iraq gained the least", n="n = 14 countries",
          source="Gapminder", dek="1952–2007.", units=("", "Years"))
 ```
@@ -112,6 +124,7 @@ Worked example: [`examples/out/report.pdf`](examples/out/report.pdf) /
 ## Examples
 
 `python3 charts/kit/examples/build.py` renders everything in `examples/out/`
+(`examples/furniture.py` renders the furniture example, from the Online Retail audit)
 from public sample data (Stocks.csv via matplotlib, audited by
 `charts/examples.py`; Gapminder via plotly.express). Nothing is invented.
 
