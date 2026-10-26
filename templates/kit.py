@@ -281,7 +281,7 @@ def outlier_ring(size: float = 44, rule: str = "") -> str:
 
 # 8 · Process line (E04 nodes + E05 leaders) ----------------------------------
 def process(steps: list[tuple[str, str]], w: float, h: float = 150, hair: float = 1.5,
-            active: int | None = None) -> str:
+            active: int | None = None, value_size: float = 34, label_size: float = 22) -> str:
     """Steps as nodes on one construction line. Each step is (value, label).
     Open nodes are steps, the one `active` node is the result."""
     n = len(steps)
@@ -296,11 +296,11 @@ def process(steps: list[tuple[str, str]], w: float, h: float = 150, hair: float 
             out.append(A.circle(x, y, 9, "ink", hair * 1.6, fill="var(--pg-ground)"))
         out.append(A.line(x, y + 14, x, y + 44, "faint", hair))
         anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
-        out.append(f'<text x="{A.f(x)}" y="{A.f(y + 82)}" class="{cls} fill" fill="currentColor" '
-                   f'font-size="34" font-family="IBM Plex Mono, monospace" font-weight="500" '
+        out.append(f'<text x="{A.f(x)}" y="{A.f(y + 44 + value_size * 1.12)}" class="{cls} fill" fill="currentColor" '
+                   f'font-size="{A.f(value_size)}" font-family="IBM Plex Mono, monospace" font-weight="500" '
                    f'text-anchor="{anchor}">{val}</text>')
-        out.append(f'<text x="{A.f(x)}" y="{A.f(y + 116)}" class="body fill" fill="currentColor" '
-                   f'font-size="22" font-family="Readex Pro, sans-serif" font-weight="300" '
+        out.append(f'<text x="{A.f(x)}" y="{A.f(y + 44 + value_size * 1.12 + label_size * 1.5)}" class="body fill" fill="currentColor" '
+                   f'font-size="{A.f(label_size)}" font-family="Readex Pro, sans-serif" font-weight="300" '
                    f'text-anchor="{anchor}">{lab}</text>')
     return svg(w, h, "".join(out), cls="process", style=f"width:{A.f(w)}px;height:{A.f(h)}px;overflow:visible")
 

@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    paths: ["templates/**", "slides/**", "social/templates/**", "geometry/astrolabe.py", "charts/kit/**", "tokens/**", ".github/workflows/templates.yml"]
+    paths: ["templates/**", "apps/**", "ui/**", "slides/**", "social/templates/**", "geometry/astrolabe.py", "charts/kit/**", "tokens/**", ".github/workflows/templates.yml"]
 
 jobs:
   check:

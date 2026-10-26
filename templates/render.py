@@ -13,7 +13,8 @@ import os
 import sys
 
 
-def render(html: str, png_dir: str | None = None, pdf: str | None = None, prefix: str = "") -> list[str]:
+def render(html: str, png_dir: str | None = None, pdf: str | None = None, prefix: str = "",
+           viewport: tuple[int, int] = (2200, 2200)) -> list[str]:
     from playwright.sync_api import sync_playwright
 
     html = os.path.abspath(html)
@@ -23,7 +24,7 @@ def render(html: str, png_dir: str | None = None, pdf: str | None = None, prefix
     with sync_playwright() as p:
         exe = os.environ.get("CHROMIUM")
         b = p.chromium.launch(executable_path=exe) if exe else p.chromium.launch()
-        pg = b.new_page(viewport={"width": 2200, "height": 2200}, device_scale_factor=1)
+        pg = b.new_page(viewport={"width": viewport[0], "height": viewport[1]}, device_scale_factor=1)
         pg.goto("file://" + html)
         pg.evaluate("document.fonts.ready")
         pg.wait_for_timeout(400)

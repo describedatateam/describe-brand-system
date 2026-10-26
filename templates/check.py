@@ -14,6 +14,7 @@ Builds both template sets (no browser needed) and fails if:
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import subprocess
@@ -45,7 +46,8 @@ def raises(fn, msg):
 
 
 HEX = re.compile(r"#[0-9A-Fa-f]{6}\b")
-for rel in ("templates/enrich.css", "templates/kit.py", "slides/build.py", "social/templates/build.py"):
+for rel in ("templates/enrich.css", "templates/kit.py", "slides/build.py", "social/templates/build.py",
+            "apps/app.css", "apps/build.py", "apps/describe_streamlit.py", "apps/streamlit_app.py"):
     src = open(os.path.join(ROOT, rel), encoding="utf-8").read()
     ok(not HEX.findall(src), f"{rel}: no typed colours (found {sorted(set(HEX.findall(src)))})")
 
@@ -68,6 +70,28 @@ for path in outs:
         has_fig = re.search(r'class="num', sec) is not None
         if has_fig:
             ok("Source:" in sec or "Flagged by" in sec, f"{name}: a page with figures states its source")
+
+# the data-app kit: the static dashboard and the Streamlit theme
+r = subprocess.run([sys.executable, os.path.join(ROOT, "apps/build.py")], capture_output=True, text=True)
+ok(r.returncode == 0, "apps/build.py builds" + ("" if r.returncode == 0 else ": " + r.stderr[-400:]))
+sys.path.insert(0, os.path.join(ROOT, "apps"))
+import describe_streamlit as S  # noqa: E402
+from describe_charts.tokens import TOKENS  # noqa: E402
+
+for path in [l.strip() for l in r.stdout.splitlines() if l.strip().endswith(".html")]:
+    html = open(path, encoding="utf-8").read()
+    body = html[html.index("<body"):]
+    name = os.path.relpath(path, ROOT)
+    flagged = len(json.load(open(os.path.join(ROOT, "decisions/uci_audit.json")))["flagged_lines"])
+    # coral: one marker per flagged line in the table, one on the tile; none in the chart
+    ok(body.count('class="d-outlier"') == flagged + 1, f"{name}: coral only on the flagged lines and their tile")
+    coral = {TOKENS[m]["mark"].lower() for m in ("light", "dark")}
+    ok(not any(c in body.lower() for c in coral), f"{name}: the chart has no coral (it has no outliers)")
+    ok("Source:" in body, f"{name}: the page states its source")
+    ok("t-label" not in body, f"{name}: no mono eyebrow above the title")
+cfg = open(os.path.join(ROOT, "apps/.streamlit/config.toml"), encoding="utf-8").read()
+ok(cfg == S.config_toml(), "apps/.streamlit/config.toml is generated from the tokens")
+ok("robust z" in S.kpi("Flagged", "3", rule="robust z > 7"), "kpi() writes an outlier tile's rule into it")
 
 raises(lambda: K.outlier_ring(40, rule=""), "outlier_ring() refuses a ring without its rule")
 raises(lambda: K._radial_scale(0, 0, 10, 0, 340, 6, 5, 2, 1, "faint", 1), "graduation refuses a full circle")
