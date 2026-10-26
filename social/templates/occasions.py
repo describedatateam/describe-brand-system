@@ -95,7 +95,7 @@ def greeting(W, H):
     art += crescent(cx, cy, R, "ink") + scaled(A.star(sx, sy, cls="active"), sx, sy, 2.6)
     art = K.svg(W, H, art)
     return K.page(
-        lattice(W, H).replace('class="geo layer"', 'class="geo layer fade-up"', 1) + art + edge("right")
+        lattice(W, H).replace('class="geo layer"', 'class="geo layer fade-up"', 1) + art
         + label("تهنئة")
         + '<div style="margin-top:40px;text-align:right;direction:rtl">'
           '<div style="font-family:var(--font-ar-display);font-size:176px;line-height:1.05;color:var(--ink)">عيد مبارك</div>'

@@ -116,7 +116,7 @@ colour and coral does not appear (check.py fails if it does).
 
 | Post | Ground | Field | The one marked thing | Why it means that |
 |---|---|---|---|---|
-| Greeting (Arabic, RTL) | Brass | Eight-point lattice (faint, fading up), measuring edge on the right | The star, seated in the opening of a crescent cut from the ring | The crescent is the ring minus a second circle pushed along the sight axis: the mark's grammar, not a stock symbol |
+| Greeting (Arabic, RTL) | Brass | Eight-point lattice (faint, fading up); no measuring edge, the two fight | The star, seated in the opening of a crescent cut from the ring | The crescent is the ring minus a second circle pushed along the sight axis: the mark's grammar, not a stock symbol |
 | First client | Paper | Empty cell field | One active cell, labelled 1 | A count of one, shown as one |
 | Milestone | Paper | Measuring edge | A full tally group | Five is the group that closes; use it only for counts that really are five, ten, fifteen |
 | Announcement | Navy | Construction backdrop | The crosshair, settled | "Look here", for one thing |
@@ -126,7 +126,7 @@ colour and coral does not appear (check.py fails if it does).
 The lattice is notation, not ornament: it is the star's own eight arms tiled, drawn in `faint`, never behind text and never the marked thing. Do not extend it into figurative Islamic patterns.
 
 Rules for new occasion posts: one language per post (Arabic posts mirror fully:
-`dir="rtl"`, the measuring edge on the right, Amiri for the headline, Vazirmatn
+`dir="rtl"`, the measuring edge on the right when the post uses one, Amiri for the headline, Vazirmatn
 for the line under it); no typed colours; copy is placeholder until the fact it
 states is true (no invented clients or numbers); label unfinished posts
 `template`.
