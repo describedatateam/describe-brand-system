@@ -73,6 +73,8 @@ def font_css(out_dir: str) -> str:
 @font-face{{font-family:'Readex Pro';src:local('Readex Pro'),url('{rx}');font-weight:160 700}}
 @font-face{{font-family:'IBM Plex Mono';src:local('IBM Plex Mono'),url('{url("IBMPlexMono-Regular.ttf")}');font-weight:400}}
 @font-face{{font-family:'IBM Plex Mono';src:local('IBM Plex Mono Medium'),url('{url("IBMPlexMono-Medium.ttf")}');font-weight:500}}
+@font-face{{font-family:Amiri;src:local('Amiri'),url('{url("Amiri-Regular.ttf")}');font-weight:400}}
+@font-face{{font-family:Vazirmatn;src:local('Vazirmatn'),url('{url("Vazirmatn%5Bwght%5D.ttf")}');font-weight:100 900}}
 """
 
 

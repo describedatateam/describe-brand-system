@@ -100,3 +100,33 @@ function. Copy the function, replace the figures with your own (computed, never
 typed), keep the source line. For PowerPoint, Keynote or Google Slides, export
 `deck.pdf` or the PNGs as backgrounds, and set the theme colours from the
 README's *By medium* table.
+
+---
+
+## Posts that are not about data
+
+`python3 social/templates/occasions.py --render` builds six 4:5 posts for
+greetings, first client, milestones, announcements, hiring and the tagline
+(`social/templates/occasions.py`). They use the same kit and add no new
+element.
+
+**The rule: a measured field with one marked thing.** The data posts mark an
+outlier in coral. Without data there is no outlier, so the marker is the active
+colour and coral does not appear (check.py fails if it does).
+
+| Post | Ground | Field | The one marked thing | Why it means that |
+|---|---|---|---|---|
+| Greeting (Arabic, RTL) | Brass | Eight-point lattice (faint, fading up), measuring edge on the right | The star, seated in the opening of a crescent cut from the ring | The crescent is the ring minus a second circle pushed along the sight axis: the mark's grammar, not a stock symbol |
+| First client | Paper | Empty cell field | One active cell, labelled 1 | A count of one, shown as one |
+| Milestone | Paper | Measuring edge | A full tally group | Five is the group that closes; use it only for counts that really are five, ten, fifteen |
+| Announcement | Navy | Construction backdrop | The crosshair, settled | "Look here", for one thing |
+| Hiring | Paper | Orbit motif, large | The active marker on the ring | The open position |
+| Tagline | Navy | Dither glow | None. Atmosphere only | Use sparingly; it says nothing on its own |
+
+The lattice is notation, not ornament: it is the star's own eight arms tiled, drawn in `faint`, never behind text and never the marked thing. Do not extend it into figurative Islamic patterns.
+
+Rules for new occasion posts: one language per post (Arabic posts mirror fully:
+`dir="rtl"`, the measuring edge on the right, Amiri for the headline, Vazirmatn
+for the line under it); no typed colours; copy is placeholder until the fact it
+states is true (no invented clients or numbers); label unfinished posts
+`template`.

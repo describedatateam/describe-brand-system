@@ -46,13 +46,13 @@ def raises(fn, msg):
 
 
 HEX = re.compile(r"#[0-9A-Fa-f]{6}\b")
-for rel in ("templates/enrich.css", "templates/kit.py", "slides/build.py", "social/templates/build.py",
+for rel in ("templates/enrich.css", "templates/kit.py", "slides/build.py", "social/templates/build.py", "social/templates/occasions.py",
             "apps/app.css", "apps/build.py", "apps/describe_streamlit.py", "apps/streamlit_app.py"):
     src = open(os.path.join(ROOT, rel), encoding="utf-8").read()
     ok(not HEX.findall(src), f"{rel}: no typed colours (found {sorted(set(HEX.findall(src)))})")
 
 outs = []
-for script in ("slides/build.py", "social/templates/build.py"):
+for script in ("slides/build.py", "social/templates/build.py", "social/templates/occasions.py"):
     r = subprocess.run([sys.executable, os.path.join(ROOT, script)], capture_output=True, text=True)
     ok(r.returncode == 0, f"{script} builds" + ("" if r.returncode == 0 else ": " + r.stderr[-400:]))
     outs += [l.strip() for l in r.stdout.splitlines() if l.strip().endswith(".html")]
