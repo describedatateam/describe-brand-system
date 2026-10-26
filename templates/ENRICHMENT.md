@@ -121,7 +121,7 @@ colour and coral does not appear (check.py fails if it does).
 | Milestone | Paper | Measuring edge | A full tally group | Five is the group that closes; use it only for counts that really are five, ten, fifteen |
 | Announcement | Navy | Construction backdrop | The crosshair, settled | "Look here", for one thing |
 | Hiring | Paper | Orbit motif, large | The active marker on the ring | The open position |
-| Tagline | Navy | Dither glow | None. Atmosphere only | Use sparingly; it says nothing on its own |
+| Tagline | Navy | Dither glow under a ticked rule, `data` at one end | The index mark at the far end, `decision` | A direction, with the destination marked |
 
 The lattice is notation, not ornament: it is the star's own eight arms tiled, drawn in `faint`, never behind text and never the marked thing. Do not extend it into figurative Islamic patterns.
 

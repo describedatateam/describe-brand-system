@@ -157,10 +157,23 @@ def hiring(W, H):
         + foot())
 
 
-# 6 · Tagline: atmosphere only, as on the carousel cover --------------------
+# 6 · Tagline: a rule from data to decision, one index mark at the end --------------------
 def tagline(W, H):
+    """From data to decision: a measured rule with its two ends named and one
+    index mark at the far end (the decision), over the faint dither glow."""
+    x0, x1, y, n = 77, 1003, 930, 61
+    art = [A.line(x0, y, x1, y, "body", 2)]
+    for i in range(n):
+        x = x0 + (x1 - x0) * i / (n - 1)
+        L = 40 if i % 10 == 0 else 16
+        art.append(A.line(x, y, x, y - L, "body" if i < n - 1 else "active", 2))
+    art.append(A.line(x1, y + 6, x1, y - 84, "active", 5))
+    art.append(A.dot(x1, y - 84, 11, "active"))
+    art.append(A.text(x0, y + 62, "data", "body", 26, "start"))
+    art.append(A.text(x1, y + 62, "decision", "active", 26, "end"))
     return K.page(
         K.dither_layer(W, H, kind="glow", cx=0.72, cy=0.70, hi=0.30)
+        + K.svg(W, H, "".join(art))
         + label("Tagline")
         + '<div class="opener" style="margin-top:64px">From data<br><span class="em">to decision.</span></div>'
         + foot(), theme="dark")
