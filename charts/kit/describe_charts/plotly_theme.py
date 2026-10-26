@@ -144,6 +144,46 @@ def outlier(fig, x, y, rule, label=None):
     return fig
 
 
+SIGHT = 40.6   # the sight axis θ, up and to the right on screen
+
+
+def measuring_edge(fig, axis="x", minor=4):
+    """The axis as a measuring edge: an ink line with outward major ticks and
+    shorter minors (`minor` per interval; 0 for none)."""
+    p = palette(_mode_of(fig))
+    kw = dict(showline=True, linecolor=p["ink"], linewidth=1.25, ticks="outside", ticklen=7,
+              tickwidth=1.25, tickcolor=p["ink"])
+    if minor:
+        kw["minor"] = dict(ticks="outside", ticklen=3.5, tickwidth=0.9, tickcolor=p["body"],
+                           nticks=minor + 1, showgrid=False)
+    for which in ("x", "y") if axis == "both" else (axis,):
+        (fig.update_xaxes if which == "x" else fig.update_yaxes)(**kw)
+    return fig
+
+
+def index_mark(fig, x, y, label, length=46, side="right"):
+    """The one point the finding is about: open ring, seated dot, and a sight
+    line at θ out to the label. Once per figure. Story blue, never coral."""
+    import math
+    import plotly.graph_objects as go
+    if getattr(fig, "_dsc_index", False):
+        raise ValueError("One index mark per chart.")
+    object.__setattr__(fig, "_dsc_index", True)
+    p = palette(_mode_of(fig))
+    fig.add_trace(go.Scatter(x=[x], y=[y], mode="markers", showlegend=False, hoverinfo="skip",
+                             marker=dict(size=17, color=p["panel"], line=dict(color=p["story"], width=1.8))))
+    fig.add_trace(go.Scatter(x=[x], y=[y], mode="markers", showlegend=False, hovertemplate=f"{label}<extra></extra>",
+                             marker=dict(size=6, color=p["story"], line=dict(width=0))))
+    sgn = 1 if side == "right" else -1
+    fig.add_annotation(x=x, y=y, text=label, showarrow=True, arrowhead=0, arrowwidth=1.25,
+                       arrowcolor=p["story"], standoff=9,
+                       ax=sgn * length * math.cos(math.radians(SIGHT)),
+                       ay=-length * math.sin(math.radians(SIGHT)),
+                       xanchor="left" if sgn > 0 else "right", yanchor="bottom",
+                       font=dict(color=p["ink"], family=_fam("sans")))
+    return fig
+
+
 def _is_category(fig, ax):
     for tr in fig.data:
         vals = getattr(tr, ax, None)

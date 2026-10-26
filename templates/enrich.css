@@ -1,0 +1,94 @@
+/* enrich.css — page shell, type roles and the enrichment layer for the slide
+   and social templates. Reads tokens/dist/tokens.css; never types a colour.
+   Each element is described in templates/ENRICHMENT.md. */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#888}
+body{display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px 0}
+@media print{html,body{background:none}body{display:block;padding:0}}
+
+/* ---- the page ---------------------------------------------------------- */
+.pg{
+  --pg-ground:var(--ground);
+  --accent:var(--active);
+  --pad-x:calc(var(--t-body) * 4.6);
+  --pad-y:calc(var(--t-body) * 3.4);
+  width:var(--page-w);height:var(--page-h);
+  position:relative;overflow:hidden;flex:none;
+  background:var(--pg-ground);color:var(--ink);
+  font-family:var(--font-sans);font-weight:var(--w-body);font-size:var(--t-body);
+  line-height:var(--lh-body);
+  padding:var(--pad-y) var(--pad-x);
+  display:flex;flex-direction:column;
+  break-after:page;
+}
+[data-medium="social"] .pg{--pad-x:calc(var(--t-body) * 2.75);--pad-y:calc(var(--t-body) * 2.75)}
+.pg--brass{--pg-ground:var(--viz-seq-alt-100);--accent:var(--viz-seq-alt-500);--faint:var(--viz-seq-alt-200);--rule:var(--viz-seq-alt-200)}
+.pg > *{position:relative;z-index:1}
+.pg > .layer,.pg > .dither,.pg > .bg{position:absolute;z-index:0}
+
+/* ---- type roles -------------------------------------------------------- */
+.display,.opener,.h2,.h3{font-family:var(--font-serif);font-weight:var(--w-display);
+  font-variation-settings:'SOFT' 0,'WONK' 0;color:var(--ink)}
+.display{font-size:var(--t-display);line-height:var(--lh-display);letter-spacing:var(--tr-display)}
+.opener{font-size:var(--t-opener);line-height:var(--lh-opener);letter-spacing:var(--tr-opener)}
+.h2{font-size:var(--t-h2);line-height:var(--lh-h2);letter-spacing:var(--tr-h2)}
+.h3{font-size:var(--t-h3);line-height:var(--lh-h3);letter-spacing:var(--tr-h3)}
+.lede{font-size:var(--t-lede);line-height:var(--lh-lede);color:var(--body)}
+.body{color:var(--body)}
+.em{color:var(--accent)}
+/* mono budget: a label is at most --t-meta, uppercase, four words or fewer */
+.label{font-family:var(--font-mono);font-weight:var(--w-meta);font-size:var(--t-meta);
+  letter-spacing:var(--tr-meta);text-transform:uppercase;color:var(--dim);line-height:1.4}
+.num{font-family:var(--font-mono);font-weight:500;letter-spacing:-0.02em;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--ink)}
+.num--accent{color:var(--accent)}
+.src{font-size:calc(var(--t-meta) * .95);line-height:1.45;color:var(--dim);max-width:62%}
+/* a figure that never happened: ink figure, struck in the negative colour.
+   Coral stays on the outlier ring; it is never text. */
+.void{text-decoration:line-through;text-decoration-color:var(--neg);text-decoration-thickness:.06em}
+.rule{border-top:var(--hair) solid var(--rule)}
+
+/* ---- footer: source line and lockup ----------------------------------- */
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+.lockup{--wm-ink:var(--ink);--wm-accent:var(--active);height:calc(var(--t-body) * 1.45);width:auto;flex:none}
+
+/* ---- geometry: the semantic classes read the tokens -------------------- */
+.geo .ink{stroke:var(--ink);color:var(--ink)}
+.geo .body{stroke:var(--dim);color:var(--dim)}
+.geo .faint{stroke:var(--faint);color:var(--faint)}
+.geo .active{stroke:var(--accent);color:var(--accent)}
+.geo .mark{stroke:var(--mark);color:var(--mark)}
+.geo .fill{stroke:none}
+.geo text.fill{font-weight:500}
+.layer{inset:0;width:100%;height:100%}
+
+/* 2 · measuring edge: sits in the left margin, content aligns to its ticks */
+.edge-slot{position:absolute;left:calc(var(--pad-x) * .38);top:var(--pad-y);bottom:var(--pad-y);z-index:1}
+.edge-slot--right{left:auto;right:calc(var(--pad-x) * .38)}
+
+/* 9 · dither tone: one-bit, never scaled (resampling turns it to moiré) */
+.dither{inset:0;background:var(--dither-ink,var(--faint));
+  -webkit-mask:var(--m) top left/auto no-repeat;mask:var(--m) top left/auto no-repeat}
+.pg--dark .dither{--dither-ink:var(--rule)}
+
+/* 10 · illustration: one-bit masks, coloured by meaning */
+.art{position:relative;aspect-ratio:var(--ar)}
+.art span{position:absolute;inset:0;background:var(--c);
+  -webkit-mask:var(--m) center/100% 100% no-repeat;mask:var(--m) center/100% 100% no-repeat}
+
+/* 11 · numbered callout */
+.callout{display:flex;gap:calc(var(--t-body) * .7);align-items:baseline}
+.callout__n{font-family:var(--font-mono);font-weight:500;font-size:var(--t-meta);letter-spacing:var(--tr-meta);
+  color:var(--accent);flex:none;border-top:calc(var(--hair) * 2) solid var(--accent);padding-top:.35em}
+.callout__t{color:var(--body);line-height:1.45}
+
+/* panels and grids */
+.grow{flex:1;min-height:0}
+.row{display:flex;gap:calc(var(--t-body) * 2)}
+.col{display:flex;flex-direction:column}
+.stack > * + *{margin-top:calc(var(--t-body) * .9)}
+
+/* a background field that clears out under the text column */
+.fade-left{-webkit-mask:linear-gradient(90deg,transparent 42%,#000 72%);mask:linear-gradient(90deg,transparent 42%,#000 72%)}
+.fade-up{-webkit-mask:linear-gradient(180deg,transparent 35%,#000 80%);mask:linear-gradient(180deg,transparent 35%,#000 80%)}

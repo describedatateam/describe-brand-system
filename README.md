@@ -38,6 +38,10 @@ marker all read as the same instrument.
 | `ui/` | **Role 07** — interface components, icons and their specimen. Rules in `ui/UI.md` |
 | `charts/` | **Role 03** — chart kit: SVG and matplotlib styles, worked figures. Rules in `charts/CHARTS.md` |
 | `illustrations/` | The illustration layer (`illustrations/ILLUSTRATION.md`) |
+| `templates/` | **The enrichment layer**: construction backdrops, measuring edge, tally, orbit fill, data cells, gauge, dither, illustration masks and callouts, shared by the slide and social templates. Rules in `templates/ENRICHMENT.md` |
+| `slides/` | The 16:9 slide template: eight layouts (title, section, big number, chart, outliers, method, statement, close). `python3 slides/build.py --render` |
+| `social/templates/` | The social templates: a 4:5 carousel whose cards double as single posts, plus 1:1 and 9:16. `python3 social/templates/build.py --render` |
+| `apps/` | **The data-app kit**: a reference dashboard (KPI tiles, chart panel, flagged-lines table, method strip) as static HTML and as a Streamlit app, with the Streamlit theme generated from the tokens. Rules in `apps/APPS.md`. `python3 apps/build.py --render` |
 | `decisions/` | Scripts and evidence behind specific decisions — the UCI audit, Arabic sizing sheets, the warning-colour options (`warning.html`), and the brand fonts used by the screenshot checks (`fonts/`) |
 | `website/` | The approved homepage design: content brief (`content-brief.html`), design briefs, build script, checks, critiques, and the handoff prompt. The live site is built from this in its own repo, `describedatateam/website`, and runs at https://describe.team |
 | `site/` | The earlier homepage draft. **Not a deliverable** — see the warning below |

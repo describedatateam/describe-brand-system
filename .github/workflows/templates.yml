@@ -1,0 +1,19 @@
+name: templates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths: ["templates/**", "apps/**", "ui/**", "slides/**", "social/templates/**", "geometry/astrolabe.py", "charts/kit/**", "tokens/**", ".github/workflows/templates.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install matplotlib fonttools
+      - name: Templates read the tokens, coral stays on outliers, guards hold
+        run: python3 templates/check.py
