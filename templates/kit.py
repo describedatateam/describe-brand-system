@@ -387,3 +387,65 @@ def art(name: str, out_dir: str, layers: dict[str, str], style: str = "") -> str
 # 11 · Callout marker (numbered, joined to the data) --------------------------
 def callout(n: int, text: str) -> str:
     return f'<div class="callout"><span class="callout__n">{n:02d}</span><span class="callout__t">{text}</span></div>'
+
+
+# 12 · Sightline fan -----------------------------------------------------------
+def sightline_fan(w: float, h: float, ox: float, oy: float, star_r: float, n: int = 27,
+                  spread: float = 52.0, hair: float = 1.5, k: float = 3.0) -> str:
+    """Sighting lines from one origin (usually off the page), every fifth in
+    body, one along the sight axis in the active ink ending in the star. The
+    fan is the instrument looking; the star is what it found. Fade it out under
+    the headline (class fade-up). For announcements and "new" moments."""
+    out = []
+    for i in range(n):
+        a = THETA - spread + 2 * spread * i / (n - 1)
+        if abs(a - THETA) < 1e-6:
+            continue
+        cls = "body" if i % 5 == 0 else "faint"
+        out.append(A.line(*A.polar(ox, oy, 0, a), *A.polar(ox, oy, 2600, a), cls, hair))
+    sx, sy = A.polar(ox, oy, star_r, THETA)
+    out.append(A.line(ox, oy, sx, sy, "active", hair * 2.2))
+    out.append(f'<g transform="translate({A.f(sx)} {A.f(sy)}) scale({k}) translate({A.f(-sx)} {A.f(-sy)})">'
+               f'{A.star(sx, sy, cls="active")}</g>')
+    return svg(w, h, "".join(out))
+
+
+# 13 · Constellation -----------------------------------------------------------
+def constellation(w: float, h: float, pts: list[tuple[float, float]], ox: float, oy: float,
+                  step: float = 150.0, hair: float = 1.5, k: float = 2.4) -> str:
+    """One point per thing counted (a client, a project), joined in the order
+    they happened over a faint polar graticule. The last point is the star, the
+    only active mark. Positions must mean something (x = when, y = size); this
+    is a scatter dressed as a star chart, never a decoration."""
+    if len(pts) < 3:
+        raise ValueError("a constellation needs at least three points")
+    out = []
+    reach = math.hypot(max(w, abs(ox)), max(h, abs(oy))) * 1.2
+    r = step
+    while r < reach:
+        out.append(A.circle(ox, oy, r, "faint", hair))
+        r += step
+    for j in range(-10, 40):
+        a = j * 7.5
+        if abs(a - THETA) % 360 < 3:
+            continue
+        out.append(A.line(*A.polar(ox, oy, step, a), *A.polar(ox, oy, reach, a), "faint", hair * 0.7))
+    out.append(A.path("M" + "L".join(f"{A.f(x)} {A.f(y)}" for x, y in pts), "body", hair * 1.4))
+    for x, y in pts[:-1]:
+        out.append(A.dot(x, y, 7, "ink"))
+    sx, sy = pts[-1]
+    out.append(f'<g transform="translate({A.f(sx)} {A.f(sy)}) scale({k}) translate({A.f(-sx)} {A.f(-sy)})">'
+               f'{A.star(sx, sy, cls="active")}</g>')
+    return svg(w, h, "".join(out))
+
+
+# 14 · Tile (geometry/tiles.py) -------------------------------------------------
+def tile(i: int, x: float, y: float, size: float, turned: bool = False) -> str:
+    """One of the 36 tiles, placed in page coordinates. `turned` flips it to a
+    paper tile with navy lines: the singled-out tile in a grid (one per grid)."""
+    sys.path.insert(0, os.path.join(ROOT, "geometry"))
+    import tiles as TL
+    back = ('<rect width="200" height="200" style="fill:var(--brand-off-white)"/>' if turned
+            else '<rect x="1" y="1" width="198" height="198" class="faint" stroke-width="1.2"/>')
+    return (f'<svg x="{A.f(x)}" y="{A.f(y)}" width="{A.f(size)}" height="{A.f(size)}" viewBox="0 0 200 200" '
+            f'{"class=" + chr(34) + "inv" + chr(34) if turned else ""} fill="none">{back}{TL.tile(i)}</svg>')

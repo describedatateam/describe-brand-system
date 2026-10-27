@@ -46,7 +46,7 @@ def raises(fn, msg):
 
 
 HEX = re.compile(r"#[0-9A-Fa-f]{6}\b")
-for rel in ("templates/enrich.css", "templates/kit.py", "slides/build.py", "social/templates/build.py", "social/templates/occasions.py",
+for rel in ("templates/enrich.css", "templates/kit.py", "slides/build.py", "social/templates/build.py", "social/templates/occasions.py", "geometry/tiles.py",
             "apps/app.css", "apps/build.py", "apps/describe_streamlit.py", "apps/streamlit_app.py"):
     src = open(os.path.join(ROOT, rel), encoding="utf-8").read()
     ok(not HEX.findall(src), f"{rel}: no typed colours (found {sorted(set(HEX.findall(src)))})")

@@ -179,7 +179,59 @@ def tagline(W, H):
         + foot(), theme="dark")
 
 
-POSTS = [greeting, first_client, milestone, announcement, hiring, tagline]
+# 7 · New: sighting lines from off the page find one thing ------------------------
+def new_offer(W, H):
+    """Announcement of something new. The fan is the instrument looking, the
+    active line is the sight axis and the star is what it found. Cleared out
+    under the headline so the type never sits across a stroke."""
+    fan = K.sightline_fan(W, H, -90, 1520, 1180, n=29, spread=52)
+    fan = fan.replace('class="geo layer"', 'class="geo layer fade-up"', 1)
+    return K.page(
+        fan + label("Announcement · template")
+        + '<div class="opener" style="margin-top:64px">Now offering<br><span class="em">[ service ]</span></div>'
+        + foot())
+
+
+# 8 · Clients: one point each, joined in the order they signed -------------------
+def clients(W, H):
+    """A scatter dressed as a star chart: x = month signed, y = project size
+    (placeholder values). The last client is the star. Replace the points with
+    real ones; the geometry stays."""
+    x0, x1, base = 130, 960, 1110
+    sizes = [0.18, 0.30, 0.22, 0.42, 0.36, 0.55, 0.48, 0.64, 0.60, 0.78, 0.92]
+    pts = [(x0 + (x1 - x0) * i / (len(sizes) - 1), base - 80 - s * 520) for i, s in enumerate(sizes)]
+    art = K.constellation(W, H, pts, -120, 1500, step=170)
+    ticks = K.svg(W, H, A.tick_row(x0, base, x1 - x0, 41, 4, 9, 20, cls="body", w=1.6)
+                  + A.line(x0, base, x1, base, "body", 1.6)
+                  + A.text(x0, base + 46, "month signed", "body", 24, "start")
+                  + A.text(x1, base + 46, "size", "body", 24, "end"))
+    return K.page(
+        art + ticks + label("Clients · template")
+        + '<div class="opener" style="margin-top:64px">Every client,<br><span class="em">in order.</span></div>'
+        + '<div class="foot"><div class="src">Template: sample points, not our clients.</div>' + K.lockup("compact") + '</div>',
+        theme="dark")
+
+
+# 9 · Cobalt: a grid of tiles, one turned over -------------------------------------
+def cobalt(W, H):
+    """The brand blue as a ground. Twelve of the 36 tiles; one is turned to a
+    paper tile, and that is the only marked thing on the page."""
+    import tiles as TL
+    pick = [31, 5, 28, 15, 0, 18, 8, 26, 22, 12, 24, 9]
+    names = [TL.TILES[i][0] for i in pick]
+    size, gap, x0, y0 = 190, 55, 77, 500
+    cells = []
+    for n, i in enumerate(pick):
+        r, c = divmod(n, 4)
+        cells.append(K.tile(i, x0 + c * (size + gap), y0 + r * (size + gap), size, turned=(n == 2)))
+    return K.page(
+        K.svg(W, H, "".join(cells), cls="layer tiles")
+        + label("Announcement · template")
+        + '<div class="opener" style="margin-top:64px">Something new,<br><span class="em">[ headline ].</span></div>'
+        + foot(), theme="cobalt")
+
+
+POSTS = [greeting, first_client, milestone, announcement, hiring, tagline, new_offer, clients, cobalt]
 
 
 def build() -> list[str]:

@@ -24,6 +24,19 @@ body{display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px
 }
 [data-medium="social"] .pg{--pad-x:calc(var(--t-body) * 2.75);--pad-y:calc(var(--t-body) * 2.75)}
 .pg--brass{--pg-ground:var(--viz-seq-alt-100);--accent:var(--viz-seq-alt-500);--faint:var(--viz-seq-alt-200);--rule:var(--viz-seq-alt-200)}
+/* cobalt: the brand blue as a ground. Paper-white ink; everything else is the
+   same white stepped back toward the blue, so the one marked thing is the
+   brightest. The marker is paper, never a bluer blue (there is none to use). */
+.pg--cobalt{--pg-ground:var(--brand-blue);--ink:var(--brand-off-white);--accent:var(--brand-off-white);--active:var(--brand-off-white);
+  --body:color-mix(in srgb,var(--brand-off-white) 88%,var(--brand-blue));
+  --dim:color-mix(in srgb,var(--brand-off-white) 88%,var(--brand-blue));
+  --faint:color-mix(in srgb,var(--brand-off-white) 34%,var(--brand-blue));
+  --rule:color-mix(in srgb,var(--brand-off-white) 44%,var(--brand-blue))}
+.pg--cobalt .em{color:var(--dim)}
+/* tile linework on cobalt steps back one notch so the active element is the brightest thing in the tile */
+.pg--cobalt .tiles{--ink:color-mix(in srgb,var(--brand-off-white) 76%,var(--brand-blue));--body:color-mix(in srgb,var(--brand-off-white) 66%,var(--brand-blue));--accent:color-mix(in srgb,var(--brand-off-white) 76%,var(--brand-blue));--active:var(--accent)}
+/* a tile or panel turned over: paper ground, navy lines, the page's accent kept */
+.inv{--ink:var(--brand-navy);--body:var(--brand-grey);--dim:var(--brand-grey);--faint:var(--brand-light-grey);--accent:var(--brand-blue);--active:var(--brand-blue)}
 .pg > *{position:relative;z-index:1}
 .pg > .layer,.pg > .dither,.pg > .bg{position:absolute;z-index:0}
 
