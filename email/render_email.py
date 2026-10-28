@@ -11,6 +11,7 @@ Two kinds:
 Usage:
   python3 render_email.py outreach  body.md  > out.html  [--lang ar]
   python3 render_email.py newsletter issue.md > out.html [--lang ar]
+  python3 render_email.py brief      issue.md > out.html [--lang ar] [--img-base URL]   rich Brief layout
 
 Markup understood (keep it simple):
   # Title                 newsletter title (first line)
@@ -170,10 +171,179 @@ def newsletter(text, rtl=False):
 </table></td></tr></table></body></html>'''
 
 
+# ---------------------------------------------------------------------------
+# The Brief, rich layout. Section tags in the issue file: ## Title {lead} {news} {band} {cta}
+# ---------------------------------------------------------------------------
+import json as _json, os as _os
+
+_T = _json.load(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "tokens", "tokens.json"), encoding="utf-8"))["color"]
+BRASS_100 = _T["viz"]["seq-alt"]["100"]["$value"]
+BRASS_200 = _T["viz"]["seq-alt"]["200"]["$value"]
+BRASS_500 = _T["viz"]["seq-alt"]["500"]["$value"]
+BODY = _T["text"]["body"]["$value"]
+NAVY_BLOCK = _T["brand"]["navy"]["$value"]
+SERIF = "Georgia,'Times New Roman',serif"
+IMG_BASE = "https://raw.githubusercontent.com/describedatateam/describe-brand-system/claude/occasion-posts/email/"
+
+
+def _sections(text):
+    head, secs, cur = [], [], None
+    for line in text.splitlines():
+        if line.startswith("## "):
+            m = re.search(r"\s*\{(\w+)\}\s*$", line)
+            title = re.sub(r"\s*\{\w+\}\s*$", "", line[3:])
+            cur = [title, m.group(1) if m else "plain", []]
+            secs.append(cur)
+        elif cur is None:
+            head.append(line)
+        else:
+            cur[2].append(line)
+    return "\n".join(head), [(t, tag, "\n".join(b)) for t, tag, b in secs]
+
+
+def _label(text, color, align="left"):
+    return (f'<div style="font-family:{FONT_EN};font-size:11px;line-height:14px;letter-spacing:1.6px;text-transform:uppercase;'
+            f'font-weight:bold;color:{color};text-align:{align};">{text}</div>')
+
+
+def _h(text, color, size=26, align="left", margin="0 0 14px"):
+    return f'<h2 style="margin:{margin};font-family:{SERIF};font-weight:normal;font-size:{size}px;line-height:{size + 6}px;color:{color};text-align:{align};">{inline(text)}</h2>'
+
+
+def _p(text, color=INK, size=16, align="left", margin="0 0 16px", extra=""):
+    return f'<p style="margin:{margin};font-family:{FONT_EN};font-size:{size}px;line-height:25px;color:{color};text-align:{align};{extra}">{inline(text)}</p>'
+
+
+def _row(inner, bg="#FFFFFF", pad="28px 32px", border=""):
+    return f'<tr><td style="background:{bg};padding:{pad};{border}">{inner}</td></tr>'
+
+
+def _lead(title, body, img, alt, align):
+    bl = blocks(body)
+    out = [_label("The big one", BLUE, align), _h(title, INK, 30, align, "8px 0 14px")]
+    i = 0
+    while i < len(bl):
+        b = bl[i]
+        if b[0] == "p" and i + 1 < len(bl) and bl[i + 1][0] == "ol" and b[1].rstrip().endswith(":"):
+            items = bl[i + 1][1]
+            rows = "".join(
+                f'<tr><td width="44" valign="top" style="padding:13px 0;border-top:1px solid {LINE};font-family:{SERIF};font-size:30px;line-height:30px;color:{BLUE};">{n}</td>'
+                f'<td valign="middle" style="padding:13px 0;border-top:1px solid {LINE};font-family:{FONT_EN};font-size:15px;line-height:23px;color:{INK};text-align:{align};">{inline(t)}</td></tr>'
+                for n, t in enumerate(items, 1))
+            out.append(
+                f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 18px;background:{TINT};border-radius:8px;"><tr><td style="padding:20px 22px 8px;">'
+                f'{_label(inline(b[1].rstrip(":")), BLUE, align)}'
+                f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">{rows}</table></td></tr></table>')
+            i += 2
+            continue
+        if b[0] == "p":
+            out.append(_p(b[1], INK, 16, align))
+        i += 1
+    hero = (f'<tr><td style="padding:0;line-height:0;font-size:0;"><img src="{img}" width="600" alt="{html.escape(alt)}" '
+            f'style="display:block;width:100%;height:auto;border:0;"></td></tr>')
+    return hero, _row("".join(out), pad="30px 32px 10px")
+
+
+def _news(title, body, align):
+    bl = blocks(body)
+    out = [_label("This week", BLUE, align), _h(title, INK, 24, align, "8px 0 6px")]
+    first = True
+    for b in bl:
+        if b[0] == "p" and b[1].startswith("**"):
+            m = re.match(r"^\*\*(.+?)\*\*\s*(.*)$", b[1])
+            sep = "" if first else f'<div style="border-top:1px solid {LINE};margin:20px 0 0;line-height:1px;font-size:1px;">&nbsp;</div>'
+            out.append(sep + f'<h3 style="margin:{"14px" if first else "18px"} 0 6px;font-family:{FONT_EN};font-size:17px;line-height:23px;color:{INK};text-align:{align};">{inline(m.group(1))}</h3>'
+                       + _p(m.group(2), BODY, 15, align, "0 0 12px"))
+            first = False
+        elif b[0] == "p":
+            out.append(_p(b[1], BODY, 15, align))
+        elif b[0] == "note":
+            t = re.sub(r"^\*\*Our take:?\*\*:?\s*", "", b[1])
+            t = t[:1].upper() + t[1:]
+            side = "right" if align == "right" else "left"
+            out.append(
+                f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 4px;"><tr>'
+                f'<td style="border-{side}:3px solid {BLUE};padding:2px 0 2px 14px;">{_label("Our take", BLUE, align)}'
+                f'<div style="padding-top:5px;font-family:{FONT_EN};font-size:15px;line-height:24px;color:{INK};text-align:{align};">{inline(t)}</div></td></tr></table>')
+    return _row("".join(out), pad="26px 32px 30px", border=f"border-top:1px solid {LINE};")
+
+
+def _band(title, body, align):
+    out = [_h(title, INK, 26, align, "0 0 14px")]
+    for b in blocks(body):
+        if b[0] == "p":
+            out.append(_p(b[1], INK, 16, align))
+        elif b[0] == "note":
+            out.append(f'<p style="margin:18px 0 4px;padding-top:16px;border-top:2px solid {BRASS_500};font-family:{SERIF};font-style:italic;font-size:22px;line-height:30px;color:{INK};text-align:{align};">{inline(b[1])}</p>')
+    return _row("".join(out), bg=BRASS_100, pad="30px 32px 28px")
+
+
+def _cta(title, body, align):
+    out = [_h(title, "#F6F8FC", 26, align, "0 0 14px")]
+    for b in blocks(body):
+        if b[0] == "p" and "button" not in b[1]:
+            small = b[1].startswith("Not subscribed")
+            out.append(_p(b[1], "#9FB0CC" if small else "#DBE4F5", 13 if small else 16, align, "18px 0 0" if small else "0 0 16px"))
+        elif b[0] == "button":
+            out.append(f'<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 4px;"><tr><td style="background:#F6F8FC;border-radius:6px;">'
+                       f'<a href="{b[2]}" style="display:inline-block;padding:14px 26px;font-family:{FONT_EN};font-size:15px;font-weight:bold;color:{INK};text-decoration:none;">{inline(b[1])}</a></td></tr></table>')
+    return _row("".join(out), bg=NAVY_BLOCK, pad="34px 32px 32px")
+
+
+def brief(text, rtl=False, img_base=IMG_BASE, hero_alt="Countdown to White Friday"):
+    align = "right" if rtl else "left"
+    head, secs = _sections(text)
+    hb = blocks(head)
+    title = next((b[1] for b in hb if b[0] == "h1"), "The .describe( Brief")
+    meta = next((b[1].strip("_") for b in hb if b[0] == "p" and re.fullmatch(r"_.+_", b[1].strip())), "")
+    edition, _, lede = meta.partition(". ")
+    sources = ""
+    rows = []
+    for t, tag, body in secs:
+        if "\n---" in body:
+            body, _, tail = body.partition("\n---")
+            sources = tail.strip()
+        if tag == "lead":
+            hero, r = _lead(t, body, img_base + "brief-hero.png", hero_alt, align)
+            rows += [hero, r]
+        elif tag == "news":
+            rows.append(_news(t, body, align))
+        elif tag == "band":
+            rows.append(_band(t, body, align))
+        elif tag == "cta":
+            rows.append(_cta(t, body, align))
+        else:
+            rows.append(_row(_h(t, INK, 22, align) + render_blocks(blocks(body), FONT_EN, rtl)))
+    unsub = "إلغاء الاشتراك: ردّ بكلمة «إيقاف»." if rtl else "Don't want these? Reply “stop” and you're off the list."
+    why = "تصلك هذه النشرة لأنك اشتركت في describe.team/brief أو تواصلت معنا." if rtl else \
+          "You get The Brief because you signed up at describe.team/brief or we've worked together."
+    src = f'<p style="margin:0 0 18px;font-family:{FONT_EN};font-size:12px;line-height:18px;color:{MUTED};text-align:{align};">{inline(sources)}</p>' if sources else ""
+    side = "right" if rtl else "left"
+    return f"""<!doctype html><html lang="{"ar" if rtl else "en"}" dir="{"rtl" if rtl else "ltr"}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{html.escape(title)}</title></head>
+<body style="margin:0;padding:0;background:{PAPER};">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{PAPER};"><tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#FFFFFF;border:1px solid {LINE};border-radius:10px;overflow:hidden;">
+<tr><td style="padding:24px 32px 14px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td align="{side}"><a href="https://describe.team/brief/"><img src="{LOGO}" width="168" height="40" alt=".describe(" style="display:block;border:0;width:168px;height:40px;"></a></td>
+<td align="{"left" if rtl else "right"}" valign="bottom" style="font-family:{FONT_EN};font-size:11px;line-height:15px;letter-spacing:1.6px;text-transform:uppercase;font-weight:bold;color:{MUTED};">{inline(edition)}</td>
+</tr></table></td></tr>
+<tr><td style="padding:0;line-height:0;font-size:0;"><img src="{img_base}brief-rule.png" width="600" alt="" style="display:block;width:100%;height:auto;border:0;"></td></tr>
+<tr><td style="padding:24px 32px 26px;"><p style="margin:0;font-family:{SERIF};font-style:italic;font-size:20px;line-height:29px;color:{INK};text-align:{align};">{inline(lede)}</p></td></tr>
+{"".join(rows)}
+<tr><td style="padding:26px 32px 22px;">{src}{signature(rtl)}</td></tr>
+<tr><td style="background:{PAPER};padding:16px 32px;border-top:1px solid {LINE};font-family:{FONT_EN};font-size:12px;line-height:18px;color:{MUTED};text-align:{align};">
+{why}<br>{unsub}<br><a href="https://describe.team/" style="color:{MUTED};">describe.team</a></td></tr>
+</table></td></tr></table></body></html>"""
+
+
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     rtl = "--lang" in sys.argv and sys.argv[sys.argv.index("--lang") + 1] == "ar"
-    args = [a for a in args if a not in ("ar", "en")]
+    base = sys.argv[sys.argv.index("--img-base") + 1] if "--img-base" in sys.argv else IMG_BASE
+    args = [a for a in args if a not in ("ar", "en", base)]
     kind, path = args[0], args[1]
     text = open(path, encoding="utf-8").read()
-    sys.stdout.write((outreach if kind == "outreach" else newsletter)(text, rtl))
+    if kind == "brief":
+        sys.stdout.write(brief(text, rtl, base))
+    else:
+        sys.stdout.write((outreach if kind == "outreach" else newsletter)(text, rtl))
