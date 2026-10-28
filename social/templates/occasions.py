@@ -28,6 +28,7 @@ sys.path.insert(0, os.path.join(ROOT, "geometry"))
 
 import astrolabe as A  # noqa: E402
 import kit as K  # noqa: E402
+import textures as TX  # noqa: E402
 
 OUT = os.path.join(HERE, "out")
 W, H = 1080, 1350
@@ -38,8 +39,8 @@ def label(text: str) -> str:
     return f'<div class="top" style="display:flex;justify-content:space-between"><span class="label">{text}</span></div>'
 
 
-def foot() -> str:
-    return f'<div class="foot"><div class="src"></div>{K.lockup("compact")}</div>'
+def foot(src: str = "") -> str:
+    return f'<div class="foot"><div class="src">{src}</div>{K.lockup("compact")}</div>'
 
 
 def edge(side: str = "left") -> str:
@@ -231,7 +232,67 @@ def cobalt(W, H):
         + foot(), theme="cobalt")
 
 
-POSTS = [greeting, first_client, milestone, announcement, hiring, tagline, new_offer, clients, cobalt]
+# 10-14 · Textures: one-bit and stepped fields, each bound to a measurement ------------
+# geometry/textures.py draws them; the post places one, adds a headline and keeps
+# the type clear of the field. Replace the sample values before posting.
+def _tx(svg: str, left: float, top: float, width: float, cls: str = "") -> str:
+    return f'<div class="{cls}" style="position:absolute;left:{left}px;top:{top}px;width:{width}px">{svg}</div>'
+
+
+def _head(kicker: str, line1: str, line2: str) -> str:
+    return (label(kicker)
+            + f'<div class="opener" style="margin-top:64px">{line1}<br><span class="em">{line2}</span></div>')
+
+
+def signal_post(W, H):
+    svg = TX.signal(TX.sample_values(46), 920, 710, label="Sample values, one column per period")
+    return K.page(_tx(svg, 80, 480, 920) + _head("Dither · Template", "Signal,", "then noise.")
+                  + foot("Template: each column is one [ period ]. Sample values, not real data."), theme="dark")
+
+
+def halftone_post(W, H):
+    svg = TX.halftone(W, 820, measure="[ measure ]")
+    return K.page(_tx(svg, 0, 395, W) + _head("Halftone · Template", "Dots sized", "by the data.")
+                  + foot("Template: dot size = [ measure ]. Sample values."))
+
+
+def rings_post(W, H):
+    svg = TX.rings(W, 785, a="[ A ]", b="[ B ]")
+    sx, sy = TX.star_xy(svg)
+    sy += 410
+    leader = K.svg(W, H, A.line(sx + 56, sy, 790, sy, "active", 2))
+    plate = (f'<div style="position:absolute;left:790px;top:{sy - 22:.0f}px;height:44px;padding:0 16px;display:flex;align-items:center;gap:12px;'
+             'background:var(--ground);border:1px solid var(--active)" class="label">'
+             '<span style="color:var(--active)">01</span><span style="color:var(--ink)">Overlap</span></div>')
+    return K.page(_tx(svg, 0, 410, W) + leader + plate + _head("Interference · Template", "Where two sets", "overlap.")
+                  + foot("Template: one ring set per dataset, [ A ] and [ B ]."))
+
+
+def waves_post(W, H):
+    svg = TX.waves(W, 730, label="64 sample series; the blue line is the story")
+    sx, sy = TX.star_xy(svg)
+    sy += 468
+    leader = K.svg(W, H, A.line(sx, sy - 40, sx, 452, "body", 1.6, **{"stroke-dasharray": "4 7"}) + A.line(sx - 10, 452, sx + 10, 452, "body", 1.6))
+    peak = (f'<div class="label" style="position:absolute;left:{sx - 100:.0f}px;width:200px;top:414px;text-align:center">Peak &middot; [ t ]</div>')
+    return K.page(_tx(svg, 0, 468, W) + leader + peak + _head("Line field · Template", "One series", "among many.")
+                  + foot("Template: each line is one [ series ]; the blue line is the story."))
+
+
+def eid_cells(W, H):
+    """The occasion crescent built from cells: the same geometry as the greeting
+    (ring minus a circle pushed along the sight axis), dissolving toward its tip."""
+    svg = TX.crescent(W, 1000, label="A crescent built from cells", cy=500, R=330)
+    return K.page(
+        _tx(svg, 0, 290, W)
+        + label("تهنئة")
+        + '<div style="margin-top:40px;text-align:right;direction:rtl">'
+          '<div style="font-family:var(--font-ar-display);font-size:176px;line-height:1.05;color:var(--ink)">عيد مبارك</div>'
+          '<div class="lede" style="font-family:var(--font-ar-sans);margin-top:16px">كل عام وأنتم بخير</div></div>'
+        + foot(), theme="brass").replace('<section ', '<section dir="rtl" lang="ar" ', 1)
+
+
+POSTS = [greeting, first_client, milestone, announcement, hiring, tagline, new_offer, clients, cobalt,
+         signal_post, halftone_post, rings_post, waves_post, eid_cells]
 
 
 def build() -> list[str]:

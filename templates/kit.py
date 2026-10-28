@@ -89,6 +89,8 @@ def lockup(kind: str = "compact") -> str:
 
 def page_doc(pages: list[str], out_dir: str, width: int, height: int, medium: str, title: str) -> str:
     css = open(os.path.join(HERE, "enrich.css"), encoding="utf-8").read()
+    import textures as TX                      # geometry/textures.py: the texture classes read the tokens
+    css += "\n" + TX.css()
     tokens_css = _rel(os.path.join(ROOT, "tokens", "dist", "tokens.css"), out_dir)
     return f"""<!doctype html>
 <html lang="en" data-medium="{medium}"><head><meta charset="utf-8">

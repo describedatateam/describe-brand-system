@@ -108,7 +108,7 @@ README's *By medium* table.
 
 ## Posts that are not about data
 
-`python3 social/templates/occasions.py --render` builds six 4:5 posts for
+`python3 social/templates/occasions.py --render` builds fourteen 4:5 posts for
 greetings, first client, milestones, announcements, hiring and the tagline
 (`social/templates/occasions.py`). They use the same kit and add no new
 element.
@@ -128,8 +128,15 @@ colour and coral does not appear (check.py fails if it does).
 | New offer | Paper | Sightline fan from off the page | The star at the end of the sight axis | The instrument found something |
 | Clients | Navy | Constellation over a polar graticule, month axis | The star: the newest client | A scatter in signing order; replace the placeholder points |
 | Cobalt announcement | Cobalt | Twelve tiles, stepped back | One tile turned to paper | The one chosen thing in a field of the system's vocabulary |
+| Dither | Navy | One-bit dissolve, one column per period | The peak cell and the star above it | Solid where the data is dense, dissolving where it thins |
+| Halftone | Paper | Dots sized by a measure, bent toward the largest | One active disc | The largest value |
+| Interference | Paper | Two ring sets, one per dataset | The active ring and the star at the overlap | Where the two sets meet |
+| Line field | Paper | One line per series, five stepped greys, a measuring edge | The story line and the star at its crest | One series among many |
+| Eid, in cells | Brass | A crescent built from cells, dissolving to its tip | The star in the opening | The greeting's own geometry as a bitmap |
 
 **Cobalt ground** (`theme="cobalt"`, `.pg--cobalt`). The brand blue as a ground, for announcements. Everything is the paper colour stepped back toward the blue; the marker is paper at full strength, or a turned tile. Body text is at least 4.5:1 (88% paper on blue, 4.7:1); tile linework is a graphic and clears 3:1. Coral is never used on it. Use it for announcements, not for data pages.
+
+**Textures.** `python3 geometry/textures.py` builds five token-driven fields (dither, halftone, interference, line field, cell crescent) for the website and these posts. They are bound to a measurement, carry one marked thing, and are one-bit or stepped, never smooth. See `geometry/TEXTURES.md`.
 
 **Tile set.** `python3 geometry/tiles.py` writes 36 tile SVGs and `geometry/tiles/tiles.html`, a sheet on paper, navy and cobalt.
 
