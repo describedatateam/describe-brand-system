@@ -43,3 +43,19 @@ pages = {
    'A mountain ridge photo as dither cells. The summit cells are recoloured brass.'),
 }
 for k, v in pages.items(): open(k + '.html', 'w').write(v)
+
+# Round two: three takes on the Earth in digits
+H1 = "From far, one picture.<br><span style='color:#4F86F7'>Up close, all data.</span>"
+pages2 = {
+ 'ga': page('Type image · Study 01a', H1,
+   f"<div class='art' style='top:420px;height:760px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 88%,transparent)'><img src='file://{H}/ga_img.png'></div>",
+   'Earth photo redrawn in digits; the top lifts off into loose cells.', dark=True),
+ 'gb': page('Type image · Study 01b', H1,
+   f"<div class='art' style='top:370px;height:800px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 85%,transparent)'><img src='file://{H}/gb_img.png'></div>",
+   'The framed digits are the same digits, recoloured.', dark=True),
+ 'gc': page('Type image · Study 01c',
+   f"From far, one picture.<br><span style='color:{BLUE}'>Up close, all data.</span>",
+   f"<div class='art' style='top:380px;height:800px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 85%,transparent)'><img src='file://{H}/gc_img.png'></div>",
+   'Navy ink on paper; the blue digits are the same digits, recoloured.', bg=CREAM),
+}
+for k, v in pages2.items(): open(k + '.html', 'w').write(v)
