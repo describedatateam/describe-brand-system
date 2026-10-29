@@ -20,22 +20,22 @@ def p1():
     W, H = 1080, 880
     S = 2
     src = np.zeros((H, W))
-    D = 940
-    g = contrast(lum('src/earth.png', D, D), 0.08, 0.9)
-    ox, oy = (W - D) // 2 + 60, 10
+    D = 900
+    g = contrast(lum('src/earth_hd.png', D, D), 0.06, 0.85)
+    ox, oy = (W - D) // 2 + 40, 0
     src[oy:oy + min(D, H - oy), ox:ox + D - max(0, ox + D - W)] = g[:H - oy, :W - ox]
     im = Image.new('RGB', (W * S, H * S), hexrgb(NAVY)); d = ImageDraw.Draw(im)
-    fr = ImageFont.truetype(F + 'IBMPlexMono-Regular.ttf', 14 * S)
-    fm = ImageFont.truetype(F + 'IBMPlexMono-Medium.ttf', 14 * S)
+    fr = ImageFont.truetype(F + 'IBMPlexMono-Regular.ttf', 12 * S)
+    fm = ImageFont.truetype(F + 'IBMPlexMono-Medium.ttf', 12 * S)
     lo, hi, hl = hexrgb('#1E3A6B'), hexrgb('#E6EFFF'), hexrgb('#D9AE62')
     r = np.random.default_rng(4)
-    cw, ch = 9, 15
-    # brass region: the Arabian Peninsula sits around (0.58, 0.45) of the photo
-    ax, ay = ox + 0.60 * D, oy + 0.47 * D
+    cw, ch = 8, 13
+    # brass region: the Arabian Peninsula sits around (0.57, 0.43) of the Replicate photo
+    ax, ay = ox + 0.57 * D, oy + 0.43 * D
     for j in range(0, H, ch):
         for i in range(0, W, cw):
             v = src[j, i]
-            inside = (i - (ox + 0.47 * D)) ** 2 + (j - (oy + 0.5 * D)) ** 2 < (0.47 * D) ** 2
+            inside = (i - (ox + 0.5 * D)) ** 2 + (j - (oy + 0.5 * D)) ** 2 < (0.48 * D) ** 2
             if v < 0.05:
                 if inside: d.text((i * S, j * S), '.', font=fr, fill=hexrgb('#1B3566'))
                 continue
