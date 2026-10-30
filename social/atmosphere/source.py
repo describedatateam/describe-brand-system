@@ -3,8 +3,8 @@
 # usage: python3 source.py out.png "subject description"
 import json, sys, urllib.request
 
-STYLE = ("High-detail documentary photograph. One clear subject, {subject}. Strong single light "
-         "from the upper left, deep clean shadows, plain dark background, high tonal contrast, "
+STYLE = ("High-detail documentary photograph. One clear subject, {subject}. Soft directional light "
+         "from the upper left, plain dark background, clear tonal contrast, no faces in shadow, "
          "sharp edges, no text, no logos, no watermark.")
 
 def make(out, subject, model='black-forest-labs/flux-1.1-pro', aspect='1:1'):

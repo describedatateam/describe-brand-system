@@ -117,7 +117,7 @@ def lines(t, pal, gap=10, amp=9, width=1.6, accent=None):
 
 # ---- annotation ---------------------------------------------------------------------
 
-def frame(im, box, label=None, color='#D9AE62', ground='#092052', k=26, w=2):
+def frame(im, box, label=None, color='#D9AE62', ground='#092052', k=26, w=2, side='below'):
     """Corner brackets around the focus, with an optional mono label on a knocked-out chip."""
     S = 2; W, H = im.size
     big = im.resize((W * S, H * S), Image.LANCZOS); d = ImageDraw.Draw(big)
@@ -126,7 +126,8 @@ def frame(im, box, label=None, color='#D9AE62', ground='#092052', k=26, w=2):
         d.line([(px, py), (px + sx * k, py)], fill=c, width=w); d.line([(px, py), (px, py + sy * k)], fill=c, width=w)
     if label:
         f = ImageFont.truetype(FONTS + 'IBMPlexMono-Medium.ttf', 15 * S)
-        tx, ty = x0, y1 + 14 * S; bb = d.textbbox((tx, ty), label, font=f)
+        tx, ty = (x0, y1 + 14 * S) if side == 'below' else (x1 + 18 * S, y0)
+        bb = d.textbbox((tx, ty), label, font=f)
         d.rectangle([bb[0] - 8 * S, bb[1] - 6 * S, bb[2] + 8 * S, bb[3] + 6 * S], fill=hexrgb(ground))
         d.text((tx, ty), label, font=f, fill=c)
     return big.resize((W, H), Image.LANCZOS)
