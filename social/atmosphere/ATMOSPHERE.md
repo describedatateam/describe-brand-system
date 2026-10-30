@@ -21,9 +21,9 @@ cells or dots. The look comes from how the units are used, not from the subject.
    step or dot size. Depth comes from that ramp: bright faces get medium-weight digits, mid
    tones regular digits, the shadow side drops to `:` and `.`. No blur, glow, grain,
    gradients or drop shadows.
-4. **Light ink on navy.** Photo-based images use the `navy` palette. The inverted versions
-   (navy ink on cream or off-white) were tried and don't work for photos; `paper` and `light`
-   are kept only for drawn data, like the first S2 and S3.
+4. **Light ink on navy by default.** Photo-based images use the `navy` palette. Navy ink on
+   cream (`paper`) has worked once, for the globe (study 01c), and failed on the portrait, so
+   use it only for simple, well-lit shapes. `light` is for drawn data, like the first S3.
 5. **Guide attention the natural way.** Contrast fades away from the focus (`focus()`), so
    the eye settles on it without an arrow. The globe settles on the Arabian Peninsula this way.
 6. **The highlight is the image's own units, recoloured, and it must mean something.** Recolour
@@ -50,6 +50,7 @@ cells or dots. The look comes from how the units are used, not from the subject.
 
 - `../studies-2026-10-29/p1.png`: Earth in digits from a Replicate photo.
 - `../studies-2026-10-29/gb.png`: the same with a brass frame and label.
+- `../studies-2026-10-29/gc.png`: the globe in navy ink on cream.
 - `demo/post_returns.png`: parcel in digits, the shipping label highlighted.
 - First-version S2 (digit line field) and S3 (dither cells) from 28 Oct.
 
