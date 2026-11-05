@@ -26,6 +26,8 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(ROOT, "charts", "kit"))
 
 import kit as K  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "geometry"))
+import textures as TX  # noqa: E402
 
 fails: list[str] = []
 
@@ -46,13 +48,13 @@ def raises(fn, msg):
 
 
 HEX = re.compile(r"#[0-9A-Fa-f]{6}\b")
-for rel in ("templates/enrich.css", "templates/kit.py", "slides/build.py", "social/templates/build.py",
+for rel in ("templates/enrich.css", "templates/kit.py", "slides/build.py", "social/templates/build.py", "social/templates/occasions.py", "geometry/tiles.py", "geometry/textures.py",
             "apps/app.css", "apps/build.py", "apps/describe_streamlit.py", "apps/streamlit_app.py"):
     src = open(os.path.join(ROOT, rel), encoding="utf-8").read()
     ok(not HEX.findall(src), f"{rel}: no typed colours (found {sorted(set(HEX.findall(src)))})")
 
 outs = []
-for script in ("slides/build.py", "social/templates/build.py"):
+for script in ("slides/build.py", "social/templates/build.py", "social/templates/occasions.py"):
     r = subprocess.run([sys.executable, os.path.join(ROOT, script)], capture_output=True, text=True)
     ok(r.returncode == 0, f"{script} builds" + ("" if r.returncode == 0 else ": " + r.stderr[-400:]))
     outs += [l.strip() for l in r.stdout.splitlines() if l.strip().endswith(".html")]
@@ -99,6 +101,29 @@ raises(lambda: K.data_cells([], 100, 100), "data_cells() refuses an empty series
 raises(lambda: K.art("scorpio", HERE, {"lines": "ink"}), "art() refuses an illustration without confirmed rights")
 raises(lambda: K.art("libra", HERE, {"lines": "mark"}), "art() keeps coral off the drawing's lines")
 raises(lambda: K.gauge(1.4), "gauge() takes a share between 0 and 1")
+
+# textures: bound to a measurement, one marked thing, no coral, no gradients
+raises(lambda: TX.signal([], 600, 300, label="x"), "signal() refuses empty values")
+raises(lambda: TX.signal([5] * 12, 600, 300, label="x"), "signal() refuses a flat series (nothing to show)")
+raises(lambda: TX.signal(TX.sample_values(), 600, 300, label=""), "signal() refuses a missing label")
+raises(lambda: TX.signal(TX.sample_values(), 600, 300, label="x", tone="mark"), "signal() keeps coral out of the field")
+raises(lambda: TX.halftone(measure=" "), "halftone() needs to say what dot size measures")
+raises(lambda: TX.rings(a="A", b=""), "rings() needs both datasets named")
+raises(lambda: TX.waves(label="x", n=6), "waves() needs enough series to read as a field")
+raises(lambda: TX.waves(label="x", story=99), "waves() needs its story to be one of the lines")
+raises(lambda: TX.crescent(label=""), "crescent() needs a label")
+for name, svg in {
+    "signal": TX.signal(TX.sample_values(), 920, 700, label="x"),
+    "halftone": TX.halftone(measure="x"),
+    "rings": TX.rings(a="A", b="B"),
+    "waves": TX.waves(label="x"),
+    "crescent": TX.crescent(label="x"),
+}.items():
+    ok(svg.count("data-star") + svg.count("data-focus") == 1, f"texture {name}: exactly one marked thing")
+    ok(not re.search(r'class="[^"]*\bmark\b', svg) and not HEX.search(svg), f"texture {name}: no coral, no typed colour")
+    ok("gradient" not in svg.lower() and "filter" not in svg.lower(), f"texture {name}: no gradient or glow")
+    ok('aria-label="' in svg and 'role="img"' in svg, f"texture {name}: has an accessible name")
+ok(not HEX.search(TX.css()) and "gradient(180deg" in TX.css(), "textures.css reads tokens (its only gradients are the two clear-out masks)")
 
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")

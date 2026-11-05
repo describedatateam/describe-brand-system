@@ -37,6 +37,9 @@ isn't installed, point `CHROMIUM` at one: `CHROMIUM=/path/to/chromium python3 sl
 | 9 | **Dither tone** | `dither_layer(w, h, kind=…)` | The illustration layer's one-bit treatment, as a tone field. Ink capped at 34% | Navy section slides, covers, closing cards | Scaled (moiré); on paper pages behind figures |
 | 10 | **Illustration** | `art(name, out_dir, layers)` | One meaning per image (`illustrations/ILLUSTRATION.md` §1) | Covers and section dividers, matched by meaning | Interior data pages; any image whose rights are unconfirmed (refused) |
 | 11 | **Numbered callout** | `callout(n, text)`; `D.callout(ax, x, y, n)` on the chart | "Look here": the number on the data, the sentence beside it | Chart slides and posts | Mono for the sentence (mono is for the number only) |
+| 12 | **Sightline fan** | `sightline_fan(w, h, ox, oy, star_r)` | The instrument looking: lines from one origin, one along the sight axis ending in the star | "New" and announcement posts; fade it under the headline (`.fade-up`) | Origin on the page (put it off the edge); a second star |
+| 13 | **Constellation** | `constellation(w, h, pts, ox, oy)` | One point per thing counted, joined in the order it happened, over a polar graticule; the last point is the star | Clients, projects, releases: anything with a when and a size | Points that mean nothing (it is a scatter, not a pattern); fewer than three points (refused) |
+| 14 | **Tile** | `tile(i, x, y, size, turned=False)`; set in `geometry/tiles.py` | One idea from the mark's grammar on a square, one active element | Icons, avatars, section markers; a grid where one tile is `turned` | Two turned tiles in a grid; new shapes (a tile only composes `astrolabe.py` primitives) |
 
 ### Colour, by theme
 
@@ -100,3 +103,47 @@ function. Copy the function, replace the figures with your own (computed, never
 typed), keep the source line. For PowerPoint, Keynote or Google Slides, export
 `deck.pdf` or the PNGs as backgrounds, and set the theme colours from the
 README's *By medium* table.
+
+---
+
+## Posts that are not about data
+
+`python3 social/templates/occasions.py --render` builds fourteen 4:5 posts for
+greetings, first client, milestones, announcements, hiring and the tagline
+(`social/templates/occasions.py`). They use the same kit and add no new
+element.
+
+**The rule: a measured field with one marked thing.** The data posts mark an
+outlier in coral. Without data there is no outlier, so the marker is the active
+colour and coral does not appear (check.py fails if it does).
+
+| Post | Ground | Field | The one marked thing | Why it means that |
+|---|---|---|---|---|
+| Greeting (Arabic, RTL) | Brass | Eight-point lattice (faint, fading up); no measuring edge, the two fight | The star, seated in the opening of a crescent cut from the ring | The crescent is the ring minus a second circle pushed along the sight axis: the mark's grammar, not a stock symbol |
+| First client | Paper | Empty cell field | One active cell, labelled 1 | A count of one, shown as one |
+| Milestone | Paper | Measuring edge | A full tally group | Five is the group that closes; use it only for counts that really are five, ten, fifteen |
+| Announcement | Navy | Construction backdrop | The crosshair, settled | "Look here", for one thing |
+| Hiring | Paper | Orbit motif, large | The active marker on the ring | The open position |
+| Tagline | Navy | Dither glow under a ticked rule, `data` at one end | The index mark at the far end, `decision` | A direction, with the destination marked |
+| New offer | Paper | Sightline fan from off the page | The star at the end of the sight axis | The instrument found something |
+| Clients | Navy | Constellation over a polar graticule, month axis | The star: the newest client | A scatter in signing order; replace the placeholder points |
+| Cobalt announcement | Cobalt | Twelve tiles, stepped back | One tile turned to paper | The one chosen thing in a field of the system's vocabulary |
+| Dither | Navy | One-bit dissolve, one column per period | The peak cell and the star above it | Solid where the data is dense, dissolving where it thins |
+| Halftone | Paper | Dots sized by a measure, bent toward the largest | One active disc | The largest value |
+| Interference | Paper | Two ring sets, one per dataset | The active ring and the star at the overlap | Where the two sets meet |
+| Line field | Paper | One line per series, five stepped greys, a measuring edge | The story line and the star at its crest | One series among many |
+| Eid, in cells | Brass | A crescent built from cells, dissolving to its tip | The star in the opening | The greeting's own geometry as a bitmap |
+
+**Cobalt ground** (`theme="cobalt"`, `.pg--cobalt`). The brand blue as a ground, for announcements. Everything is the paper colour stepped back toward the blue; the marker is paper at full strength, or a turned tile. Body text is at least 4.5:1 (88% paper on blue, 4.7:1); tile linework is a graphic and clears 3:1. Coral is never used on it. Use it for announcements, not for data pages.
+
+**Textures.** `python3 geometry/textures.py` builds five token-driven fields (dither, halftone, interference, line field, cell crescent) for the website and these posts. They are bound to a measurement, carry one marked thing, and are one-bit or stepped, never smooth. See `geometry/TEXTURES.md`.
+
+**Tile set.** `python3 geometry/tiles.py` writes 36 tile SVGs and `geometry/tiles/tiles.html`, a sheet on paper, navy and cobalt.
+
+The lattice is notation, not ornament: it is the star's own eight arms tiled, drawn in `faint`, never behind text and never the marked thing. Do not extend it into figurative Islamic patterns.
+
+Rules for new occasion posts: one language per post (Arabic posts mirror fully:
+`dir="rtl"`, the measuring edge on the right when the post uses one, Amiri for the headline, Vazirmatn
+for the line under it); no typed colours; copy is placeholder until the fact it
+states is true (no invented clients or numbers); label unfinished posts
+`template`.
